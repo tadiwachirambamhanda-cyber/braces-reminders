@@ -42,40 +42,42 @@ export default async function BookPage(props: PageProps<"/book">) {
   const free = (eff?.slots ?? []).filter((s) => s.takenBy === null);
 
   return (
-    <main className="mx-auto w-full max-w-3xl p-6">
+    <>
       <Nav />
-      <h1 className="text-2xl font-semibold">Book a braces visit</h1>
-      <p className="mt-1 text-sm text-neutral-600">
-        Pick a patient and a free time. The patient is sent a confirmation straight away. A time that is already taken is refused.
-      </p>
-
-      {message ? (
-        <p className={`mt-4 rounded border p-3 ${message.good ? "border-green-300 bg-green-50" : "border-red-300 bg-red-50"}`} role="status" data-testid="book-result">
-          {message.text}
+      <main className="page page-narrow">
+        <h1 className="page-title">Book a braces visit</h1>
+        <p className="page-lead">
+          Pick a patient and a free time. The patient is sent a confirmation straight away. A time that is already taken is refused.
         </p>
-      ) : null}
 
-      {!eff ? null : (
-        <form action={bookAction} className="mt-6 flex flex-wrap items-end gap-4">
-          <label className="text-sm">
-            Patient
-            <select name="patient" required className="mt-1 block rounded border border-neutral-300 px-2 py-1" data-testid="book-patient">
-              {patients.map((p) => (
-                <option key={p.id} value={p.id}>{p.id} {p.firstName} (due {p.dueDate})</option>
-              ))}
-            </select>
-          </label>
-          <label className="text-sm">
-            Free time
-            <select name="slot" required className="mt-1 block rounded border border-neutral-300 px-2 py-1" data-testid="book-slot">
-              {free.map((s) => (
-                <option key={s.id} value={s.id}>{formatDateEn(s.date)} at {s.time}</option>
-              ))}
-            </select>
-          </label>
-          <button type="submit" className="rounded bg-blue-700 px-4 py-2 text-white">Book</button>
-        </form>
-      )}
-    </main>
+        {message ? (
+          <p className={`strip mt-5 ${message.good ? "strip-good" : "strip-clay"}`} role="status" data-testid="book-result">
+            {message.text}
+          </p>
+        ) : null}
+
+        {!eff ? null : (
+          <form action={bookAction} className="mt-6 flex flex-wrap items-end gap-x-6 gap-y-4">
+            <label className="field-label">
+              Patient
+              <select name="patient" required className="field min-w-[260px]" data-testid="book-patient">
+                {patients.map((p) => (
+                  <option key={p.id} value={p.id}>{p.id} {p.firstName} (due {p.dueDate})</option>
+                ))}
+              </select>
+            </label>
+            <label className="field-label">
+              Free time
+              <select name="slot" required className="field min-w-[220px]" data-testid="book-slot">
+                {free.map((s) => (
+                  <option key={s.id} value={s.id}>{formatDateEn(s.date)} at {s.time}</option>
+                ))}
+              </select>
+            </label>
+            <button type="submit" className="btn-primary">Book</button>
+          </form>
+        )}
+      </main>
+    </>
   );
 }
