@@ -25,7 +25,9 @@ After this, the clinic can run one command and open a Patients screen that shows
 - 50 braces patients with visit dates on the four November Fridays (2026-11-06, 11-13, 11-20, 11-27).
 - Friday 2026-11-06 has 14 braces patients: 12 clean ones (no booking, valid phone), 1 already booked, 1 with a missing or bad phone. The other three Fridays have 12 each. That gives 14 + 12 + 12 + 12 = 50.
 - 10 non-braces patients (check-up, cleaning, filling and so on), some also due on 2026-11-06, to prove they are skipped later.
-- The seed has no bookings or reminders yet beyond the one booked patient, so the Monday 2026-11-09 run later finds 24 (12 first reminders for 2026-11-13 plus 12 second reminders for 2026-11-06), and the Monday 2026-11-16 run sends 24 and moves the 12 from 2026-11-06 to the call list. A patient's `dueFriday` is the Friday their visit was first due; the later run (F2) decides who has rolled over, so the seed needs no extra field for it.
+- The seed has no reminders yet and only the one booked patient. A patient's `dueDate` is the Friday their monthly visit is first due; the later run (F2) decides who has rolled over, so the seed needs no extra field for it. With no bookings changing, the later runs should find:
+  - Monday 2026-11-09: 24 reminders (12 first reminders for 2026-11-13, plus 12 second reminders for the patients first due 2026-11-06).
+  - Monday 2026-11-16: 24 reminders (12 first reminders for 2026-11-20, plus 12 second reminders for 2026-11-13). The 12 patients first due 2026-11-06 have had two reminders and still have no booking, so they get no third reminder and go to the call list.
 - All names, phone numbers and ids are invented. Phones look like `+971 50 000 0001`. No surnames.
 
 ## Files
@@ -56,3 +58,28 @@ No Monday run, no reminders, no message wording, no `/phone` screen, no replies,
 
 ## Questions
 None. I picked the seed numbers above myself from the acceptance criteria.
+
+## Changes from the plan
+- The patient field is named `dueDate`, not `dueFriday`, because the 10 non-braces patients have a due date too and not always on a Friday rule.
+- Added `src/lib/seed-data.ts` (the fixed data builder, so tests and the seed script share it), `src/lib/load-data.ts` (reads the data files on the server) and `vitest.config.ts`. `tests/patients.test.ts` holds the shape tests.
+- The page calls `connection()` so it reads the data on every visit rather than once at build time.
+- Left out the liwan-desk `cacheComponents` setting and the dark-mode styles, because F1 does not need them. The Anthropic and Jev packages are not installed yet; they arrive with the features that use them.
+- The two other taken times on 2026-11-06 are marked `clinic-hold` (times the dentist keeps).
+
+## Verification
+| Check | Result |
+|---|---|
+| `npm run seed` | prints `60 patients, 50 braces` |
+| `npm test` | 16 tests pass (60 total, 50 braces, 10 other; Fridays in November 2026; 14 braces on 2026-11-06 = 12 clean + 1 booked + 1 no phone; 12 braces on each other Friday; 15 slots per Friday; the exact 12 free times on 2026-11-06; zod accepts a valid patient and rejects one with no id) |
+| Open `/` in the browser | 60 rows, 50 "braces" badges, count line says `60 patients, 50 braces`, calendar shows `2026-11-06: 15 slots, 12 free` with the 12 times |
+| `npm run lint` and `npm run typecheck` | no errors |
+| `npm run build` | passes with no environment variables set |
+
+## Ideas for later
+- Put the Patients page and the receptionist screens behind a staff login before any real patient data is used (Codex round 1, finding 1).
+
+## Codex review
+Round 1: VERDICT: FINDINGS(2).
+1. MAJOR, the Patients page has no login: Dismissed for now. All 60 patients are made up and nothing real is stored; the owner asked for no logins unless wanted. Before any real patient data is used, the page must go behind a staff login (recorded under Ideas for later).
+2. MAJOR, plan line about the 2026-11-16 run was unclear: Fixed. The rules were right (B3 and B6); the sentence is now spelled out, and uses `dueDate`, not `dueFriday`.
+Codex also confirmed the seed counts, found no secrets, no `NEXT_PUBLIC_` variables, no messaging or model code in F1.
