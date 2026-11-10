@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { connection } from "next/server";
 import { isMonday } from "@/lib/dates";
@@ -42,49 +43,53 @@ export default async function RunPage(props: PageProps<"/run">) {
   const state = fileState();
 
   return (
-    <main className="mx-auto w-full max-w-5xl p-6">
+    <>
       <Nav />
-      <h1 className="text-2xl font-semibold">Run this week</h1>
-      <p className="mt-1 text-sm text-neutral-600">
-        Pick the Monday. &quot;Run this week&quot; creates the reminders in the phone simulator, each with a planned send time between 17:00 and 22:00.
-        &quot;Preview&quot; only shows who would get one.
-      </p>
-
-      <div className="mt-4 flex flex-wrap items-end gap-6">
-        <form action={runAction} className="flex items-end gap-3">
-          <WeekSelect value={week} />
-          <button type="submit" className="rounded bg-blue-700 px-4 py-2 text-white">Run this week</button>
-        </form>
-        <form method="get" className="flex items-end gap-3">
-          <WeekSelect value={week} />
-          <button type="submit" className="rounded border border-neutral-400 px-4 py-2">Preview</button>
-        </form>
-      </div>
-
-      {error === "wording" ? (
-        <p className="mt-4 text-red-700" role="alert">
-          Nothing was created. The reminder wording has not been approved yet. Approve it on the Wording page first.
+      <main className="page">
+        <h1 className="page-title">Run this week</h1>
+        <p className="page-lead">
+          Pick the Monday. &quot;Run this week&quot; creates the reminders in the phone simulator, each with a planned send time between 17:00 and 22:00.
+          &quot;Preview&quot; only shows who would get one.
         </p>
-      ) : null}
 
-      {!state ? (
-        <p className="mt-6">No patients yet. Run <code className="font-mono">npm run seed</code> first.</p>
-      ) : week === undefined ? null : !isMonday(week) ? (
-        <p className="mt-6" role="alert">Please pick a Monday. {week} is not one.</p>
-      ) : runId ? (
-        <RunResult state={state} week={week} runId={runId} />
-      ) : (
-        <Preview state={state} week={week} />
-      )}
-    </main>
+        <div className="mt-6 flex flex-wrap items-end gap-x-8 gap-y-4">
+          <form action={runAction} className="flex flex-wrap items-end gap-4">
+            <WeekSelect value={week} />
+            <button type="submit" className="btn-primary">Run this week</button>
+          </form>
+          <form method="get" className="flex flex-wrap items-end gap-4">
+            <WeekSelect value={week} />
+            <button type="submit" className="btn-quiet">Preview</button>
+          </form>
+        </div>
+
+        {error === "wording" ? (
+          <p className="strip strip-clay mt-5" role="alert">
+            Nothing was created. The reminder wording has not been approved yet. Approve it on the <Link href="/wording" className="underline">Wording page</Link> first.
+          </p>
+        ) : null}
+
+        {!state ? (
+          <p className="mt-6">No patients yet. Run <code className="font-mono">npm run seed</code> first.</p>
+        ) : week === undefined ? (
+          <p className="mt-6 text-soft">Choose a Monday, then Preview or Run this week.</p>
+        ) : !isMonday(week) ? (
+          <p className="strip strip-clay mt-6" role="alert">Please pick a Monday. {week} is not one.</p>
+        ) : runId ? (
+          <RunResult state={state} week={week} runId={runId} />
+        ) : (
+          <Preview state={state} week={week} />
+        )}
+      </main>
+    </>
   );
 }
 
 function WeekSelect({ value }: { value: string | undefined }) {
   return (
-    <label className="text-sm">
+    <label className="field-label">
       Week starting Monday
-      <select name="week" defaultValue={value ?? MONDAYS[0]} className="mt-1 block rounded border border-neutral-300 px-2 py-1">
+      <select name="week" defaultValue={value ?? MONDAYS[0]} className="field min-w-[180px]">
         {MONDAYS.map((m) => (
           <option key={m} value={m}>{m}</option>
         ))}
@@ -104,8 +109,8 @@ function Preview({ state, week }: { state: State; week: string }) {
   const sendRows = rows.filter((d) => d.status === "to_send");
 
   return (
-    <section className="mt-6">
-      <h2 className="text-lg font-semibold">Preview: week of {r.monday}, braces visits on Friday {r.friday}</h2>
+    <section className="mt-8 border-t border-ink pt-5">
+      <h2 className="text-[22px]">Preview: week of {r.monday}, braces visits on Friday {r.friday}</h2>
       <Counts
         toSend={r.counts.toSend}
         detail={`${r.counts.firstReminders} first, ${r.counts.secondReminders} second`}
@@ -114,34 +119,23 @@ function Preview({ state, week }: { state: State; week: string }) {
         other={r.counts.ignored}
         otherLabel="not this week"
       />
-      <div className="mt-4 overflow-x-auto">
-        <table className="w-full border-collapse text-left text-sm">
-          <thead>
-            <tr className="border-b border-neutral-300">
-              <th className="py-2 pr-4">ID</th>
-              <th className="py-2 pr-4">First name</th>
-              <th className="py-2 pr-4">Visit due</th>
-              <th className="py-2 pr-4">Result</th>
-              <th className="py-2 pr-4">Why</th>
-              <th className="py-2 pr-4">Planned send time</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((d) => {
-              const i = sendRows.indexOf(d);
-              return (
-                <tr key={d.patientId} className="border-b border-neutral-200" data-testid="decision-row">
-                  <td className="py-2 pr-4 font-mono">{d.patientId}</td>
-                  <td className="py-2 pr-4">{d.firstName}</td>
-                  <td className="py-2 pr-4">{d.dueDate}</td>
-                  <td className="py-2 pr-4">{STATUS_LABEL[d.status]}</td>
-                  <td className="py-2 pr-4">{reasonText(d)}</td>
-                  <td className="py-2 pr-4 font-mono" data-testid="planned-time">{i >= 0 ? timeOfDay(planned[i]) : ""}</td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+      <div className="ledger mt-4" role="table">
+        <div role="row" className="ledger-head grid grid-cols-[60px_120px_130px_190px_1fr_120px]">
+          <span role="columnheader">ID</span><span role="columnheader">First name</span><span role="columnheader">Visit due</span><span role="columnheader">Result</span><span role="columnheader">Why</span><span role="columnheader">Planned send time</span>
+        </div>
+        {rows.map((d) => {
+          const i = sendRows.indexOf(d);
+          return (
+            <div role="row" key={d.patientId} className="ledger-row grid grid-cols-[60px_120px_130px_190px_1fr_120px]" data-testid="decision-row">
+              <span role="cell" className="cell-soft" data-label="ID">{d.patientId}</span>
+              <span role="cell" className="cell-name" data-label="First name">{d.firstName}</span>
+              <span role="cell" data-label="Visit due">{d.dueDate}</span>
+              <span role="cell" className={`status ${d.status === "to_send" ? "status-ok" : d.status === "needs_person" ? "status-clay" : ""}`} data-label="Result">{STATUS_LABEL[d.status]}</span>
+              <span role="cell" className="cell-soft" data-label="Why">{reasonText(d)}</span>
+              <span role="cell" className="num" data-label="Planned send time" data-testid="planned-time">{i >= 0 ? timeOfDay(planned[i]) : ""}</span>
+            </div>
+          );
+        })}
       </div>
     </section>
   );
@@ -155,8 +149,8 @@ function RunResult({ state, week, runId }: { state: State; week: string; runId: 
   const created = records.filter((r) => r.status === "sent");
 
   return (
-    <section className="mt-6">
-      <h2 className="text-lg font-semibold">Run done: week of {week}</h2>
+    <section className="mt-8 border-t border-ink pt-5">
+      <h2 className="text-[22px]">Run done: week of {week}</h2>
       <Counts
         toSend={created.length}
         detail={`${created.filter((r) => r.reason === "reminder 1").length} first, ${created.filter((r) => r.reason === "reminder 2").length} second`}
@@ -166,32 +160,22 @@ function RunResult({ state, week, runId }: { state: State; week: string; runId: 
         otherLabel="already sent earlier"
         toSendLabel="reminders created"
       />
-      <div className="mt-4 overflow-x-auto">
-        <table className="w-full border-collapse text-left text-sm">
-          <thead>
-            <tr className="border-b border-neutral-300">
-              <th className="py-2 pr-4">ID</th>
-              <th className="py-2 pr-4">First name</th>
-              <th className="py-2 pr-4">Result</th>
-              <th className="py-2 pr-4">Why</th>
-              <th className="py-2 pr-4">Planned send time</th>
-            </tr>
-          </thead>
-          <tbody>
-            {records.map((r) => {
-              const m = messages.find((x) => x.patientId === r.patientId);
-              return (
-                <tr key={r.patientId} className="border-b border-neutral-200" data-testid="decision-row">
-                  <td className="py-2 pr-4 font-mono">{r.patientId}</td>
-                  <td className="py-2 pr-4">{names.get(r.patientId)}</td>
-                  <td className="py-2 pr-4">{r.status.replace("_", " ")}</td>
-                  <td className="py-2 pr-4">{r.reason && r.status === "needs_person" ? REASON_TEXT[r.reason as CallReason] : (r.reason ?? "")}</td>
-                  <td className="py-2 pr-4 font-mono" data-testid="planned-time">{r.status === "sent" && m ? timeOfDay(m.sendAt) : ""}</td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+      <div className="ledger mt-4" role="table">
+        <div role="row" className="ledger-head grid grid-cols-[60px_120px_190px_1fr_120px]">
+          <span role="columnheader">ID</span><span role="columnheader">First name</span><span role="columnheader">Result</span><span role="columnheader">Why</span><span role="columnheader">Planned send time</span>
+        </div>
+        {records.map((r) => {
+          const m = messages.find((x) => x.patientId === r.patientId);
+          return (
+            <div role="row" key={r.patientId} className="ledger-row grid grid-cols-[60px_120px_190px_1fr_120px]" data-testid="decision-row">
+              <span role="cell" className="cell-soft" data-label="ID">{r.patientId}</span>
+              <span role="cell" className="cell-name" data-label="First name">{names.get(r.patientId)}</span>
+              <span role="cell" className={`status ${r.status === "sent" ? "status-ok" : r.status === "needs_person" ? "status-clay" : ""}`} data-label="Result">{r.status.replace("_", " ")}</span>
+              <span role="cell" className="cell-soft" data-label="Why">{r.reason && r.status === "needs_person" ? REASON_TEXT[r.reason as CallReason] : (r.reason ?? "")}</span>
+              <span role="cell" className="num" data-label="Planned send time" data-testid="planned-time">{r.status === "sent" && m ? timeOfDay(m.sendAt) : ""}</span>
+            </div>
+          );
+        })}
       </div>
     </section>
   );
@@ -199,23 +183,25 @@ function RunResult({ state, week, runId }: { state: State; week: string; runId: 
 
 function Counts(props: { toSend: number; detail: string; skipped: number; needs: number; other: number; otherLabel: string; toSendLabel?: string }) {
   return (
-    <ul className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4" data-testid="counts">
-      <li className="rounded border border-neutral-300 p-3">
-        <span className="block text-2xl font-semibold" data-testid="count-to-send">{props.toSend}</span>
-        {props.toSendLabel ?? "to send"}
-        <span className="block text-xs text-neutral-600">{props.detail}</span>
+    <ul className="mt-3 flex flex-wrap items-baseline gap-x-10 gap-y-3" data-testid="counts">
+      <li className="flex items-baseline gap-3">
+        <span className="font-serif text-[64px] leading-none text-green" data-testid="count-to-send">{props.toSend}</span>
+        <span className="text-lg">
+          {props.toSendLabel ?? "to send"}
+          <span className="block text-sm text-soft">{props.detail}</span>
+        </span>
       </li>
-      <li className="rounded border border-neutral-300 p-3">
-        <span className="block text-2xl font-semibold" data-testid="count-skipped">{props.skipped}</span>
-        skipped (booked)
+      <li className="flex items-baseline gap-2">
+        <span className="font-serif text-[28px]" data-testid="count-skipped">{props.skipped}</span>
+        <span className="text-soft">skipped (booked)</span>
       </li>
-      <li className="rounded border border-neutral-300 p-3">
-        <span className="block text-2xl font-semibold" data-testid="count-needs-person">{props.needs}</span>
-        need a person
+      <li className="flex items-baseline gap-2">
+        <span className="font-serif text-[28px]" data-testid="count-needs-person">{props.needs}</span>
+        <span className="text-soft">need a person</span>
       </li>
-      <li className="rounded border border-neutral-300 p-3">
-        <span className="block text-2xl font-semibold" data-testid="count-ignored">{props.other}</span>
-        {props.otherLabel}
+      <li className="flex items-baseline gap-2">
+        <span className="font-serif text-[28px]" data-testid="count-ignored">{props.other}</span>
+        <span className="text-soft">{props.otherLabel}</span>
       </li>
     </ul>
   );

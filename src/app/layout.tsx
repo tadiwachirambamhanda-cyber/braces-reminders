@@ -1,16 +1,11 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { IBM_Plex_Mono, Newsreader, Noto_Naskh_Arabic, Source_Sans_3 } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const body = Source_Sans_3({ variable: "--font-body", subsets: ["latin"], weight: ["400", "600"] });
+const title = Newsreader({ variable: "--font-title", subsets: ["latin"], weight: ["500"] });
+const code = IBM_Plex_Mono({ variable: "--font-code", subsets: ["latin"], weight: ["400"] });
+const arabic = Noto_Naskh_Arabic({ variable: "--font-arabic", subsets: ["arabic"], weight: ["400", "600"] });
 
 export const metadata: Metadata = {
   title: "Smile Book",
@@ -21,7 +16,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${body.variable} ${title.variable} ${code.variable} ${arabic.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>

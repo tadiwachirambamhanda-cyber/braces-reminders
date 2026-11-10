@@ -18,6 +18,27 @@ function label(sendAt: string): string {
   return `${sendAt.slice(0, 10)} ${sendAt.slice(11, 16)}`;
 }
 
+const ARABIC = /[؀-ۿ]/;
+
+// A message may hold English and Arabic paragraphs. Arabic goes in its own right-to-left block.
+function MessageBody({ text }: { text: string }) {
+  return (
+    <>
+      {text.split(/\n{2,}/).map((para, i) =>
+        ARABIC.test(para) ? (
+          <div key={i} dir="rtl" lang="ar" className={`text-right ${i > 0 ? "mt-2 border-t border-black/10 pt-2" : ""}`}>
+            {para}
+          </div>
+        ) : (
+          <div key={i} className={`whitespace-pre-wrap leading-relaxed ${i > 0 ? "mt-2" : ""}`}>
+            {para}
+          </div>
+        ),
+      )}
+    </>
+  );
+}
+
 export default async function PhonePage(props: PageProps<"/phone">) {
   await connection();
   const params = await props.searchParams;
@@ -26,10 +47,12 @@ export default async function PhonePage(props: PageProps<"/phone">) {
 
   if (!state) {
     return (
-      <main className="mx-auto w-full max-w-5xl p-6">
+      <>
         <Nav />
-        <p>No patients yet. Run <code className="font-mono">npm run seed</code> first.</p>
-      </main>
+        <main className="page">
+          <p>No patients yet. Run <code className="font-mono">npm run seed</code> first.</p>
+        </main>
+      </>
     );
   }
 
@@ -41,60 +64,83 @@ export default async function PhonePage(props: PageProps<"/phone">) {
   const chat = messages.filter((m) => m.patientId === selected.id).sort((a, b) => a.sendAt.localeCompare(b.sendAt));
 
   return (
-    <main className="mx-auto w-full max-w-5xl p-6">
+    <>
       <Nav />
-      <h1 className="text-2xl font-semibold">Phone simulator</h1>
-      <p className="mt-1 text-sm text-neutral-600">What each patient sees on WhatsApp. Times are the planned send times.</p>
-      <div className="mt-4 grid gap-6 md:grid-cols-[14rem_1fr]">
-        <ul className="max-h-[32rem] overflow-y-auto rounded border border-neutral-300 text-sm" data-testid="patient-list">
-          {patients.map((p) => (
-            <li key={p.id}>
-              <Link
-                href={`/phone?patient=${p.id}`}
-                className={`flex justify-between px-3 py-2 hover:bg-neutral-100 ${p.id === selected.id ? "bg-neutral-100 font-medium" : ""}`}
-              >
-                <span>{p.id} {p.firstName}</span>
-                <span className="text-neutral-500">{counts.get(p.id) ?? ""}</span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-
-        <section className="rounded border border-neutral-300 p-4" data-testid="chat">
-          <h2 className="font-semibold">{selected.firstName} ({selected.id})</h2>
-          {chat.length === 0 ? <p className="mt-3 text-sm text-neutral-600">No messages yet.</p> : null}
-          <ul className="mt-3 space-y-3">
-            {chat.map((m) => (
-              <li key={m.id} className={m.direction === "out" ? "mr-8" : "ml-8"} data-testid={`msg-${m.kind}`}>
-                <div className={`whitespace-pre-wrap rounded-lg p-3 text-sm ${m.direction === "out" ? "bg-green-100" : "bg-neutral-100"}`}>{m.text}</div>
-                <p className="mt-1 text-xs text-neutral-500">
-                  {m.direction === "out" ? "Liwan Dental" : selected.firstName}, planned {label(m.sendAt)}
-                </p>
-                {m.ai ? (
-                  <p className="text-xs text-neutral-500" data-testid="ai-line">
-                    Read by: {m.ai.engine}
-                    {m.ai.intent ? ` (${m.ai.intent}, confidence ${m.ai.confidence === null ? "n/a" : m.ai.confidence.toFixed(2)})` : ""}, {m.ai.ms} ms
-                    {m.ai.costUsd !== null ? `, $${m.ai.costUsd.toFixed(5)}` : ""}. Warm sentence:{" "}
-                    {m.ai.opening === "ai" ? "written by AI, passed the checks" : `fixed wording${m.ai.openingNote ? ` (${m.ai.openingNote})` : ""}`}.
-                  </p>
-                ) : null}
+      <main className="page">
+        <h1 className="page-title">Phone simulator</h1>
+        <p className="page-lead">What each patient sees on WhatsApp. Times are the planned send times.</p>
+        <div className="mt-7 flex flex-wrap items-start gap-8">
+          <ul className="max-h-44 flex-[1_1_100%] sm:max-h-[32rem] overflow-y-auto border-t border-ink sm:flex-[0_0_200px]" data-testid="patient-list">
+            {patients.map((p) => (
+              <li key={p.id}>
+                <Link
+                  href={`/phone?patient=${p.id}`}
+                  className="flex min-h-11 items-center justify-between border-b border-rule px-2.5 text-ink no-underline"
+                  style={p.id === selected.id ? { background: "var(--chat-ground)", fontWeight: 600 } : undefined}
+                >
+                  <span>
+                    <span className="font-serif text-lg">{p.firstName}</span>{" "}
+                    <span className="text-[13px] font-normal text-soft">{p.id}</span>
+                  </span>
+                  <span className="font-normal text-soft">{counts.get(p.id) ?? ""}</span>
+                </Link>
               </li>
             ))}
           </ul>
-          <form action={sendAction} className="mt-4 flex gap-2" data-testid="send-form">
-            <input type="hidden" name="patient" value={selected.id} />
-            <input
-              name="text"
-              dir="auto"
-              placeholder={`Type a message as ${selected.firstName}`}
-              className="flex-1 rounded border border-neutral-300 px-2 py-1 text-sm"
-              autoComplete="off"
-              data-testid="send-text"
-            />
-            <button type="submit" className="rounded bg-green-700 px-4 py-1 text-sm text-white">Send</button>
-          </form>
-        </section>
-      </div>
-    </main>
+
+          <section className="min-w-0 max-w-[600px] flex-[1_1_420px]" data-testid="chat">
+            <div className="flex items-baseline gap-2.5 border-b border-rule pb-2.5">
+              <h2 className="text-[26px]">{selected.firstName}</h2>
+              <span className="text-soft">{selected.id}</span>
+            </div>
+            <div className="mt-3 rounded-md px-4 py-5" style={{ background: "var(--chat-ground)" }}>
+              {chat.length === 0 ? <p className="text-sm text-soft">No messages yet.</p> : null}
+              <ul className="flex flex-col gap-1.5">
+                {chat.map((m) => {
+                  const out = m.direction === "out";
+                  return (
+                    <li key={m.id} className={`max-w-[88%] ${out ? "self-start" : "mt-2.5 self-end"}`} data-testid={`msg-${m.kind}`}>
+                      <div
+                        className="px-3.5 py-2.5"
+                        style={{
+                          background: out ? "var(--bubble-out)" : "var(--bubble-in)",
+                          borderRadius: out ? "10px 10px 10px 2px" : "10px 10px 2px 10px",
+                        }}
+                      >
+                        <MessageBody text={m.text} />
+                        <p className="mt-1 text-right text-xs" style={{ color: out ? "var(--bubble-time)" : "var(--soft)" }}>
+                          {out ? "Liwan Dental" : selected.firstName}, planned {label(m.sendAt)}
+                        </p>
+                      </div>
+                      {m.ai ? (
+                        <p className="mx-0.5 mt-1 font-mono text-xs leading-normal text-soft" data-testid="ai-line">
+                          Read by: {m.ai.engine}
+                          {m.ai.intent ? ` (${m.ai.intent}, confidence ${m.ai.confidence === null ? "n/a" : m.ai.confidence.toFixed(2)})` : ""}, {m.ai.ms} ms
+                          {m.ai.costUsd !== null ? `, $${m.ai.costUsd.toFixed(5)}` : ""}. Warm sentence:{" "}
+                          {m.ai.opening === "ai" ? "written by AI, passed the checks" : `fixed wording${m.ai.openingNote ? ` (${m.ai.openingNote})` : ""}`}.
+                        </p>
+                      ) : null}
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+            <form action={sendAction} className="mt-4 flex gap-2.5" data-testid="send-form">
+              <input type="hidden" name="patient" value={selected.id} />
+              <input
+                name="text"
+                dir="auto"
+                aria-label={`Type a message as ${selected.firstName}`}
+                placeholder={`Type a message as ${selected.firstName}`}
+                className="field flex-1"
+                autoComplete="off"
+                data-testid="send-text"
+              />
+              <button type="submit" className="btn-primary">Send</button>
+            </form>
+          </section>
+        </div>
+      </main>
+    </>
   );
 }

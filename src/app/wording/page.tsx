@@ -31,44 +31,62 @@ function Status({ set, hash }: { set: keyof typeof FILES; hash: string }) {
   const record = store.read();
   const approved = isApproved(store, hash);
   return (
-    <section className="mt-4 rounded border border-neutral-300 p-4" data-testid={`approval-status-${set}`}>
+    <p className={`status ${approved && record ? "status-ok" : "status-clay"}`} data-testid={`approval-status-${set}`}>
       {approved && record ? (
-        <p>
+        <span>
           <strong>Approved</strong> by {record.approvedBy} on {record.approvedAt.slice(0, 16).replace("T", " ")} UTC.
-        </p>
+        </span>
       ) : record ? (
-        <p><strong>Not approved.</strong> The wording has changed since it was last approved, so it needs approving again.</p>
+        <span><strong>Not approved.</strong> The wording has changed since it was last approved, so it needs approving again.</span>
       ) : (
-        <p><strong>Not approved yet.</strong> Nothing can be built from this wording until it is approved.</p>
+        <span><strong>Not approved yet.</strong> Nothing can be built from this wording until it is approved.</span>
       )}
-    </section>
+    </p>
   );
 }
 
-function ApproveForm({ set, error, errorSet }: { set: keyof typeof FILES; error: string | undefined; errorSet: string | undefined }) {
+function ApproveForm({ set, hash, error, errorSet }: { set: keyof typeof FILES; hash: string; error: string | undefined; errorSet: string | undefined }) {
+  const approved = isApproved(fileStore(FILES[set]), hash);
   return (
     <>
-      <form action={approveAction} className="mt-4 flex flex-wrap items-end gap-3">
+      <form action={approveAction} className="mt-5 flex flex-wrap items-end gap-x-4 gap-y-3">
         <input type="hidden" name="set" value={set} />
-        <label className="text-sm">
+        <label className="field-label">
           Your name
-          <input name="name" required className="mt-1 block rounded border border-neutral-300 px-2 py-1" autoComplete="off" data-testid={`name-${set}`} />
+          <input name="name" required className="field w-60" autoComplete="off" data-testid={`name-${set}`} />
         </label>
-        <button type="submit" className="rounded bg-blue-700 px-4 py-2 text-white" data-testid={`approve-${set}`}>Approve this wording</button>
+        <button type="submit" className={approved ? "btn-quiet" : "btn-primary"} data-testid={`approve-${set}`}>{approved ? "Approve again" : "Approve this wording"}</button>
       </form>
-      {errorSet === set && error === "name" ? <p className="mt-3 text-red-700" role="alert">Please type your name to approve.</p> : null}
+      {errorSet === set && error === "name" ? <p className="strip strip-clay mt-3" role="alert">Please type your name to approve.</p> : null}
       {errorSet === set && error === "save" ? (
-        <p className="mt-3 text-red-700" role="alert">The approval could not be saved here (the folder may be read-only). Nothing was approved.</p>
+        <p className="strip strip-clay mt-3" role="alert">The approval could not be saved here (the folder may be read-only). Nothing was approved.</p>
       ) : null}
     </>
   );
 }
 
-function Box({ lang, children, testId }: { lang: "en" | "ar"; children: string; testId?: string }) {
+function SetHeader({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <p className="mt-2 whitespace-pre-wrap rounded bg-neutral-100 p-3 text-sm" lang={lang} dir={lang === "ar" ? "rtl" : "ltr"} data-testid={testId}>
+    <div className="mt-10 flex flex-wrap items-baseline justify-between gap-2 border-t border-ink pt-4">
+      <h2 className="text-[28px]">{title}</h2>
       {children}
-    </p>
+    </div>
+  );
+}
+
+// English on the left, Arabic on the right (stacked on a phone). Arabic is its own right-to-left block.
+function Pair({ label, en, ar, testId }: { label: string; en: string; ar: string; testId?: string }) {
+  return (
+    <div className="flex flex-wrap gap-x-8 gap-y-4 border-b border-rule py-5">
+      <div className="min-w-0 flex-[1_1_320px]">
+        <p className="label-caps mb-1.5">{label}</p>
+        <p className="whitespace-pre-wrap leading-relaxed" data-testid={testId ? `${testId}-en` : undefined}>{en}</p>
+      </div>
+      <div className="min-w-0 flex-[1_1_320px]" dir="rtl" lang="ar">
+        <p className="label-caps mb-1.5 text-left" dir="ltr" lang="en" style={{ fontSize: 13, lineHeight: "normal" }}>Arabic</p>
+        <p className="whitespace-pre-wrap text-right" data-testid={testId ? `${testId}-ar` : undefined}>{ar}</p>
+      </div>
+    </div>
   );
 }
 
@@ -82,73 +100,61 @@ export default async function WordingPage(props: PageProps<"/wording">) {
   const errorSet = one(params.set);
   const v = { name: SAMPLE_NAME, date: "Friday 6 November", time: "18:00", date2: "Friday 13 November" };
   const vAr = { name: SAMPLE_NAME, date: "الجمعة 6 نوفمبر", time: "18:00", date2: "الجمعة 13 نوفمبر" };
+  const price = { price: String(BRACES_PRICE_AED) };
 
   return (
-    <main className="mx-auto w-full max-w-3xl p-6">
+    <>
       <Nav />
-      <h1 className="text-2xl font-semibold">Wording</h1>
-      <p className="mt-1 text-sm text-neutral-600">
-        Read the wording below (a sample name, date and time are shown) and approve each set once. If a set is ever changed, it needs approving again.
-        Someone who reads Arabic should check the Arabic before it is approved.
-      </p>
-
-      <h2 className="mt-8 text-xl font-semibold">1. Reminders</h2>
-      <Status set="reminders" hash={wordingHash()} />
-      {([1, 2] as ReminderNumber[]).map((n) => (
-        <section key={n} className="mt-6">
-          <h3 className="text-lg font-semibold">{n === 1 ? "First reminder" : "Second reminder"}</h3>
-          <Box lang="en" testId={`wording-${n}-en`}>{renderTemplate(n, "en", SAMPLE_NAME, SAMPLE_DATE)}</Box>
-          <Box lang="ar" testId={`wording-${n}-ar`}>{renderTemplate(n, "ar", SAMPLE_NAME, SAMPLE_DATE)}</Box>
-        </section>
-      ))}
-      <ApproveForm set="reminders" error={error} errorSet={errorSet} />
-
-      <h2 className="mt-12 text-xl font-semibold">2. Confirmation and replies</h2>
-      <Status set="replies" hash={repliesWordingHash()} />
-      <section className="mt-6">
-        <h3 className="text-lg font-semibold">Booking confirmation (sent when the receptionist books)</h3>
-        <Box lang="en">{fill(REPLY_TEMPLATES.confirmation.en, v)}</Box>
-        <Box lang="ar">{fill(REPLY_TEMPLATES.confirmation.ar, vAr)}</Box>
-      </section>
-      <section className="mt-6">
-        <h3 className="text-lg font-semibold">Reply to &quot;What times are available?&quot; (no slot times are listed)</h3>
-        <Box lang="en">{fill(REPLY_TEMPLATES.windowReply.en, v)}</Box>
-        <Box lang="ar">{fill(REPLY_TEMPLATES.windowReply.ar, vAr)}</Box>
-      </section>
-      <section className="mt-6">
-        <h3 className="text-lg font-semibold">Reply when a patient names a time or wants to book (the receptionist books it)</h3>
-        <Box lang="en">{fill(REPLY_TEMPLATES.bookingRequest.en, v)}</Box>
-        <Box lang="ar">{fill(REPLY_TEMPLATES.bookingRequest.ar, vAr)}</Box>
-      </section>
-      <section className="mt-6">
-        <h3 className="text-lg font-semibold">Reply to &quot;How much does it cost?&quot; (braces patients only; the price is AED {BRACES_PRICE_AED})</h3>
-        <Box lang="en">{fill(REPLY_TEMPLATES.priceReply.en, { ...v, price: String(BRACES_PRICE_AED) })}</Box>
-        <Box lang="ar">{fill(REPLY_TEMPLATES.priceReply.ar, { ...vAr, price: String(BRACES_PRICE_AED) })}</Box>
-      </section>
-      <section className="mt-6">
-        <h3 className="text-lg font-semibold">Reply to pain, bleeding or damage (the patient goes first on the call list as URGENT)</h3>
-        <Box lang="en">{fill(REPLY_TEMPLATES.urgentReply.en, v)}</Box>
-        <Box lang="ar">{fill(REPLY_TEMPLATES.urgentReply.ar, vAr)}</Box>
-      </section>
-      <section className="mt-6">
-        <h3 className="text-lg font-semibold">Reply to anything else (the patient goes on the call list)</h3>
-        <Box lang="en">{fill(REPLY_TEMPLATES.holding.en, v)}</Box>
-        <Box lang="ar">{fill(REPLY_TEMPLATES.holding.ar, vAr)}</Box>
-      </section>
-      <section className="mt-6" data-testid="opening-rules">
-        <h3 className="text-lg font-semibold">The AI warm sentence (only when AI is switched on)</h3>
-        <p className="mt-1 text-sm text-neutral-600">
-          Claude may add one short, warm sentence after the first line of a reply. Code throws it away and uses the fixed wording above
-          if it breaks any of these rules. Approving this page approves these rules and the instructions below. Changing either needs a new approval.
+      <main className="page">
+        <h1 className="page-title">Wording</h1>
+        <p className="page-lead">
+          Read the wording below (a sample name, date and time are shown) and approve each set once. If a set is ever changed, it needs approving again.
+          Someone who reads Arabic should check the Arabic before it is approved.
         </p>
-        <ul className="mt-2 list-disc pl-6 text-sm">
-          {OPENING_CHECKS.map((c) => (
-            <li key={c.name}>{c.description}</li>
-          ))}
-        </ul>
-        <p className="mt-2 rounded bg-neutral-100 p-3 text-xs">{OPENING_PROMPT}</p>
-      </section>
-      <ApproveForm set="replies" error={error} errorSet={errorSet} />
-    </main>
+
+        <SetHeader title="1. Reminders">
+          <Status set="reminders" hash={wordingHash()} />
+        </SetHeader>
+        {([1, 2] as ReminderNumber[]).map((n) => (
+          <Pair
+            key={n}
+            label={n === 1 ? "First reminder" : "Second reminder"}
+            en={renderTemplate(n, "en", SAMPLE_NAME, SAMPLE_DATE)}
+            ar={renderTemplate(n, "ar", SAMPLE_NAME, SAMPLE_DATE)}
+            testId={`wording-${n}`}
+          />
+        ))}
+        <ApproveForm set="reminders" hash={wordingHash()} error={error} errorSet={errorSet} />
+
+        <SetHeader title="2. Confirmation and replies">
+          <Status set="replies" hash={repliesWordingHash()} />
+        </SetHeader>
+        <Pair label="Booking confirmation (sent when the receptionist books)" en={fill(REPLY_TEMPLATES.confirmation.en, v)} ar={fill(REPLY_TEMPLATES.confirmation.ar, vAr)} />
+        <Pair label={'Reply to "What times are available?" (no slot times are listed)'} en={fill(REPLY_TEMPLATES.windowReply.en, v)} ar={fill(REPLY_TEMPLATES.windowReply.ar, vAr)} />
+        <Pair label="Reply when a patient names a time or wants to book (the receptionist books it)" en={fill(REPLY_TEMPLATES.bookingRequest.en, v)} ar={fill(REPLY_TEMPLATES.bookingRequest.ar, vAr)} />
+        <Pair
+          label={`Reply to "How much does it cost?" (braces patients only; the price is AED ${BRACES_PRICE_AED})`}
+          en={fill(REPLY_TEMPLATES.priceReply.en, { ...v, ...price })}
+          ar={fill(REPLY_TEMPLATES.priceReply.ar, { ...vAr, ...price })}
+        />
+        <Pair label="Reply to pain, bleeding or damage (the patient goes first on the call list as URGENT)" en={fill(REPLY_TEMPLATES.urgentReply.en, v)} ar={fill(REPLY_TEMPLATES.urgentReply.ar, vAr)} />
+        <Pair label="Reply to anything else (the patient goes on the call list)" en={fill(REPLY_TEMPLATES.holding.en, v)} ar={fill(REPLY_TEMPLATES.holding.ar, vAr)} />
+
+        <section className="mt-6 rounded px-6 py-5" style={{ background: "var(--tint)" }} data-testid="opening-rules">
+          <h3 className="text-[22px]">The AI warm sentence (only when AI is switched on)</h3>
+          <p className="mb-3 mt-1.5 max-w-[680px] leading-normal text-soft">
+            Claude may add one short, warm sentence after the first line of a reply. Code throws it away and uses the fixed wording above
+            if it breaks any of these rules. Approving this page approves these rules and the instructions below. Changing either needs a new approval.
+          </p>
+          <ol className="list-decimal pl-6 leading-loose sm:columns-2 sm:gap-10">
+            {OPENING_CHECKS.map((c) => (
+              <li key={c.name}>{c.description}</li>
+            ))}
+          </ol>
+          <p className="mt-3 rounded bg-white/60 p-3 text-sm">{OPENING_PROMPT}</p>
+        </section>
+        <ApproveForm set="replies" hash={repliesWordingHash()} error={error} errorSet={errorSet} />
+      </main>
+    </>
   );
 }
