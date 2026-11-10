@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const LINKS = [
   { href: "/", label: "Patients" },
@@ -10,13 +13,26 @@ const LINKS = [
 ];
 
 export function Nav() {
+  const path = usePathname();
   return (
-    <nav className="mb-4 flex flex-wrap gap-x-4 gap-y-1 border-b border-neutral-200 pb-2 text-sm">
-      {LINKS.map((l) => (
-        <Link key={l.href} href={l.href} className="underline">
-          {l.label}
-        </Link>
-      ))}
+    <nav className="nav-bar flex flex-wrap items-baseline gap-x-8 gap-y-2 border-b border-rule px-12 py-5">
+      <span className="mr-4">
+        <span className="font-serif text-[22px]">Smile Book</span>
+        <span className="ml-2 text-[13px] text-soft">Liwan Dental</span>
+      </span>
+      {LINKS.map((l) => {
+        const active = l.href === "/" ? path === "/" : path.startsWith(l.href);
+        return (
+          <Link
+            key={l.href}
+            href={l.href}
+            aria-current={active ? "page" : undefined}
+            className={`py-2 no-underline ${active ? "border-b-2 border-green font-semibold text-ink" : "text-soft"}`}
+          >
+            {l.label}
+          </Link>
+        );
+      })}
     </nav>
   );
 }
