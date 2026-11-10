@@ -56,3 +56,22 @@ No Monday run, no reminders, no message wording, no `/phone` screen, no replies,
 
 ## Questions
 None. I picked the seed numbers above myself from the acceptance criteria.
+
+## Changes from the plan
+- The patient field is named `dueDate`, not `dueFriday`, because the 10 non-braces patients have a due date too and not always on a Friday rule.
+- Added `src/lib/seed-data.ts` (the fixed data builder, so tests and the seed script share it), `src/lib/load-data.ts` (reads the data files on the server) and `vitest.config.ts`. `tests/patients.test.ts` holds the shape tests.
+- The page calls `connection()` so it reads the data on every visit rather than once at build time.
+- Left out the liwan-desk `cacheComponents` setting and the dark-mode styles, because F1 does not need them. The Anthropic and Jev packages are not installed yet; they arrive with the features that use them.
+- The two other taken times on 2026-11-06 are marked `clinic-hold` (times the dentist keeps).
+
+## Verification
+| Check | Result |
+|---|---|
+| `npm run seed` | prints `60 patients, 50 braces` |
+| `npm test` | 16 tests pass (60 total, 50 braces, 10 other; Fridays in November 2026; 14 braces on 2026-11-06 = 12 clean + 1 booked + 1 no phone; 12 braces on each other Friday; 15 slots per Friday; the exact 12 free times on 2026-11-06; zod accepts a valid patient and rejects one with no id) |
+| Open `/` in the browser | 60 rows, 50 "braces" badges, count line says `60 patients, 50 braces`, calendar shows `2026-11-06: 15 slots, 12 free` with the 12 times |
+| `npm run lint` and `npm run typecheck` | no errors |
+| `npm run build` | passes with no environment variables set |
+
+## Ideas for later
+- None yet.
