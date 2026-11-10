@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wording</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:wght@500&family=Source+Sans+3:wght@400;600&family=Noto+Naskh+Arabic:wght@400;600&display=swap">
+<style>
+body{margin:0}
+@media (max-width: 640px){.gr{grid-template-columns: 1fr !important; gap: 2px !important; padding: 10px 0 !important}.gh{display: none !important}.pg{padding: 28px 20px 56px !important}.hd{padding: 14px 20px !important}.side{flex: 1 1 100% !important}}
+a{color:#2F5D50}a:hover{color:#1F4238}
+</style>
+</helmet>
+<div style="min-height: 1700px; box-sizing: border-box; background: #F6F1E7; color: #2A2620; font-family: 'Source Sans 3', sans-serif; font-size: 16px; display: flex; flex-direction: column">
+<div class="hd" style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 32px; padding: 20px 48px; border-bottom: 1px solid #DDD3C0">
+<span style="margin-right: 16px"><span style="font-family: 'Newsreader', serif; font-size: 22px">Smile Book</span> <span style="font-size: 13px; color: #675F52; margin-left: 6px">Liwan Dental</span></span>
+<a href="#" style="text-decoration: none; color: #675F52; padding: 8px 0">Patients</a>
+<a href="#" style="text-decoration: none; color: #675F52; padding: 8px 0">Run this week</a>
+<a href="#" style="text-decoration: none; color: #675F52; padding: 8px 0">Phone</a>
+<a href="#" style="text-decoration: none; color: #675F52; padding: 8px 0">Call list</a>
+<a href="#" style="text-decoration: none; color: #675F52; padding: 8px 0">Book</a>
+<a href="#" style="text-decoration: none; color: #2A2620; font-weight: 600; padding: 8px 0; border-bottom: 2px solid #2F5D50">Wording</a>
+</div>
+<div class="pg" style="width: 100%; max-width: 1040px; box-sizing: border-box; padding: 40px 48px 80px; display: flex; flex-direction: column; gap: 24px">
+<div>
+<h1 style="margin: 0; font-family: 'Newsreader', serif; font-weight: 500; font-size: 40px; line-height: 1.1">Wording</h1>
+<p style="margin: 8px 0 0; color: #675F52; max-width: 640px; line-height: 1.5">Read the wording below, with a sample name, date and time. Approve each set once. If a set changes, it needs approving again. Someone who reads Arabic should check the Arabic first.</p>
+</div>
+
+<div style="border-top: 1px solid #2A2620; padding-top: 16px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px">
+<h2 style="margin: 0; font-family: 'Newsreader', serif; font-weight: 500; font-size: 28px">1. Reminders</h2>
+<span style="display: flex; align-items: center; gap: 8px; font-weight: 600; color: #1F4238"><span style="width: 8px; height: 8px; border-radius: 50%; background: #2F5D50"></span>Approved by Dina on 2026-11-02 09:15 UTC</span>
+</div>
+<sc-for list="{{reminders}}" as="r" hint-placeholder-count="2">
+<div style="display: flex; flex-wrap: wrap; gap: 16px 32px; padding-bottom: 20px; border-bottom: 1px solid #DDD3C0">
+<div style="flex: 1 1 320px; min-width: 0"><div style="font-size: 13px; letter-spacing: 0.04em; color: #675F52; margin-bottom: 6px">{{r.label}}</div><p style="margin: 0; line-height: 1.6; white-space: pre-line">{{r.en}}</p></div>
+<div dir="rtl" lang="ar" style="flex: 1 1 320px; min-width: 0; text-align: right"><div style="font-size: 13px; color: #675F52; margin-bottom: 6px; font-family: 'Source Sans 3', sans-serif" dir="ltr">Arabic</div><p style="margin: 0; font-family: 'Noto Naskh Arabic', serif; font-size: 18px; line-height: 1.9; white-space: pre-line">{{r.ar}}</p></div>
+</div>
+</sc-for>
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px 16px">
+<label style="display: flex; flex-direction: column; gap: 4px; font-size: 14px; color: #675F52">Your name
+<input style="min-height: 44px; width: 240px; box-sizing: border-box; padding: 0 12px; border: 1px solid #B9AD96; border-radius: 4px; background: #FFFDF8; font-family: 'Source Sans 3', sans-serif; font-size: 16px; color: #2A2620"></label>
+<button type="button" style="min-height: 44px; padding: 0 24px; background: #2F5D50; color: #F6F1E7; border: 0; border-radius: 4px; font-family: 'Source Sans 3', sans-serif; font-size: 16px; font-weight: 600">Approve this wording</button>
+</div>
+
+<div style="border-top: 1px solid #2A2620; padding-top: 16px; margin-top: 24px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px">
+<h2 style="margin: 0; font-family: 'Newsreader', serif; font-weight: 500; font-size: 28px">2. Confirmation and replies</h2>
+<span style="display: flex; align-items: center; gap: 8px; font-weight: 600; color: #8F3820"><span style="width: 8px; height: 8px; border-radius: 50%; background: #B4472B"></span>Not approved yet. Nothing can be sent from this wording.</span>
+</div>
+<sc-for list="{{replies}}" as="r" hint-placeholder-count="6">
+<div style="display: flex; flex-wrap: wrap; gap: 16px 32px; padding-bottom: 20px; border-bottom: 1px solid #DDD3C0">
+<div style="flex: 1 1 320px; min-width: 0"><div style="font-size: 13px; letter-spacing: 0.04em; color: #675F52; margin-bottom: 6px">{{r.label}}</div><p style="margin: 0; line-height: 1.6">{{r.en}}</p></div>
+<div dir="rtl" lang="ar" style="flex: 1 1 320px; min-width: 0; text-align: right"><div style="font-size: 13px; color: #675F52; margin-bottom: 6px; font-family: 'Source Sans 3', sans-serif" dir="ltr">Arabic</div><p style="margin: 0; font-family: 'Noto Naskh Arabic', serif; font-size: 18px; line-height: 1.9">{{r.ar}}</p></div>
+</div>
+</sc-for>
+
+<div style="background: #EFE7D6; border-radius: 4px; padding: 20px 24px">
+<h3 style="margin: 0; font-family: 'Newsreader', serif; font-weight: 500; font-size: 22px">The AI warm sentence</h3>
+<p style="margin: 6px 0 12px; color: #675F52; line-height: 1.5; max-width: 680px">Only when AI is switched on. The AI may add one short, warm sentence after the first line of a reply. If it breaks any rule below, code throws it away and uses the fixed wording. Approving this page approves these rules.</p>
+<ol style="margin: 0; padding-left: 24px; columns: 2 300px; column-gap: 40px; line-height: 1.8">
+<sc-for list="{{rules}}" as="x" hint-placeholder-count="12"><li>{{x}}</li></sc-for>
+</ol>
+</div>
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px 16px">
+<label style="display: flex; flex-direction: column; gap: 4px; font-size: 14px; color: #675F52">Your name
+<input style="min-height: 44px; width: 240px; box-sizing: border-box; padding: 0 12px; border: 1px solid #B9AD96; border-radius: 4px; background: #FFFDF8; font-family: 'Source Sans 3', sans-serif; font-size: 16px; color: #2A2620"></label>
+<button type="button" style="min-height: 44px; padding: 0 24px; background: #2F5D50; color: #F6F1E7; border: 0; border-radius: 4px; font-family: 'Source Sans 3', sans-serif; font-size: 16px; font-weight: 600">Approve this wording</button>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1700}}'>
+class Component extends DCLogic {
+renderVals() {
+return {
+reminders: [
+{ label: 'FIRST REMINDER', en: "Hi Sara, it's Liwan Dental. Your braces visit is due on Friday 6 November. Reply here and we will help you find a time.", ar: 'مرحباً سارة، معكِ عيادة ليوان. موعد تقويمك يوم الجمعة ٦ نوفمبر. اكتبي لنا هنا وسنساعدك في اختيار الوقت.' },
+{ label: 'SECOND REMINDER', en: "Hi Sara, it's Liwan Dental again. We have not heard back about your braces visit on Friday 13 November. Reply here and we will help.", ar: 'مرحباً سارة، معكِ عيادة ليوان مرة أخرى. لم نسمع منك بخصوص موعد تقويمك يوم الجمعة ١٣ نوفمبر. اكتبي لنا وسنساعدك.' }
+],
+replies: [
+{ label: 'BOOKING CONFIRMATION, SENT WHEN THE RECEPTIONIST BOOKS', en: "Hi Sara, your braces visit at Liwan Dental is booked for Friday 6 November at 18:00. See you then.", ar: 'مرحباً سارة، تم حجز موعد تقويمك في عيادة ليوان يوم الجمعة ٦ نوفمبر الساعة ١٨:٠٠. نراك قريباً.' },
+{ label: 'WHAT TIMES ARE AVAILABLE? (NO SLOT TIMES LISTED)', en: "Hi Sara, braces visits are on Friday 6 November, between 5 p.m. and 10 p.m. The receptionist can find you a time.", ar: 'مرحباً سارة، زيارات التقويم يوم الجمعة ٦ نوفمبر بين ٥ مساءً و١٠ مساءً. تستطيع موظفة الاستقبال إيجاد وقت لك.' },
+{ label: 'PATIENT NAMES A TIME OR WANTS TO BOOK', en: "Hi Sara, thank you. The receptionist will confirm your time with you shortly.", ar: 'مرحباً سارة، شكراً لك. ستؤكد لك موظفة الاستقبال موعدك قريباً.' },
+{ label: 'HOW MUCH DOES IT COST? (BRACES PATIENTS ONLY, AED 300)', en: "Hi Sara, a braces visit costs AED 300.", ar: 'مرحباً سارة، تكلفة زيارة التقويم ٣٠٠ درهم.' },
+{ label: 'PAIN, BLEEDING OR DAMAGE (PATIENT GOES FIRST ON THE CALL LIST AS URGENT)', en: "Hi Sara, I'm sorry you are in pain. Please come to the clinic as soon as you can. The receptionist will speak to you. If it is severe, go to an emergency department.", ar: 'مرحباً سارة، نأسف لأنك تشعرين بألم. يرجى زيارة العيادة في أقرب وقت. ستتحدث إليك موظفة الاستقبال. وإذا كان الألم شديداً فتوجهي إلى الطوارئ.' },
+{ label: 'ANYTHING ELSE (PATIENT GOES ON THE CALL LIST)', en: "Hi Sara, thank you for your message. The receptionist will get back to you.", ar: 'مرحباً سارة، شكراً لرسالتك. ستعود إليك موظفة الاستقبال.' }
+],
+rules: ['Not empty', 'At most one short sentence, no line breaks', 'Not a question', 'No numbers', 'No month or weekday name', 'No price, money, discount or free offer', 'Never says anything is booked or confirmed', 'No promise, no staff action, no medical or timing words', 'No thank you (the reply already says it)', 'No link, email or @', 'Same language as the patient', 'Instructions to the AI are approved with this page']
+};
+}
+}
+</script>
+</body>
+</html>

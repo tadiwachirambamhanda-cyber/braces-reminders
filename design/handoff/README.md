@@ -1,8 +1,8 @@
-# Handoff: Braces Reminders, direction A "Appointment book"
+# Handoff: Smile Book, direction A "Appointment book"
 
 For the coding agent that restyles the app. Restyle only. No new route, field, screen or feature. Do not change what any screen does. Canvas (private): https://claude.ai/artifact/7wC5T5JgoYkJSMe28yu64t
 
-Files (each is a design prototype in the .dc.html format; read the markup and inline styles for exact values): `patients.dc.html` (/), `run.dc.html` (/run), `phone.dc.html` (/phone), `calls.dc.html` (/calls), `book.dc.html` (/book), `wording.dc.html` (/wording), `states.dc.html` (empty, loading, error for every screen). No screenshots yet: open the canvas to see them.
+Files (each is a design prototype in the .dc.html format; read the markup and inline styles for exact values): `patients.dc.html` (/), `run.dc.html` (/run), `phone.dc.html` (/phone), `calls.dc.html` (/calls), `book.dc.html` (/book), `wording.dc.html` (/wording), `states.dc.html` (empty, loading, error for every screen). Open the canvas to see them rendered.
 
 ## Tokens (exact)
 | Token | Value | Use |
@@ -38,5 +38,5 @@ Files (each is a design prototype in the .dc.html format; read the markup and in
 
 ## Choices and open points
 - Chose a serif only for titles and first names; ledger rows instead of cards; one green; clay red kept for urgency so it keeps its meaning.
-- Mobile (390px) frames are not drawn yet; the layouts are fluid and wrap by design. Screenshots at 390 are still to do.
+- 390px frames: `calls-390`, `phone-390`, `run-390`, `wording-390` (same markup, shown in a 390 wide frame). Under 640px: table rows stack as one block per row (status, name, why, week), header labels hide, page padding drops to 20px, the nav wraps. Checked in a browser at 375px: no sideways scroll on /, /calls, /phone.
 - The wording samples in `wording.dc.html` are illustrative; the real text comes from `src/lib`.

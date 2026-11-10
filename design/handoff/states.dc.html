@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>States sheet</title>
 <script src="./support.js"></script>
 </head>
@@ -11,10 +12,11 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:wght@500&family=Source+Sans+3:wght@400;600&display=swap">
 <style>
 body{margin:0}
+@media (max-width: 640px){.gr{grid-template-columns: 1fr !important; gap: 2px !important; padding: 10px 0 !important}.gh{display: none !important}.pg{padding: 28px 20px 56px !important}.hd{padding: 14px 20px !important}.side{flex: 1 1 100% !important}}
 </style>
 </helmet>
 <div style="min-height: 1500px; box-sizing: border-box; background: #F6F1E7; color: #2A2620; font-family: 'Source Sans 3', sans-serif; font-size: 16px">
-<div style="width: 100%; max-width: 1200px; box-sizing: border-box; padding: 40px 48px 64px; display: flex; flex-direction: column; gap: 24px">
+<div class="pg" style="width: 100%; max-width: 1200px; box-sizing: border-box; padding: 40px 48px 64px; display: flex; flex-direction: column; gap: 24px">
 <div>
 <h1 style="margin: 0; font-family: 'Newsreader', serif; font-weight: 500; font-size: 40px; line-height: 1.1">States on every screen</h1>
 <p style="margin: 8px 0 0; color: #675F52; max-width: 640px; line-height: 1.5">Empty, loading and error for each screen, plus the extra states from the screen map. Loading is quiet grey bars. Errors are one plain sentence in clay red, with what to do next.</p>

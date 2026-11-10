@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Phone simulator</title>
 <script src="./support.js"></script>
 </head>
@@ -11,12 +12,13 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:wght@500&family=Source+Sans+3:wght@400;600&family=Noto+Naskh+Arabic:wght@400;600&display=swap">
 <style>
 body{margin:0}
+@media (max-width: 640px){.gr{grid-template-columns: 1fr !important; gap: 2px !important; padding: 10px 0 !important}.gh{display: none !important}.pg{padding: 28px 20px 56px !important}.hd{padding: 14px 20px !important}.side{flex: 1 1 100% !important}}
 a{color:#2F5D50}a:hover{color:#1F4238}
 </style>
 </helmet>
 <div style="min-height: 1000px; box-sizing: border-box; background: #F6F1E7; color: #2A2620; font-family: 'Source Sans 3', sans-serif; font-size: 16px; display: flex; flex-direction: column">
-<div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 32px; padding: 20px 48px; border-bottom: 1px solid #DDD3C0">
-<span style="font-family: 'Newsreader', serif; font-size: 20px; margin-right: 16px">Liwan Dental</span>
+<div class="hd" style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 32px; padding: 20px 48px; border-bottom: 1px solid #DDD3C0">
+<span style="margin-right: 16px"><span style="font-family: 'Newsreader', serif; font-size: 22px">Smile Book</span> <span style="font-size: 13px; color: #675F52; margin-left: 6px">Liwan Dental</span></span>
 <a href="#" style="text-decoration: none; color: #675F52; padding: 8px 0">Patients</a>
 <a href="#" style="text-decoration: none; color: #675F52; padding: 8px 0">Run this week</a>
 <a href="#" style="text-decoration: none; color: #2A2620; font-weight: 600; padding: 8px 0; border-bottom: 2px solid #2F5D50">Phone</a>
@@ -24,11 +26,11 @@ a{color:#2F5D50}a:hover{color:#1F4238}
 <a href="#" style="text-decoration: none; color: #675F52; padding: 8px 0">Book</a>
 <a href="#" style="text-decoration: none; color: #675F52; padding: 8px 0">Wording</a>
 </div>
-<div style="width: 100%; max-width: 1040px; box-sizing: border-box; padding: 40px 48px 64px">
+<div class="pg" style="width: 100%; max-width: 1040px; box-sizing: border-box; padding: 40px 48px 64px">
 <h1 style="margin: 0; font-family: 'Newsreader', serif; font-weight: 500; font-size: 40px; line-height: 1.1">Phone simulator</h1>
 <p style="margin: 8px 0 0; color: #675F52; max-width: 560px; line-height: 1.5">What each patient sees on WhatsApp. Times are the planned send times.</p>
 <div style="display: flex; flex-wrap: wrap; gap: 32px; margin-top: 28px; align-items: flex-start">
-<div style="flex: 0 0 200px; border-top: 1px solid #2A2620">
+<div class="side" style="flex: 0 0 200px; border-top: 1px solid #2A2620">
 <div style="display: flex; justify-content: space-between; align-items: center; min-height: 44px; border-bottom: 1px solid #DDD3C0; background: #EAE1CF; padding: 0 10px; font-weight: 600"><span><span style="font-family: 'Newsreader', serif; font-size: 18px; font-weight: 500">Sara</span> <span style="color: #675F52; font-size: 13px; font-weight: 400">P003</span></span><span style="color: #675F52; font-weight: 400">5</span></div>
 <div style="display: flex; justify-content: space-between; align-items: center; min-height: 44px; border-bottom: 1px solid #DDD3C0; padding: 0 10px"><span><span style="font-family: 'Newsreader', serif; font-size: 18px">Omar</span> <span style="color: #675F52; font-size: 13px">P011</span></span><span style="color: #675F52">3</span></div>
 <div style="display: flex; justify-content: space-between; align-items: center; min-height: 44px; border-bottom: 1px solid #DDD3C0; padding: 0 10px"><span><span style="font-family: 'Newsreader', serif; font-size: 18px">Layla</span> <span style="color: #675F52; font-size: 13px">P014</span></span><span style="color: #675F52">2</span></div>

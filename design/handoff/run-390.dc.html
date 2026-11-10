@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Run this week</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:wght@500&family=Source+Sans+3:wght@400;600&display=swap">
+<style>
+body{margin:0}
+@media (max-width: 640px){.gr{grid-template-columns: 1fr !important; gap: 2px !important; padding: 10px 0 !important}.gh{display: none !important}.pg{padding: 28px 20px 56px !important}.hd{padding: 14px 20px !important}.side{flex: 1 1 100% !important}}
+a{color:#2F5D50}a:hover{color:#1F4238}
+</style>
+</helmet>
+<div style="min-height: 1000px; box-sizing: border-box; background: #F6F1E7; color: #2A2620; font-family: 'Source Sans 3', sans-serif; font-size: 16px; display: flex; flex-direction: column">
+<div class="hd" style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 32px; padding: 20px 48px; border-bottom: 1px solid #DDD3C0">
+<span style="margin-right: 16px"><span style="font-family: 'Newsreader', serif; font-size: 22px">Smile Book</span> <span style="font-size: 13px; color: #675F52; margin-left: 6px">Liwan Dental</span></span>
+<a href="#" style="text-decoration: none; color: #675F52; padding: 8px 0">Patients</a>
+<a href="#" style="text-decoration: none; color: #2A2620; font-weight: 600; padding: 8px 0; border-bottom: 2px solid #2F5D50">Run this week</a>
+<a href="#" style="text-decoration: none; color: #675F52; padding: 8px 0">Phone</a>
+<a href="#" style="text-decoration: none; color: #675F52; padding: 8px 0">Call list</a>
+<a href="#" style="text-decoration: none; color: #675F52; padding: 8px 0">Book</a>
+<a href="#" style="text-decoration: none; color: #675F52; padding: 8px 0">Wording</a>
+</div>
+<div class="pg" style="width: 100%; max-width: 1040px; box-sizing: border-box; padding: 40px 48px 64px; display: flex; flex-direction: column; gap: 24px">
+<div>
+<h1 style="margin: 0; font-family: 'Newsreader', serif; font-weight: 500; font-size: 40px; line-height: 1.1">Run this week</h1>
+<p style="margin: 8px 0 0; color: #675F52; max-width: 600px; line-height: 1.5">Pick a Monday. Code chooses who gets a reminder for that week's Friday. Reminders go out between 17:00 and 22:00.</p>
+</div>
+<form onsubmit="return false" style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 16px 24px">
+<label style="display: flex; flex-direction: column; gap: 4px; font-size: 14px; color: #675F52">Monday
+<select style="min-height: 44px; min-width: 180px; padding: 0 12px; border: 1px solid #B9AD96; border-radius: 4px; background: #FFFDF8; font-family: 'Source Sans 3', sans-serif; font-size: 16px; color: #2A2620"><option>Mon 2 Nov 2026</option><option>Mon 9 Nov 2026</option></select>
+</label>
+<button type="submit" style="min-height: 44px; padding: 0 24px; background: #2F5D50; color: #F6F1E7; border: 0; border-radius: 4px; font-family: 'Source Sans 3', sans-serif; font-size: 16px; font-weight: 600">Run this week</button>
+<button type="button" style="min-height: 44px; padding: 0 20px; background: transparent; color: #2A2620; border: 1px solid #B9AD96; border-radius: 4px; font-family: 'Source Sans 3', sans-serif; font-size: 16px">Preview</button>
+</form>
+<div style="border-top: 1px solid #2A2620; padding-top: 20px">
+<div style="font-family: 'Newsreader', serif; font-size: 22px">Run done: week of Mon 2 Nov, braces visits on Friday 6 Nov</div>
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 12px 40px; margin-top: 12px">
+<div style="display: flex; align-items: baseline; gap: 12px"><span style="font-family: 'Newsreader', serif; font-size: 64px; line-height: 1; color: #2F5D50" data-testid="count-to-send">12</span><span style="font-size: 18px">to send</span></div>
+<div style="display: flex; align-items: baseline; gap: 8px"><span style="font-family: 'Newsreader', serif; font-size: 28px">1</span><span style="color: #675F52">skipped, already booked</span></div>
+<div style="display: flex; align-items: baseline; gap: 8px"><span style="font-family: 'Newsreader', serif; font-size: 28px">1</span><span style="color: #675F52">needs a person</span></div>
+<div style="display: flex; align-items: baseline; gap: 8px"><span style="font-family: 'Newsreader', serif; font-size: 28px">0</span><span style="color: #675F52">other</span></div>
+</div>
+</div>
+<div style="border-top: 1px solid #2A2620">
+<div class="gh" style="display: grid; grid-template-columns: 60px 120px 170px 1fr 120px; gap: 12px; padding: 10px 0; border-bottom: 1px solid #DDD3C0; color: #675F52; font-size: 13px; letter-spacing: 0.04em"><span>ID</span><span>FIRST NAME</span><span>RESULT</span><span>WHY</span><span>SEND TIME</span></div>
+<div class="gr" style="display: grid; grid-template-columns: 60px 120px 170px 1fr 120px; gap: 12px; align-items: center; min-height: 48px; border-bottom: 1px solid #DDD3C0"><span style="color: #675F52">P003</span><span style="font-family: 'Newsreader', serif; font-size: 19px">Sara</span><span style="display: flex; align-items: center; gap: 8px"><span style="width: 8px; height: 8px; border-radius: 50%; background: #2F5D50"></span>Sent</span><span style="color: #675F52">First reminder</span><span style="font-variant-numeric: tabular-nums">17:40</span></div>
+<div class="gr" style="display: grid; grid-template-columns: 60px 120px 170px 1fr 120px; gap: 12px; align-items: center; min-height: 48px; border-bottom: 1px solid #DDD3C0"><span style="color: #675F52">P011</span><span style="font-family: 'Newsreader', serif; font-size: 19px">Omar</span><span style="display: flex; align-items: center; gap: 8px"><span style="width: 8px; height: 8px; border-radius: 50%; background: #2F5D50"></span>Sent</span><span style="color: #675F52">First reminder</span><span style="font-variant-numeric: tabular-nums">18:10</span></div>
+<div class="gr" style="display: grid; grid-template-columns: 60px 120px 170px 1fr 120px; gap: 12px; align-items: center; min-height: 48px; border-bottom: 1px solid #DDD3C0"><span style="color: #675F52">P014</span><span style="font-family: 'Newsreader', serif; font-size: 19px">Layla</span><span style="display: flex; align-items: center; gap: 8px"><span style="width: 8px; height: 8px; border-radius: 50%; background: #675F52"></span>Skipped</span><span style="color: #675F52">Already booked</span><span></span></div>
+<div class="gr" style="display: grid; grid-template-columns: 60px 120px 170px 1fr 120px; gap: 12px; align-items: center; min-height: 48px; border-bottom: 1px solid #DDD3C0"><span style="color: #675F52">P034</span><span style="font-family: 'Newsreader', serif; font-size: 19px">Yousef</span><span style="display: flex; align-items: center; gap: 8px; color: #8F3820; font-weight: 600"><span style="width: 8px; height: 8px; border-radius: 50%; background: #B4472B"></span>Needs a person</span><span style="color: #675F52">No usable phone number</span><span></span></div>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1000}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>
