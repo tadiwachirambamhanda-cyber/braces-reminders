@@ -70,7 +70,7 @@ export default async function PhonePage(props: PageProps<"/phone">) {
         <h1 className="page-title">Phone simulator</h1>
         <p className="page-lead">What each patient sees on WhatsApp. Times are the planned send times.</p>
         <div className="mt-7 flex flex-wrap items-start gap-8">
-          <ul className="max-h-[32rem] flex-[1_1_100%] overflow-y-auto border-t border-ink sm:flex-[0_0_200px]" data-testid="patient-list">
+          <ul className="max-h-44 flex-[1_1_100%] sm:max-h-[32rem] overflow-y-auto border-t border-ink sm:flex-[0_0_200px]" data-testid="patient-list">
             {patients.map((p) => (
               <li key={p.id}>
                 <Link

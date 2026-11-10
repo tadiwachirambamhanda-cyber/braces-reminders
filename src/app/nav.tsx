@@ -16,7 +16,7 @@ export function Nav() {
   const path = usePathname();
   return (
     <nav className="nav-bar flex flex-wrap items-baseline gap-x-8 gap-y-2 border-b border-rule px-12 py-5">
-      <span className="mr-4">
+      <span className="nav-brand mr-4">
         <span className="font-serif text-[22px]">Smile Book</span>
         <span className="ml-2 text-[13px] text-soft">Liwan Dental</span>
       </span>

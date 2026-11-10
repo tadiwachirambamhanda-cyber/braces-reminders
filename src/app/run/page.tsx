@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { connection } from "next/server";
 import { isMonday } from "@/lib/dates";
@@ -64,13 +65,15 @@ export default async function RunPage(props: PageProps<"/run">) {
 
         {error === "wording" ? (
           <p className="strip strip-clay mt-5" role="alert">
-            Nothing was created. The reminder wording has not been approved yet. Approve it on the Wording page first.
+            Nothing was created. The reminder wording has not been approved yet. Approve it on the <Link href="/wording" className="underline">Wording page</Link> first.
           </p>
         ) : null}
 
         {!state ? (
           <p className="mt-6">No patients yet. Run <code className="font-mono">npm run seed</code> first.</p>
-        ) : week === undefined ? null : !isMonday(week) ? (
+        ) : week === undefined ? (
+          <p className="mt-6 text-soft">Choose a Monday, then Preview or Run this week.</p>
+        ) : !isMonday(week) ? (
           <p className="strip strip-clay mt-6" role="alert">Please pick a Monday. {week} is not one.</p>
         ) : runId ? (
           <RunResult state={state} week={week} runId={runId} />

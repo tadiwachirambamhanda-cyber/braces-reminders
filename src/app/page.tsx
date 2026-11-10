@@ -60,7 +60,7 @@ export default async function PatientsPage() {
             </div>
           </div>
 
-          <div className="min-w-[260px] flex-[0_1_320px]">
+          <div className="min-w-[260px] flex-[0_1_320px] max-sm:order-first max-sm:flex-[1_1_100%]">
             <h2 className="text-[26px]">Braces calendar</h2>
             <p className="mb-3 mt-1 text-[15px] text-soft">Fridays, 17:00 to 22:00, 20-minute slots.</p>
             <ul className="border-t border-ink">

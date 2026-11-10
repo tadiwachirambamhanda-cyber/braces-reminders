@@ -115,5 +115,7 @@ a:hover { color: var(--green-hover); }
   .ledger-row > [data-label]::before {
     content: attr(data-label) ": "; order: -2; color: var(--soft); font-size: 13px; font-weight: 400; font-family: var(--font-body), system-ui, sans-serif;
   }
-  .nav-bar { padding: 14px 20px !important; }
+  .ledger-row > [data-label]:empty { display: none; }
+  .nav-bar { padding: 14px 20px !important; column-gap: 20px !important; }
+  .nav-brand { flex-basis: 100%; }
 }

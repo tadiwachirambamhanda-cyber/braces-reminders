@@ -45,7 +45,8 @@ function Status({ set, hash }: { set: keyof typeof FILES; hash: string }) {
   );
 }
 
-function ApproveForm({ set, error, errorSet }: { set: keyof typeof FILES; error: string | undefined; errorSet: string | undefined }) {
+function ApproveForm({ set, hash, error, errorSet }: { set: keyof typeof FILES; hash: string; error: string | undefined; errorSet: string | undefined }) {
+  const approved = isApproved(fileStore(FILES[set]), hash);
   return (
     <>
       <form action={approveAction} className="mt-5 flex flex-wrap items-end gap-x-4 gap-y-3">
@@ -54,7 +55,7 @@ function ApproveForm({ set, error, errorSet }: { set: keyof typeof FILES; error:
           Your name
           <input name="name" required className="field w-60" autoComplete="off" data-testid={`name-${set}`} />
         </label>
-        <button type="submit" className="btn-primary" data-testid={`approve-${set}`}>Approve this wording</button>
+        <button type="submit" className={approved ? "btn-quiet" : "btn-primary"} data-testid={`approve-${set}`}>{approved ? "Approve again" : "Approve this wording"}</button>
       </form>
       {errorSet === set && error === "name" ? <p className="strip strip-clay mt-3" role="alert">Please type your name to approve.</p> : null}
       {errorSet === set && error === "save" ? (
@@ -123,7 +124,7 @@ export default async function WordingPage(props: PageProps<"/wording">) {
             testId={`wording-${n}`}
           />
         ))}
-        <ApproveForm set="reminders" error={error} errorSet={errorSet} />
+        <ApproveForm set="reminders" hash={wordingHash()} error={error} errorSet={errorSet} />
 
         <SetHeader title="2. Confirmation and replies">
           <Status set="replies" hash={repliesWordingHash()} />
@@ -150,9 +151,9 @@ export default async function WordingPage(props: PageProps<"/wording">) {
               <li key={c.name}>{c.description}</li>
             ))}
           </ol>
-          <p className="mt-3 rounded bg-white/60 p-3 text-xs">{OPENING_PROMPT}</p>
+          <p className="mt-3 rounded bg-white/60 p-3 text-sm">{OPENING_PROMPT}</p>
         </section>
-        <ApproveForm set="replies" error={error} errorSet={errorSet} />
+        <ApproveForm set="replies" hash={repliesWordingHash()} error={error} errorSet={errorSet} />
       </main>
     </>
   );

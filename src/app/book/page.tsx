@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { connection } from "next/server";
 import { bookSlot } from "@/lib/booking";
@@ -53,6 +54,12 @@ export default async function BookPage(props: PageProps<"/book">) {
         {message ? (
           <p className={`strip mt-5 ${message.good ? "strip-good" : "strip-clay"}`} role="status" data-testid="book-result">
             {message.text}
+            {result === "booked_no_confirmation" ? (
+              <>
+                {" "}
+                <Link href="/wording" className="underline">Open the Wording page</Link>.
+              </>
+            ) : null}
           </p>
         ) : null}
 
