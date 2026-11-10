@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Book a braces visit</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:wght@500&family=Source+Sans+3:wght@400;600&display=swap">
+<style>
+body{margin:0}
+@media (max-width: 640px){.gr{grid-template-columns: 1fr !important; gap: 2px !important; padding: 10px 0 !important}.gh{display: none !important}.pg{padding: 28px 20px 56px !important}.hd{padding: 14px 20px !important}.side{flex: 1 1 100% !important}}
+a{color:#2F5D50}a:hover{color:#1F4238}
+</style>
+</helmet>
+<div style="min-height: 720px; box-sizing: border-box; background: #F6F1E7; color: #2A2620; font-family: 'Source Sans 3', sans-serif; font-size: 16px; display: flex; flex-direction: column">
+<div class="hd" style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 32px; padding: 20px 48px; border-bottom: 1px solid #DDD3C0">
+<span style="margin-right: 16px"><span style="font-family: 'Newsreader', serif; font-size: 22px">Smile Book</span> <span style="font-size: 13px; color: #675F52; margin-left: 6px">Liwan Dental</span></span>
+<a href="#" style="text-decoration: none; color: #675F52; padding: 8px 0">Patients</a>
+<a href="#" style="text-decoration: none; color: #675F52; padding: 8px 0">Run this week</a>
+<a href="#" style="text-decoration: none; color: #675F52; padding: 8px 0">Phone</a>
+<a href="#" style="text-decoration: none; color: #675F52; padding: 8px 0">Call list</a>
+<a href="#" style="text-decoration: none; color: #2A2620; font-weight: 600; padding: 8px 0; border-bottom: 2px solid #2F5D50">Book</a>
+<a href="#" style="text-decoration: none; color: #675F52; padding: 8px 0">Wording</a>
+</div>
+<div class="pg" style="width: 100%; max-width: 760px; box-sizing: border-box; padding: 40px 48px 64px; display: flex; flex-direction: column; gap: 24px">
+<div>
+<h1 style="margin: 0; font-family: 'Newsreader', serif; font-weight: 500; font-size: 40px; line-height: 1.1">Book a braces visit</h1>
+<p style="margin: 8px 0 0; color: #675F52; line-height: 1.5">Pick a patient and a free time. The patient is sent a confirmation straight away. A time that is already taken is refused.</p>
+</div>
+<div role="status" style="padding: 12px 16px; background: #DCE8D2; color: #1F4238; border-radius: 4px; font-weight: 600">Booked. The patient has been sent a confirmation (see the Phone screen).</div>
+<form onsubmit="return false" style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 16px 24px">
+<label style="display: flex; flex-direction: column; gap: 4px; font-size: 14px; color: #675F52">Patient
+<select style="min-height: 44px; min-width: 260px; padding: 0 12px; border: 1px solid #B9AD96; border-radius: 4px; background: #FFFDF8; font-family: 'Source Sans 3', sans-serif; font-size: 16px; color: #2A2620"><option>P003 Sara (due 2026-11-06)</option><option>P011 Omar (due 2026-11-06)</option></select>
+</label>
+<label style="display: flex; flex-direction: column; gap: 4px; font-size: 14px; color: #675F52">Free time
+<select style="min-height: 44px; min-width: 220px; padding: 0 12px; border: 1px solid #B9AD96; border-radius: 4px; background: #FFFDF8; font-family: 'Source Sans 3', sans-serif; font-size: 16px; color: #2A2620"><option>Friday 6 November at 18:00</option><option>Friday 6 November at 18:20</option></select>
+</label>
+<button type="submit" style="min-height: 44px; padding: 0 28px; background: #2F5D50; color: #F6F1E7; border: 0; border-radius: 4px; font-family: 'Source Sans 3', sans-serif; font-size: 16px; font-weight: 600">Book</button>
+</form>
+<div role="alert" style="padding: 12px 16px; background: #F3DDD0; color: #8F3820; border-radius: 4px; font-weight: 600">That time is already taken. Nothing was booked and nothing was sent. Pick another time.</div>
+<p style="margin: 0; color: #675F52; font-size: 14px">Shown above: the two result messages, booked and refused. Only one appears at a time.</p>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":720}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>
