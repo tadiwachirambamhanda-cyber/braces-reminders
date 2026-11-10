@@ -12,7 +12,7 @@ export default async function PatientsPage() {
   if (!data) {
     return (
       <main className="mx-auto w-full max-w-5xl p-6">
-        <h1 className="text-2xl font-semibold">Braces Reminders</h1>
+        <h1 className="text-2xl font-semibold">Smile Book</h1>
         <p className="mt-4">No patients yet. Run <code className="font-mono">npm run seed</code> in the terminal, then refresh this page.</p>
       </main>
     );
@@ -24,7 +24,7 @@ export default async function PatientsPage() {
   return (
     <main className="mx-auto w-full max-w-5xl p-6">
       <Nav />
-      <h1 className="text-2xl font-semibold">Braces Reminders</h1>
+      <h1 className="text-2xl font-semibold">Smile Book</h1>
       <p className="mt-1 text-sm text-neutral-600">Liwan Dental. All patients below are made up.</p>
 
       <h2 className="mt-6 text-lg font-semibold">Patients</h2>

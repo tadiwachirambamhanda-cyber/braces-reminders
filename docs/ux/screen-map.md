@@ -1,4 +1,4 @@
-# Screen map: Braces Reminders (Liwan Dental)
+# Screen map: Smile Book (Liwan Dental)
 
 One row per screen. Each screen is judged against its row, on a screenshot of the running app. These are the six screens the app already has; no screen is added. Every screen is read at 1440 and at 390 wide, in English (left to right) and with Arabic text (right to left) where patient or reminder text appears.
 
