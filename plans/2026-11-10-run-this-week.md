@@ -84,3 +84,6 @@ All 34 tests pass in total.
 
 ## Ideas for later
 - None yet.
+
+## Codex review
+Deferred by the owner (2026-11-10): one Codex review of the whole project will be run once all features are built, instead of one per feature. Not run on F2.
