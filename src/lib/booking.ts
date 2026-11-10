@@ -1,7 +1,8 @@
 // The receptionist books a braces slot. The agent cannot book; a person does (B8).
 // The check and the save are one step, so a double press books once.
 import { isApproved } from "./approval";
-import { isBraces } from "./patients";
+import { isBraces, type Patient } from "./patients";
+import type { Slot } from "./calendar";
 import { buildConfirmation, repliesWordingHash } from "./replies-wording";
 import { addCall, closeCallsForBooking, effectiveData, newId, type AppState } from "./state";
 
@@ -10,16 +11,17 @@ export type BookingResult =
   | { ok: false; error: "unknown_patient" | "not_braces" | "already_booked" | "unknown_slot" | "slot_taken" };
 
 export function bookSlot(state: AppState, patientId: string, slotId: string, now: Date = new Date()): BookingResult {
-  const outcome = state.bookings.update((bookings) => {
+  type Refused = Extract<BookingResult, { ok: false }>["error"];
+  const outcome = state.bookings.update<Refused | { patient: Patient; slot: Slot }>((bookings) => {
     // A fresh check against seed + everything booked so far, just before saving.
     const { patients, slots } = effectiveData(state, bookings);
     const patient = patients.find((p) => p.id === patientId);
-    if (!patient) return { result: "unknown_patient" as const };
-    if (!isBraces(patient)) return { result: "not_braces" as const };
-    if (patient.bookedSlotId !== null) return { result: "already_booked" as const };
+    if (!patient) return { result: "unknown_patient" as Refused };
+    if (!isBraces(patient)) return { result: "not_braces" as Refused };
+    if (patient.bookedSlotId !== null) return { result: "already_booked" as Refused };
     const slot = slots.find((s) => s.id === slotId);
-    if (!slot) return { result: "unknown_slot" as const };
-    if (slot.takenBy !== null) return { result: "slot_taken" as const };
+    if (!slot) return { result: "unknown_slot" as Refused };
+    if (slot.takenBy !== null) return { result: "slot_taken" as Refused };
     return {
       items: [...bookings, { patientId, slotId, bookedAt: now.toISOString() }],
       result: { patient, slot },
