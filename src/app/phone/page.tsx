@@ -1,7 +1,18 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { connection } from "next/server";
+import { handlePatientMessage } from "@/lib/replies";
 import { fileState } from "@/lib/state";
 import { Nav } from "../nav";
+
+async function sendAction(formData: FormData) {
+  "use server";
+  const patientId = String(formData.get("patient") ?? "");
+  const text = String(formData.get("text") ?? "").slice(0, 500);
+  const state = fileState();
+  if (state && state.seed.patients.some((p) => p.id === patientId)) handlePatientMessage(state, patientId, text);
+  redirect(`/phone?patient=${encodeURIComponent(patientId)}`);
+}
 
 function label(sendAt: string): string {
   return `${sendAt.slice(0, 10)} ${sendAt.slice(11, 16)}`;
@@ -62,6 +73,18 @@ export default async function PhonePage(props: PageProps<"/phone">) {
               </li>
             ))}
           </ul>
+          <form action={sendAction} className="mt-4 flex gap-2" data-testid="send-form">
+            <input type="hidden" name="patient" value={selected.id} />
+            <input
+              name="text"
+              dir="auto"
+              placeholder={`Type a message as ${selected.firstName}`}
+              className="flex-1 rounded border border-neutral-300 px-2 py-1 text-sm"
+              autoComplete="off"
+              data-testid="send-text"
+            />
+            <button type="submit" className="rounded bg-green-700 px-4 py-1 text-sm text-white">Send</button>
+          </form>
         </section>
       </div>
     </main>

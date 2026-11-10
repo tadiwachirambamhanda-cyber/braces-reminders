@@ -74,7 +74,7 @@ export function handlePatientMessage(state: AppState, patientId: string, text: s
     .sort((a, b) => b.sendAt.localeCompare(a.sendAt))[0];
   const friday = latest?.visitDate ?? patient.dueDate;
 
-  let date = friday;
+  const date = friday;
   let times = freeTimes(slots, date);
   let nextDate: string | undefined;
   if (times.length === 0) {
