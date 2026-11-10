@@ -212,6 +212,15 @@ describe("F14 P1 to P3: the braces price is answered", () => {
     expect(m.text).toContain("300 درهم");
   });
 
+  it("'What times are available this week?' is a general times question and gets the window reply; 'next week' still goes to a person", () => {
+    const a = freshState();
+    handlePatientMessage(a, "P001", "What times are available this week?", NOW);
+    expect(lastOut(a, "P001")!.kind).toBe("times_reply");
+    const b = freshState();
+    handlePatientMessage(b, "P001", "Can I come next week instead?", NOW);
+    expect(lastOut(b, "P001")!.kind).toBe("holding_reply");
+  });
+
   it("'How much is a filling?' gets the braces price, clearly worded as the braces appointment price only (P3 shortened on purpose)", () => {
     const state = freshState();
     handlePatientMessage(state, "P001", "How much is a filling?", NOW);
