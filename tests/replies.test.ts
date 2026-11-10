@@ -31,8 +31,14 @@ describe("F10 reading the message (B7)", () => {
   });
 
   it("a specific time, date or weekday, or wanting to book, goes to the receptionist, even if it also asks for times", () => {
-    for (const t of ["Can I come Friday 18:00? What times are free?", "What times are available tomorrow?", "Is 6pm available?", "I want to book", "Can I book a time?", "هل الجمعة متاحة؟", "الساعة 6:00 متاح؟", "أريد حجز موعد"]) {
+    for (const t of ["Can I come Friday 18:00? What times are free?", "What times are available tomorrow?", "Is 6pm available?", "I want to book", "Can I book a time?", "Are there times at 6?", "Any slots around 7?", "Is 6 o'clock free?", "ما هي الأوقات المتاحة الساعة 6؟", "هل الجمعة متاحة؟", "الساعة 6:00 متاح؟", "أريد حجز موعد"]) {
       expect(classify(t)).toBe("booking");
+    }
+  });
+
+  it("a plain times question without any time in it is still a window question (Codex #4)", () => {
+    for (const t of ["What times are available?", "Do you have slots this month?", "Are there any openings at all?"]) {
+      expect(classify(t)).toBe("window");
     }
   });
 

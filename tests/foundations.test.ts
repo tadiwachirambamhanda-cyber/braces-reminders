@@ -1,4 +1,4 @@
-import { mkdtempSync, rmSync } from "node:fs";
+import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
@@ -6,8 +6,10 @@ import { z } from "zod";
 import { ApprovalError, approve, memoryStore } from "../src/lib/approval";
 import { languageOf } from "../src/lib/language";
 import { buildBookingRequestReply, buildConfirmation, buildHoldingReply, buildWindowReply, repliesWordingHash } from "../src/lib/replies-wording";
-import { addCall, closeCallsForBooking, effectiveData, memoryState } from "../src/lib/state";
-import { fileJsonStore, memoryJsonStore } from "../src/lib/store";
+import { MessageSchema, addCall, closeCallsForBooking, effectiveData, memoryState } from "../src/lib/state";
+import { runWeek } from "../src/lib/run";
+import { wordingHash } from "../src/lib/wording";
+import { StoreError, fileJsonStore, memoryJsonStore } from "../src/lib/store";
 import { buildPatients, buildSlots } from "../src/lib/seed-data";
 import { freeTimes } from "../src/lib/calendar";
 
@@ -36,13 +38,46 @@ describe("stores", () => {
     expect(store.read()).toEqual(["slot"]);
   });
 
-  it("a file store keeps records, and a missing or damaged file is empty", () => {
+  it("a file store keeps records, and a file that does not exist yet is empty", () => {
     const dir = mkdtempSync(join(tmpdir(), "braces-store-"));
     try {
-      const store = fileJsonStore<string>(join(dir, "a", "x.json"), z.array(z.string()));
+      const path = join(dir, "a", "x.json");
+      const store = fileJsonStore<string>(path, z.array(z.string()));
       expect(store.read()).toEqual([]);
       store.update((items) => ({ items: [...items, "one"], result: null }));
-      expect(fileJsonStore<string>(join(dir, "a", "x.json"), z.array(z.string())).read()).toEqual(["one"]);
+      expect(fileJsonStore<string>(path, z.array(z.string())).read()).toEqual(["one"]);
+      expect(existsSync(`${path}.tmp`)).toBe(false); // the temporary file is gone after saving
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it("a damaged saved file is an error, never treated as empty, and is never overwritten (Codex #2)", () => {
+    const dir = mkdtempSync(join(tmpdir(), "braces-store-"));
+    try {
+      const path = join(dir, "messages.json");
+      writeFileSync(path, "{ not json");
+      const store = fileJsonStore<string>(path, z.array(z.string()));
+      expect(() => store.read()).toThrow(StoreError);
+      expect(() => store.update((items) => ({ items: [...items, "x"], result: null }))).toThrow(StoreError);
+      expect(readFileSync(path, "utf8")).toBe("{ not json");
+      writeFileSync(path, JSON.stringify([1, 2])); // valid JSON but the wrong shape
+      expect(() => store.read()).toThrow(StoreError);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it("a damaged messages file stops a weekly run instead of forgetting sent reminders (Codex #2)", () => {
+    const dir = mkdtempSync(join(tmpdir(), "braces-store-"));
+    try {
+      const path = join(dir, "messages.json");
+      writeFileSync(path, "garbage");
+      const state = memoryState(seed());
+      state.messages = fileJsonStore(path, z.array(MessageSchema));
+      approve(state.reminderApproval, "R", wordingHash());
+      expect(() => runWeek(state, "2026-11-02")).toThrow(StoreError);
+      expect(readFileSync(path, "utf8")).toBe("garbage");
     } finally {
       rmSync(dir, { recursive: true, force: true });
     }
