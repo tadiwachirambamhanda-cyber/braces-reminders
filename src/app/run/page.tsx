@@ -166,7 +166,7 @@ function RunResult({ state, week, runId }: { state: State; week: string; runId: 
         needs={count("needs_person")}
         other={count("already_sent")}
         otherLabel="already sent earlier"
-        toSendLabel="reminders created"
+        toSendLabel="sent"
       />
       <div className="ledger mt-4" role="table">
         <div role="row" className="ledger-head grid grid-cols-[60px_120px_190px_1fr_120px]">
