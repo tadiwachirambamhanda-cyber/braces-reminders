@@ -62,3 +62,25 @@ No message wording, no send times, no phone simulator, no saving of reminders, n
 
 ## Questions
 None. I chose the four Mondays in November for the week picker, and the screen shows counts and a list without phone numbers.
+
+## Changes from the plan
+- None to the steps or files. I also added a test that a missing or bad phone (empty, `12345`, `abc`, `+97`) goes to a person, and one that running the same Monday twice gives the same answer.
+- The screen also shows a "not this week" count (patients who are not looked at), which the plan said was part of the counts.
+
+## Verification
+| Check | Result |
+|---|---|
+| `npm test`, B1, B2, B3, B6 | pass (each test names its rule id) |
+| `npm test`, seed 2026-11-02 | 12 to send, 1 skipped, 1 needs person: pass |
+| `npm test`, seed 2026-11-09 | 24 to send (12 first, 12 second): pass |
+| `npm test`, seed 2026-11-16 | 24 to send; 12 patients from 2026-11-06 need a person (13 in all with the no-phone patient): pass |
+| `npm test`, date helpers | non-Monday rejected, Monday 2026-11-02 gives Friday 2026-11-06: pass |
+| Open `/run?week=2026-11-02` in the browser | 12 to send, 1 skipped, 1 need a person, 46 not this week, 14 rows |
+| Same screen for 2026-11-09 and 2026-11-16 | 24 to send (12 first, 12 second); needs a person 1 and 13 |
+| A Tuesday date | shows "Please pick a Monday." |
+| Phone numbers on screen | none shown |
+| `npm run lint`, `typecheck`, `build` | no errors; build passes with no environment variables |
+All 34 tests pass in total.
+
+## Ideas for later
+- None yet.
