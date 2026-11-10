@@ -151,10 +151,10 @@ export function newId(prefix: string): string {
   return `${prefix}${Date.now().toString(36)}${counter}`;
 }
 
-// Add a call list entry unless the same patient, reason and week is already open.
+// Add a call list entry unless the same patient and reason is already open (one line per patient and reason).
 export function addCall(state: AppState, entry: { patientId: string; reason: CallReason; week: string | null }, now: Date): boolean {
   return state.calls.update((items) => {
-    const exists = items.some((c) => c.open && c.patientId === entry.patientId && c.reason === entry.reason && c.week === entry.week);
+    const exists = items.some((c) => c.open && c.patientId === entry.patientId && c.reason === entry.reason);
     if (exists) return { result: false };
     const next: CallEntry = { id: newId("C"), ...entry, createdAt: now.toISOString(), open: true };
     return { items: [...items, next], result: true };

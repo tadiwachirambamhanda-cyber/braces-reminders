@@ -70,11 +70,12 @@ describe("seed plus bookings", () => {
 });
 
 describe("call list", () => {
-  it("does not add the same patient, reason and week twice, and a booking closes no-booking entries", () => {
+  it("does not add the same patient and reason twice (even in a later week), and a booking closes no-booking entries", () => {
     const state = memoryState(seed());
     const now = new Date("2026-11-16T09:00:00Z");
     expect(addCall(state, { patientId: "P001", reason: "no_booking_after_two_reminders", week: "2026-11-16" }, now)).toBe(true);
     expect(addCall(state, { patientId: "P001", reason: "no_booking_after_two_reminders", week: "2026-11-16" }, now)).toBe(false);
+    expect(addCall(state, { patientId: "P001", reason: "no_booking_after_two_reminders", week: "2026-11-23" }, now)).toBe(false);
     addCall(state, { patientId: "P001", reason: "other_question", week: null }, now);
     closeCallsForBooking(state, "P001");
     const open = state.calls.read().filter((c) => c.open).map((c) => c.reason);

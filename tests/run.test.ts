@@ -131,6 +131,14 @@ describe("AC3 and the call list when a Monday is skipped", () => {
     expect(reasons).not.toContain("no_booking_after_two_reminders");
   });
 
+  it("a patient with no phone is on the call list once, not once per week", () => {
+    const state = freshState();
+    run(state, "2026-11-02");
+    run(state, "2026-11-09");
+    run(state, "2026-11-16");
+    expect(calls(state).filter((c) => c.patientId === "P014")).toHaveLength(1);
+  });
+
   it("does not add the same call list entry twice on a repeat run", () => {
     const state = freshState();
     run(state, "2026-11-02");
