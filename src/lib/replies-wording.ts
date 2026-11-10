@@ -11,17 +11,15 @@ export const REPLY_TEMPLATES = {
     en: "Hello {name}, your braces visit at Liwan Dental is confirmed for {date} at {time}. We look forward to seeing you!",
     ar: "مرحباً {name}، تم تأكيد موعد التقويم الخاص بك في عيادة ليوان للأسنان (Liwan Dental) يوم {date} الساعة {time}. يسعدنا رؤيتك!",
   },
-  timesOpening: {
-    en: "Hello {name}, happy to help! Here are the free braces times on {date}:",
-    ar: "مرحباً {name}، يسعدنا مساعدتك! هذه الأوقات المتاحة للتقويم يوم {date}:",
+  // The reply to "What times are available?": the visit window only, never the 20-minute slots.
+  windowReply: {
+    en: "Hello {name}, happy to help! We see braces patients on {date} between 5 p.m. and 10 p.m. Just reply with the time that suits you and our receptionist will confirm your booking.",
+    ar: "مرحباً {name}، يسعدنا مساعدتك! نستقبل مرضى التقويم يوم {date} بين الساعة 5 مساءً و10 مساءً. ما عليك سوى إخبارنا بالوقت المناسب لك وستقوم موظفة الاستقبال بتأكيد حجزك.",
   },
-  timesOpeningNext: {
-    en: "Hello {name}, we have no free times on {date}, but here are the free braces times on {date2}:",
-    ar: "مرحباً {name}، لا توجد أوقات متاحة يوم {date}، لكن هذه الأوقات المتاحة للتقويم يوم {date2}:",
-  },
-  timesClosing: {
-    en: "Would one of those work for you? Our receptionist will confirm your booking.",
-    ar: "هل يناسبك أحد هذه الأوقات؟ ستقوم موظفة الاستقبال بتأكيد حجزك.",
+  // When a patient names a time or wants to book: a person books it.
+  bookingRequest: {
+    en: "Thank you, {name}! I have passed your request to our receptionist, who will confirm your time with you shortly.",
+    ar: "شكراً لك يا {name}! لقد حوّلت طلبك إلى موظفة الاستقبال وستؤكد لك الموعد قريباً.",
   },
   holding: {
     en: "Thank you for your message, {name}. I have passed it to our receptionist, who will reply to you shortly.",
@@ -69,28 +67,33 @@ export function buildConfirmation(
   return reasons.length ? { ok: false, reasons } : { ok: true, text };
 }
 
-// The free-times reply: a warm opening, one time per line, a closing question. One language.
-export function buildTimesReply(
-  args: { firstName: string; lang: Lang; date: string; times: string[]; nextDate?: string },
-  approvals: ApprovalStore,
-): ReplyResult {
+// The reply to a times question: Fridays between 5 p.m. and 10 p.m. No slot times are listed.
+export function buildWindowReply(args: { firstName: string; lang: Lang; date: string }, approvals: ApprovalStore): ReplyResult {
   requireApproved(approvals);
   const name = cleanFirstName(args.firstName);
   if (name === "") return { ok: false, reasons: ["no_name"] };
-  if (args.times.length === 0) return { ok: false, reasons: ["no_times"] };
   const l = args.lang;
-  const dateFor = (d: string) => (l === "en" ? formatDateEn(d) : formatDateAr(d));
-  const opening = args.nextDate
-    ? fill(REPLY_TEMPLATES.timesOpeningNext[l], { name, date: dateFor(args.date), date2: dateFor(args.nextDate) })
-    : fill(REPLY_TEMPLATES.timesOpening[l], { name, date: dateFor(args.date) });
-  const text = `${opening}\n${args.times.join("\n")}\n\n${REPLY_TEMPLATES.timesClosing[l]}`;
+  const date = l === "en" ? formatDateEn(args.date) : formatDateAr(args.date);
+  const text = fill(REPLY_TEMPLATES.windowReply[l], { name, date });
 
   const reasons: string[] = [];
-  // Every time in the reply must be exactly one of the given free times, in order, and nothing else.
-  const inText = text.match(TIME) ?? [];
-  if (inText.length !== args.times.length || inText.some((x, i) => x !== args.times[i])) reasons.push("times_not_from_calendar");
+  if ((text.match(TIME) ?? []).length > 0) reasons.push("lists_a_time"); // never 20-minute times
+  if (l === "en" ? !text.includes("5 p.m.") || !text.includes("10 p.m.") : !text.includes("5 مساءً") || !text.includes("10 مساءً")) reasons.push("no_window");
   if (PRICE.test(text)) reasons.push("has_price");
   if (SAYS_BOOKED.test(text)) reasons.push("says_booked_or_confirmed");
+  return reasons.length ? { ok: false, reasons } : { ok: true, text };
+}
+
+// Used when a patient names a time or wants to book (a person books it).
+export function buildBookingRequestReply(args: { firstName: string; lang: Lang }, approvals: ApprovalStore): ReplyResult {
+  requireApproved(approvals);
+  const name = cleanFirstName(args.firstName);
+  if (name === "") return { ok: false, reasons: ["no_name"] };
+  const text = fill(REPLY_TEMPLATES.bookingRequest[args.lang], { name });
+  const reasons: string[] = [];
+  if (PRICE.test(text)) reasons.push("has_price");
+  if (SAYS_BOOKED.test(text)) reasons.push("says_booked_or_confirmed");
+  if ((text.match(TIME) ?? []).length > 0) reasons.push("has_a_time");
   return reasons.length ? { ok: false, reasons } : { ok: true, text };
 }
 

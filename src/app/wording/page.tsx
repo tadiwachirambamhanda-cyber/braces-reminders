@@ -110,12 +110,14 @@ export default async function WordingPage(props: PageProps<"/wording">) {
         <Box lang="ar">{fill(REPLY_TEMPLATES.confirmation.ar, vAr)}</Box>
       </section>
       <section className="mt-6">
-        <h3 className="text-lg font-semibold">Reply to &quot;What times are available?&quot; (the list of free times goes in the middle)</h3>
-        <Box lang="en">{`${fill(REPLY_TEMPLATES.timesOpening.en, v)}\n17:40\n18:00\n18:20\n…\n\n${REPLY_TEMPLATES.timesClosing.en}`}</Box>
-        <Box lang="ar">{`${fill(REPLY_TEMPLATES.timesOpening.ar, vAr)}\n17:40\n18:00\n18:20\n…\n\n${REPLY_TEMPLATES.timesClosing.ar}`}</Box>
-        <p className="mt-3 text-sm text-neutral-600">If that Friday has no free times, the opening says so and names the next Friday:</p>
-        <Box lang="en">{fill(REPLY_TEMPLATES.timesOpeningNext.en, v)}</Box>
-        <Box lang="ar">{fill(REPLY_TEMPLATES.timesOpeningNext.ar, vAr)}</Box>
+        <h3 className="text-lg font-semibold">Reply to &quot;What times are available?&quot; (no slot times are listed)</h3>
+        <Box lang="en">{fill(REPLY_TEMPLATES.windowReply.en, v)}</Box>
+        <Box lang="ar">{fill(REPLY_TEMPLATES.windowReply.ar, vAr)}</Box>
+      </section>
+      <section className="mt-6">
+        <h3 className="text-lg font-semibold">Reply when a patient names a time or wants to book (the receptionist books it)</h3>
+        <Box lang="en">{fill(REPLY_TEMPLATES.bookingRequest.en, v)}</Box>
+        <Box lang="ar">{fill(REPLY_TEMPLATES.bookingRequest.ar, vAr)}</Box>
       </section>
       <section className="mt-6">
         <h3 className="text-lg font-semibold">Reply to anything else (the patient goes on the call list)</h3>

@@ -35,7 +35,7 @@ export const CALL_REASONS = [
   "confirmation_not_sent",
   "wording_not_approved",
   "other_question",
-  "no_free_times",
+  "booking_request",
   "reply_failed_checks",
 ] as const;
 export type CallReason = (typeof CALL_REASONS)[number];
@@ -75,7 +75,7 @@ export const REASON_TEXT: Record<CallReason, string> = {
   confirmation_not_sent: "Booked, but the confirmation was not sent",
   wording_not_approved: "Wrote to us, but the reply wording is not approved",
   other_question: "Asked something else",
-  no_free_times: "Asked for times, but none are free",
+  booking_request: "Wants to book a time",
   reply_failed_checks: "The reply did not pass its checks",
 };
 
@@ -162,7 +162,7 @@ export function addCall(state: AppState, entry: { patientId: string; reason: Cal
 }
 
 // A patient who has booked no longer needs a call about missing a booking.
-const CLOSED_BY_BOOKING: CallReason[] = ["no_booking_after_two_reminders", "missed_reminders", "no_free_times"];
+const CLOSED_BY_BOOKING: CallReason[] = ["no_booking_after_two_reminders", "missed_reminders", "booking_request"];
 
 export function closeCallsForBooking(state: AppState, patientId: string): void {
   state.calls.update((items) => ({

@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest";
 import { z } from "zod";
 import { ApprovalError, approve, memoryStore } from "../src/lib/approval";
 import { languageOf } from "../src/lib/language";
-import { buildConfirmation, buildHoldingReply, buildTimesReply, repliesWordingHash } from "../src/lib/replies-wording";
+import { buildBookingRequestReply, buildConfirmation, buildHoldingReply, buildWindowReply, repliesWordingHash } from "../src/lib/replies-wording";
 import { addCall, closeCallsForBooking, effectiveData, memoryState } from "../src/lib/state";
 import { fileJsonStore, memoryJsonStore } from "../src/lib/store";
 import { buildPatients, buildSlots } from "../src/lib/seed-data";
@@ -86,7 +86,8 @@ describe("replies wording set (needs its own approval)", () => {
   it("B8: nothing is built before the replies wording is approved", () => {
     const none = memoryStore();
     expect(() => buildConfirmation({ firstName: "Sara", date: "2026-11-06", time: "18:00" }, none)).toThrow(ApprovalError);
-    expect(() => buildTimesReply({ firstName: "Sara", lang: "en", date: "2026-11-06", times: ["18:00"] }, none)).toThrow(ApprovalError);
+    expect(() => buildWindowReply({ firstName: "Sara", lang: "en", date: "2026-11-06" }, none)).toThrow(ApprovalError);
+    expect(() => buildBookingRequestReply({ firstName: "Sara", lang: "en" }, none)).toThrow(ApprovalError);
     expect(() => buildHoldingReply({ firstName: "Sara", lang: "en" }, none)).toThrow(ApprovalError);
   });
 
@@ -112,28 +113,34 @@ describe("replies wording set (needs its own approval)", () => {
     expect(buildConfirmation({ firstName: " ", date: "2026-11-06", time: "18:00" }, approvedReplies())).toEqual({ ok: false, reasons: ["no_name"] });
   });
 
-  it("B7: the times reply lists exactly the given times, one per line, in order, in the patient's language", () => {
-    const times = ["17:40", "18:00", "18:20"];
-    const en = buildTimesReply({ firstName: "Sara", lang: "en", date: "2026-11-06", times }, approvedReplies());
-    const ar = buildTimesReply({ firstName: "Sara", lang: "ar", date: "2026-11-06", times }, approvedReplies());
+  it("B7: the window reply says Fridays between 5 p.m. and 10 p.m. and lists NO 20-minute times, in the patient's language", () => {
+    const en = buildWindowReply({ firstName: "Sara", lang: "en", date: "2026-11-06" }, approvedReplies());
+    const ar = buildWindowReply({ firstName: "Sara", lang: "ar", date: "2026-11-06" }, approvedReplies());
     if (!en.ok || !ar.ok) throw new Error("should build");
-    expect(en.text.split("\n").filter((l) => /^\d{2}:\d{2}$/.test(l))).toEqual(times);
+    expect(en.text.startsWith("Hello Sara")).toBe(true);
     expect(en.text).toContain("Friday 6 November");
-    expect(en.text.trim().endsWith("confirm your booking.")).toBe(true);
-    expect(/[؀-ۿ]/.test(en.text)).toBe(false);
+    expect(en.text).toContain("between 5 p.m. and 10 p.m.");
+    expect(en.text).toContain("our receptionist will confirm your booking");
+    expect(en.text).not.toMatch(/\d{1,2}:\d{2}/);
+    expect(/[\u0600-\u06FF]/.test(en.text)).toBe(false);
     expect(ar.text).toContain("الجمعة 6 نوفمبر");
-    expect(ar.text.split("\n").filter((l) => /^\d{2}:\d{2}$/.test(l))).toEqual(times);
+    expect(ar.text).toContain("5 مساءً");
+    expect(ar.text).toContain("10 مساءً");
+    expect(ar.text).not.toMatch(/\d{1,2}:\d{2}/);
   });
 
-  it("B7: the next-Friday opening names both Fridays", () => {
-    const r = buildTimesReply({ firstName: "Sara", lang: "en", date: "2026-11-06", times: ["17:00"], nextDate: "2026-11-13" }, approvedReplies());
-    if (!r.ok) throw new Error("should build");
-    expect(r.text).toContain("no free times on Friday 6 November");
-    expect(r.text).toContain("Friday 13 November");
+  it("an empty name cannot build a window reply or a booking-request reply", () => {
+    expect(buildWindowReply({ firstName: "", lang: "en", date: "2026-11-06" }, approvedReplies())).toEqual({ ok: false, reasons: ["no_name"] });
+    expect(buildBookingRequestReply({ firstName: "", lang: "en" }, approvedReplies())).toEqual({ ok: false, reasons: ["no_name"] });
   });
 
-  it("a times reply with no times cannot be built", () => {
-    expect(buildTimesReply({ firstName: "Sara", lang: "en", date: "2026-11-06", times: [] }, approvedReplies())).toEqual({ ok: false, reasons: ["no_times"] });
+  it("the booking-request reply is warm, says a person will confirm, and has no price, no time and no booked claim", () => {
+    const en = buildBookingRequestReply({ firstName: "Sara", lang: "en" }, approvedReplies());
+    const ar = buildBookingRequestReply({ firstName: "Sara", lang: "ar" }, approvedReplies());
+    if (!en.ok || !ar.ok) throw new Error("should build");
+    expect(en.text).toContain("passed your request to our receptionist");
+    expect(/[\u0600-\u06FF]/.test(ar.text)).toBe(true);
+    expect(en.text).not.toMatch(/\d{1,2}:\d{2}|AED|\bbooked\b|\bconfirmed\b/);
   });
 
   it("the holding reply is warm, in the patient's language, and has no price, no time and no booked claim", () => {
