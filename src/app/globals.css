@@ -94,10 +94,10 @@ a:hover { color: var(--green-hover); }
 
 /* Status is a dot plus a word, never colour alone. */
 .status { display: inline-flex; align-items: center; gap: 8px; }
-.status::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--soft); }
-.status-ok::before { background: var(--green); }
+.status::after { content: ""; order: -1; width: 8px; height: 8px; border-radius: 50%; background: var(--soft); }
+.status-ok::after { background: var(--green); }
 .status-clay { color: var(--clay-text); font-weight: 600; }
-.status-clay::before { background: var(--clay); }
+.status-clay::after { background: var(--clay); }
 
 /* Strips: one message at the top of a screen. */
 .strip { padding: 12px 16px; border-radius: 4px; font-weight: 600; }
@@ -113,7 +113,7 @@ a:hover { color: var(--green-hover); }
   .ledger-head { display: none; }
   .ledger-row { grid-template-columns: 1fr !important; gap: 2px; padding: 10px 0; }
   .ledger-row > [data-label]::before {
-    content: attr(data-label) ": "; color: var(--soft); font-size: 13px; font-family: var(--font-body), system-ui, sans-serif;
+    content: attr(data-label) ": "; order: -2; color: var(--soft); font-size: 13px; font-weight: 400; font-family: var(--font-body), system-ui, sans-serif;
   }
   .nav-bar { padding: 14px 20px !important; }
 }

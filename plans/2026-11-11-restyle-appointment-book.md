@@ -46,3 +46,14 @@ A fresh reviewer returned five findings; all were accepted.
 - No monospace font and no Arabic subset named: added IBM Plex Mono and the `arabic` subset, applied on every Arabic screen.
 - Strip wording differed from the screen map: step 3 now uses the screen map wording.
 - Stacked phone cells lose their labels: added `data-label` in step 7.
+
+## Changes from the plan
+- Added one extra `data-testid="urgent-strip"` on the `/calls` red strip. No other id was added, removed or renamed.
+- The status dot is drawn with `::after` (not `::before`) so the phone-width label can sit before it.
+
+## Verification
+- `npm run lint`, `npm run typecheck`: pass. `npm test`: 12 files, 193 tests pass, no test edited. `npm run build`: succeeds with the new fonts.
+- Form names, hidden fields, `action={...}` and `method="get"` compared with main: identical. Test ids: identical plus the one new id above.
+- Seeded and run on the dev server (port 3012, own data folder): approved both wording sets through the real forms with a throwaway name; ran Monday 2 Nov: "12 reminders created, 1 skipped, 1 needs a person"; ran Monday 9 Nov preview: 24 to send; on `/phone` sent "How much does it cost?" (AED 300 reply, Arabic block right-to-left) and "my bracket broke and it hurts"; `/calls` then showed the red strip "1 urgent patient: call Sara first" and the URGENT row first; `/book` booked a free slot and showed the green strip.
+- At 375px wide none of the six pages scrolls sideways; table rows stack with their own labels (a label overlap on status cells was found and fixed).
+- Not yet walked: every state on the states sheet (refused run, not a Monday, slot taken, empty call list, AI on and off) beyond the ones above; `/ux-check` not run.
