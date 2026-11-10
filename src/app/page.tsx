@@ -44,17 +44,17 @@ export default async function PatientsPage() {
             <p className="mt-1 text-soft" data-testid="patient-count">
               {patients.length} patients, {bracesCount} braces
             </p>
-            <div className="ledger mt-3">
-              <div className={`ledger-head grid ${COLS}`}>
-                <span>ID</span><span>First name</span><span>Phone</span><span>Treatment</span><span>Booking</span>
+            <div className="ledger mt-3" role="table">
+              <div role="row" className={`ledger-head grid ${COLS}`}>
+                <span role="columnheader">ID</span><span role="columnheader">First name</span><span role="columnheader">Phone</span><span role="columnheader">Treatment</span><span role="columnheader">Booking</span>
               </div>
               {patients.map((p) => (
-                <div key={p.id} className={`ledger-row grid ${COLS}`} data-testid="patient-row">
-                  <span className="cell-soft num" data-label="ID">{p.id}</span>
-                  <span className="cell-name" data-label="First name">{p.firstName}</span>
-                  <span className={p.phone ? "num" : "status-clay"} data-label="Phone">{p.phone || "missing"}</span>
-                  <span className={isBraces(p) ? "status status-ok" : "cell-soft"} data-label="Treatment">{isBraces(p) ? "braces" : p.treatment}</span>
-                  <span className={p.bookedSlotId ? "" : "cell-soft"} data-label="Booking">{p.bookedSlotId ? p.bookedSlotId.replace("T", " ") : "none"}</span>
+                <div role="row" key={p.id} className={`ledger-row grid ${COLS}`} data-testid="patient-row">
+                  <span role="cell" className="cell-soft num" data-label="ID">{p.id}</span>
+                  <span role="cell" className="cell-name" data-label="First name">{p.firstName}</span>
+                  <span role="cell" className={p.phone ? "num" : "status-clay"} data-label="Phone">{p.phone || "missing"}</span>
+                  <span role="cell" className={isBraces(p) ? "status status-ok" : "cell-soft"} data-label="Treatment">{isBraces(p) ? "braces" : p.treatment}</span>
+                  <span role="cell" className={p.bookedSlotId ? "" : "cell-soft"} data-label="Booking">{p.bookedSlotId ? p.bookedSlotId.replace("T", " ") : "none"}</span>
                 </div>
               ))}
             </div>

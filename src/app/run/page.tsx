@@ -116,20 +116,20 @@ function Preview({ state, week }: { state: State; week: string }) {
         other={r.counts.ignored}
         otherLabel="not this week"
       />
-      <div className="ledger mt-4">
-        <div className="ledger-head grid grid-cols-[60px_120px_130px_190px_1fr_120px]">
-          <span>ID</span><span>First name</span><span>Visit due</span><span>Result</span><span>Why</span><span>Planned send time</span>
+      <div className="ledger mt-4" role="table">
+        <div role="row" className="ledger-head grid grid-cols-[60px_120px_130px_190px_1fr_120px]">
+          <span role="columnheader">ID</span><span role="columnheader">First name</span><span role="columnheader">Visit due</span><span role="columnheader">Result</span><span role="columnheader">Why</span><span role="columnheader">Planned send time</span>
         </div>
         {rows.map((d) => {
           const i = sendRows.indexOf(d);
           return (
-            <div key={d.patientId} className="ledger-row grid grid-cols-[60px_120px_130px_190px_1fr_120px]" data-testid="decision-row">
-              <span className="cell-soft" data-label="ID">{d.patientId}</span>
-              <span className="cell-name" data-label="First name">{d.firstName}</span>
-              <span data-label="Visit due">{d.dueDate}</span>
-              <span className={`status ${d.status === "to_send" ? "status-ok" : d.status === "needs_person" ? "status-clay" : ""}`} data-label="Result">{STATUS_LABEL[d.status]}</span>
-              <span className="cell-soft" data-label="Why">{reasonText(d)}</span>
-              <span className="num" data-label="Planned send time" data-testid="planned-time">{i >= 0 ? timeOfDay(planned[i]) : ""}</span>
+            <div role="row" key={d.patientId} className="ledger-row grid grid-cols-[60px_120px_130px_190px_1fr_120px]" data-testid="decision-row">
+              <span role="cell" className="cell-soft" data-label="ID">{d.patientId}</span>
+              <span role="cell" className="cell-name" data-label="First name">{d.firstName}</span>
+              <span role="cell" data-label="Visit due">{d.dueDate}</span>
+              <span role="cell" className={`status ${d.status === "to_send" ? "status-ok" : d.status === "needs_person" ? "status-clay" : ""}`} data-label="Result">{STATUS_LABEL[d.status]}</span>
+              <span role="cell" className="cell-soft" data-label="Why">{reasonText(d)}</span>
+              <span role="cell" className="num" data-label="Planned send time" data-testid="planned-time">{i >= 0 ? timeOfDay(planned[i]) : ""}</span>
             </div>
           );
         })}
@@ -157,19 +157,19 @@ function RunResult({ state, week, runId }: { state: State; week: string; runId: 
         otherLabel="already sent earlier"
         toSendLabel="reminders created"
       />
-      <div className="ledger mt-4">
-        <div className="ledger-head grid grid-cols-[60px_120px_190px_1fr_120px]">
-          <span>ID</span><span>First name</span><span>Result</span><span>Why</span><span>Planned send time</span>
+      <div className="ledger mt-4" role="table">
+        <div role="row" className="ledger-head grid grid-cols-[60px_120px_190px_1fr_120px]">
+          <span role="columnheader">ID</span><span role="columnheader">First name</span><span role="columnheader">Result</span><span role="columnheader">Why</span><span role="columnheader">Planned send time</span>
         </div>
         {records.map((r) => {
           const m = messages.find((x) => x.patientId === r.patientId);
           return (
-            <div key={r.patientId} className="ledger-row grid grid-cols-[60px_120px_190px_1fr_120px]" data-testid="decision-row">
-              <span className="cell-soft" data-label="ID">{r.patientId}</span>
-              <span className="cell-name" data-label="First name">{names.get(r.patientId)}</span>
-              <span className={`status ${r.status === "sent" ? "status-ok" : r.status === "needs_person" ? "status-clay" : ""}`} data-label="Result">{r.status.replace("_", " ")}</span>
-              <span className="cell-soft" data-label="Why">{r.reason && r.status === "needs_person" ? REASON_TEXT[r.reason as CallReason] : (r.reason ?? "")}</span>
-              <span className="num" data-label="Planned send time" data-testid="planned-time">{r.status === "sent" && m ? timeOfDay(m.sendAt) : ""}</span>
+            <div role="row" key={r.patientId} className="ledger-row grid grid-cols-[60px_120px_190px_1fr_120px]" data-testid="decision-row">
+              <span role="cell" className="cell-soft" data-label="ID">{r.patientId}</span>
+              <span role="cell" className="cell-name" data-label="First name">{names.get(r.patientId)}</span>
+              <span role="cell" className={`status ${r.status === "sent" ? "status-ok" : r.status === "needs_person" ? "status-clay" : ""}`} data-label="Result">{r.status.replace("_", " ")}</span>
+              <span role="cell" className="cell-soft" data-label="Why">{r.reason && r.status === "needs_person" ? REASON_TEXT[r.reason as CallReason] : (r.reason ?? "")}</span>
+              <span role="cell" className="num" data-label="Planned send time" data-testid="planned-time">{r.status === "sent" && m ? timeOfDay(m.sendAt) : ""}</span>
             </div>
           );
         })}

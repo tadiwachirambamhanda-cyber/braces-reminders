@@ -36,20 +36,20 @@ export default async function CallsPage() {
         {open.length === 0 ? (
           <p className="mt-4">Nobody is on the call list.</p>
         ) : (
-          <div className="ledger mt-3">
-            <div className={`ledger-head grid ${COLS}`}>
-              <span>Status</span><span>Patient</span><span>Why</span><span>Week</span>
+          <div className="ledger mt-3" role="table">
+            <div role="row" className={`ledger-head grid ${COLS}`}>
+              <span role="columnheader">Status</span><span role="columnheader">Patient</span><span role="columnheader">Why</span><span role="columnheader">Week</span>
             </div>
             {open.map((c) => {
               const isUrgent = c.reason === "urgent_message";
               return (
-                <div key={c.id} className={`ledger-row grid ${COLS} ${isUrgent ? "urgent" : ""}`} data-testid="call-row">
-                  <span className={`status ${isUrgent ? "status-clay" : ""}`} data-label="Status">{isUrgent ? "URGENT" : "Needs a person"}</span>
-                  <span className="cell-name" data-label="Patient">
+                <div role="row" key={c.id} className={`ledger-row grid ${COLS} ${isUrgent ? "urgent" : ""}`} data-testid="call-row">
+                  <span role="cell" className={`status ${isUrgent ? "status-clay" : ""}`} data-label="Status">{isUrgent ? "URGENT" : "Needs a person"}</span>
+                  <span role="cell" className="cell-name" data-label="Patient">
                     {names.get(c.patientId)} <span className="font-sans text-[13px] text-soft">{c.patientId}</span>
                   </span>
-                  <span data-testid="call-reason" data-label="Why">{REASON_TEXT[c.reason]}</span>
-                  <span className="cell-soft" data-label="Week">{c.week ?? ""}</span>
+                  <span role="cell" data-testid="call-reason" data-label="Why">{REASON_TEXT[c.reason]}</span>
+                  <span role="cell" className="cell-soft" data-label="Week">{c.week ?? ""}</span>
                 </div>
               );
             })}
