@@ -2,7 +2,8 @@ import { join } from "node:path";
 import { redirect } from "next/navigation";
 import { connection } from "next/server";
 import { ApprovalError, approve, fileStore, isApproved } from "@/lib/approval";
-import { REPLY_TEMPLATES, repliesWordingHash } from "@/lib/replies-wording";
+import { OPENING_CHECKS, OPENING_PROMPT } from "@/lib/opening-rules";
+import { BRACES_PRICE_AED, REPLY_TEMPLATES, repliesWordingHash } from "@/lib/replies-wording";
 import { renderTemplate, wordingHash, type ReminderNumber } from "@/lib/wording";
 import { Nav } from "../nav";
 
@@ -120,9 +121,32 @@ export default async function WordingPage(props: PageProps<"/wording">) {
         <Box lang="ar">{fill(REPLY_TEMPLATES.bookingRequest.ar, vAr)}</Box>
       </section>
       <section className="mt-6">
+        <h3 className="text-lg font-semibold">Reply to &quot;How much does it cost?&quot; (braces patients only; the price is AED {BRACES_PRICE_AED})</h3>
+        <Box lang="en">{fill(REPLY_TEMPLATES.priceReply.en, { ...v, price: String(BRACES_PRICE_AED) })}</Box>
+        <Box lang="ar">{fill(REPLY_TEMPLATES.priceReply.ar, { ...vAr, price: String(BRACES_PRICE_AED) })}</Box>
+      </section>
+      <section className="mt-6">
+        <h3 className="text-lg font-semibold">Reply to pain, bleeding or damage (the patient goes first on the call list as URGENT)</h3>
+        <Box lang="en">{fill(REPLY_TEMPLATES.urgentReply.en, v)}</Box>
+        <Box lang="ar">{fill(REPLY_TEMPLATES.urgentReply.ar, vAr)}</Box>
+      </section>
+      <section className="mt-6">
         <h3 className="text-lg font-semibold">Reply to anything else (the patient goes on the call list)</h3>
         <Box lang="en">{fill(REPLY_TEMPLATES.holding.en, v)}</Box>
         <Box lang="ar">{fill(REPLY_TEMPLATES.holding.ar, vAr)}</Box>
+      </section>
+      <section className="mt-6" data-testid="opening-rules">
+        <h3 className="text-lg font-semibold">The AI warm sentence (only when AI is switched on)</h3>
+        <p className="mt-1 text-sm text-neutral-600">
+          Claude may add one short, warm sentence after the first line of a reply. Code throws it away and uses the fixed wording above
+          if it breaks any of these rules. Approving this page approves these rules and the instructions below. Changing either needs a new approval.
+        </p>
+        <ul className="mt-2 list-disc pl-6 text-sm">
+          {OPENING_CHECKS.map((c) => (
+            <li key={c.name}>{c.description}</li>
+          ))}
+        </ul>
+        <p className="mt-2 rounded bg-neutral-100 p-3 text-xs">{OPENING_PROMPT}</p>
       </section>
       <ApproveForm set="replies" error={error} errorSet={errorSet} />
     </main>

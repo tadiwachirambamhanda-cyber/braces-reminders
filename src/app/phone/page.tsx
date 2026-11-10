@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { connection } from "next/server";
-import { handlePatientMessage } from "@/lib/replies";
+import { handlePatientMessageAI } from "@/lib/replies-ai";
 import { fileState } from "@/lib/state";
 import { Nav } from "../nav";
 
@@ -10,7 +10,7 @@ async function sendAction(formData: FormData) {
   const patientId = String(formData.get("patient") ?? "");
   const text = String(formData.get("text") ?? "").slice(0, 500);
   const state = fileState();
-  if (state && state.seed.patients.some((p) => p.id === patientId)) handlePatientMessage(state, patientId, text);
+  if (state && state.seed.patients.some((p) => p.id === patientId)) await handlePatientMessageAI(state, patientId, text);
   redirect(`/phone?patient=${encodeURIComponent(patientId)}`);
 }
 
@@ -70,6 +70,14 @@ export default async function PhonePage(props: PageProps<"/phone">) {
                 <p className="mt-1 text-xs text-neutral-500">
                   {m.direction === "out" ? "Liwan Dental" : selected.firstName}, planned {label(m.sendAt)}
                 </p>
+                {m.ai ? (
+                  <p className="text-xs text-neutral-500" data-testid="ai-line">
+                    Read by: {m.ai.engine}
+                    {m.ai.intent ? ` (${m.ai.intent}, confidence ${m.ai.confidence === null ? "n/a" : m.ai.confidence.toFixed(2)})` : ""}, {m.ai.ms} ms
+                    {m.ai.costUsd !== null ? `, $${m.ai.costUsd.toFixed(5)}` : ""}. Warm sentence:{" "}
+                    {m.ai.opening === "ai" ? "written by AI, passed the checks" : `fixed wording${m.ai.openingNote ? ` (${m.ai.openingNote})` : ""}`}.
+                  </p>
+                ) : null}
               </li>
             ))}
           </ul>

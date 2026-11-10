@@ -155,19 +155,8 @@ describe("AC5: choosing a time or wanting to book goes to the receptionist", () 
 });
 
 describe("AC5 and F11: anything else gets the holding reply", () => {
-  it("'How much is a filling?' gets no answer to the question, a kind holding reply, and a call list entry", () => {
-    const state = freshState();
-    const out = handlePatientMessage(state, "P001", "How much is a filling?", NOW);
-    expect(out).toEqual({ kind: "holding_reply", callReason: "other_question" });
-    const m = lastOut(state, "P001")!;
-    expect(m.kind).toBe("holding_reply");
-    expect(m.text).toContain("passed it to our receptionist");
-    expect(m.text).not.toMatch(/AED|filling|\d{1,2}:\d{2}/);
-    expect(openCalls(state, "P001")).toEqual(["other_question"]);
-  });
-
-  it("an unclear message, an empty message and an Arabic price question all get the holding reply", () => {
-    for (const text of ["I need to talk to someone", "", "كم سعر التقويم؟", "I want to cancel"]) {
+  it("an unclear message, an empty message and a cancel request get the holding reply", () => {
+    for (const text of ["I need to talk to someone", "", "I want to cancel"]) {
       const state = freshState();
       const out = handlePatientMessage(state, "P001", text, NOW);
       expect(out.kind).toBe("holding_reply");
@@ -179,7 +168,7 @@ describe("AC5 and F11: anything else gets the holding reply", () => {
 
   it("an Arabic question gets an Arabic holding reply", () => {
     const state = freshState();
-    handlePatientMessage(state, "P001", "كم سعر الحشو؟", NOW);
+    handlePatientMessage(state, "P001", "أريد أن أتحدث مع أحد", NOW);
     expect(ARABIC.test(lastOut(state, "P001")!.text)).toBe(true);
   });
 
@@ -199,5 +188,89 @@ describe("AC5 and F11: anything else gets the holding reply", () => {
     }
     const replies = state.messages.read().filter((m) => m.patientId === "P002" && m.direction === "out" && m.kind !== "reminder");
     for (const m of replies) expect(m.text).not.toMatch(/\bconfirmed\b|\bbooked\b|تم تأكيد|تم حجز/i);
+  });
+});
+
+describe("F14 P1 to P3: the braces price is answered", () => {
+  it("'How much does it cost?' gets the price, AED 300, once, and no call list entry", () => {
+    const state = freshState();
+    const out = handlePatientMessage(state, "P001", "How much does it cost?", NOW);
+    expect(out).toEqual({ kind: "price_reply", callReason: null });
+    const m = lastOut(state, "P001")!;
+    expect(m.kind).toBe("price_reply");
+    expect(m.text.match(/AED 300/g)).toHaveLength(1);
+    expect(m.text.match(/[0-9]+/g)).toEqual(["300"]);
+    expect(openCalls(state, "P001")).toEqual([]);
+  });
+
+  it("an Arabic price question gets an Arabic price reply with 300 درهم", () => {
+    const state = freshState();
+    handlePatientMessage(state, "P001", "كم سعر التقويم؟", NOW);
+    const m = lastOut(state, "P001")!;
+    expect(m.kind).toBe("price_reply");
+    expect(ARABIC.test(m.text)).toBe(true);
+    expect(m.text).toContain("300 درهم");
+  });
+
+  it("'How much is a filling?' also gets the braces price, and says the receptionist helps with anything else", () => {
+    const state = freshState();
+    handlePatientMessage(state, "P001", "How much is a filling?", NOW);
+    expect(lastOut(state, "P001")!.text).toContain("braces appointment");
+    expect(lastOut(state, "P001")!.text).toContain("For anything else");
+  });
+
+  it("a patient who is not a braces patient is not given the braces price: holding reply and call list", () => {
+    const state = freshState();
+    const out = handlePatientMessage(state, "P051", "How much does it cost?", NOW);
+    expect(out).toEqual({ kind: "holding_reply", callReason: "other_question" });
+    expect(lastOut(state, "P051")!.text).not.toContain("300");
+  });
+
+  it("a price question that also names a day or time goes to the receptionist (a person books it)", () => {
+    const state = freshState();
+    const out = handlePatientMessage(state, "P001", "Can I come Friday at 6? How much is it?", NOW);
+    expect(out).toEqual({ kind: "holding_reply", callReason: "booking_request" });
+  });
+
+  it("with the replies wording not approved the price is not sent", () => {
+    const state = freshState({ replies: false });
+    const out = handlePatientMessage(state, "P001", "How much does it cost?", NOW);
+    expect(out).toEqual({ kind: "no_reply", callReason: "wording_not_approved" });
+  });
+});
+
+describe("F14 U1 and U2: pain or damage gets a sympathetic reply, and goes first on the call list", () => {
+  it.each([
+    "my bracket broke and it hurts",
+    "I have pain in my tooth",
+    "my gum is bleeding",
+    "my cheek is swollen",
+    "a wire is poking me",
+    "my bracket came off",
+    "عندي ألم في أسناني",
+    "التقويم مكسور",
+  ])("'%s' gets the urgent reply, not 'thank you for your message'", (text) => {
+    const state = freshState();
+    const out = handlePatientMessage(state, "P001", text, NOW);
+    expect(out).toEqual({ kind: "holding_reply", callReason: "urgent_message" });
+    const m = lastOut(state, "P001")!;
+    expect(m.text).not.toMatch(/Thank you for your message|شكراً لرسالتك/);
+    expect(m.text).toMatch(/so sorry|نأسف/);
+    expect(m.text).toMatch(/as soon as possible|أقرب وقت/);
+    expect(m.text).toMatch(/receptionist|الاستقبال/);
+    expect(m.text).not.toMatch(/[0-9]|AED|booked|confirmed/);
+    expect(openCalls(state, "P001")).toEqual(["urgent_message"]);
+  });
+
+  it("an urgent message beats a named time and a price question", () => {
+    const state = freshState();
+    const out = handlePatientMessage(state, "P001", "It hurts a lot, how much is it, can I come Friday at 6?", NOW);
+    expect(out.callReason).toBe("urgent_message");
+  });
+
+  it("an Arabic pain message gets an Arabic reply", () => {
+    const state = freshState();
+    handlePatientMessage(state, "P001", "عندي ألم في أسناني", NOW);
+    expect(ARABIC.test(lastOut(state, "P001")!.text)).toBe(true);
   });
 });
