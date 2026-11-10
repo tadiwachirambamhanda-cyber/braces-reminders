@@ -1,4 +1,4 @@
-# Inspiration board: Braces Reminders (Liwan Dental)
+# Inspiration board: Smile Book (Liwan Dental)
 
 Method: the inspiration-board skill. References were browsed on dribbble.com in the built-in browser on 2026-11-11 (logged out, nothing saved or downloaded). We take **principles only**. No artwork, text, logo or layout is copied.
 
@@ -47,7 +47,7 @@ Seen again and again in the results (healthcare appointment, chat, dashboards):
 
 ## 4. Translation: principle to our design
 
-| Principle | How it shows up in Braces Reminders | Originality note |
+| Principle | How it shows up in Smile Book | Originality note |
 |---|---|---|
 | One urgent sentence above the data, in its own colour | `/calls`: a single top line "1 urgent patient. Call Omar first" in clay red; below it, the ledger. `/run`: the refused-run message uses the same slot | Our own colour and wording; no KPI row |
 | Status = dot + one word, at row end | Every row on `/`, `/run`, `/calls`: "Booked", "Needs a person", "URGENT" with a dot and the word | Never colour alone |

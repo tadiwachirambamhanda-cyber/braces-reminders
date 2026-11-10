@@ -1,4 +1,4 @@
-# Scope brief: Braces Reminder Agent
+# Scope brief: Smile Book (braces reminder agent)
 
 Business: Liwan Dental (the same clinic as liwan-desk). Process owner: front-desk manager. Written: 2026-11-10. Source: the owner's requests in chat (no discovery repo for this one).
 

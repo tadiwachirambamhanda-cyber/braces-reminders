@@ -1,4 +1,4 @@
-# PRD: Braces Reminder Agent
+# PRD: Smile Book (braces reminder agent)
 
 For: Liwan Dental. Written: 2026-11-10. Source: `docs/scope-brief.md`.
 

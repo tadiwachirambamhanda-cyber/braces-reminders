@@ -1,4 +1,4 @@
-# Design brief: Braces Reminders
+# Design brief: Smile Book
 
 For: Claude Design. From: the owner. Date: 2026-11-11. Needed back by: as soon as ready (practice project, no deadline).
 

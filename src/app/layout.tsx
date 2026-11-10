@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Braces Reminders",
+  title: "Smile Book",
   description: "Monthly braces reminders for Liwan Dental, with a phone simulator",
 };
 
