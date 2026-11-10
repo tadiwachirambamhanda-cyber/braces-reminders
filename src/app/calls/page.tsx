@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { connection } from "next/server";
 import { fileState, REASON_TEXT } from "@/lib/state";
 import { Nav } from "../nav";
@@ -10,38 +11,51 @@ export default async function CallsPage() {
     .filter((c) => c.open)
     .sort((a, b) => Number(b.reason === "urgent_message") - Number(a.reason === "urgent_message")); // urgent first
 
+  const urgent = open.filter((c) => c.reason === "urgent_message");
+  const COLS = "grid-cols-[150px_170px_1fr_110px]";
+
   return (
-    <main className="mx-auto w-full max-w-5xl p-6">
+    <>
       <Nav />
-      <h1 className="text-2xl font-semibold">Call list</h1>
-      <p className="mt-1 text-sm text-neutral-600">Patients a person needs to call or reply to. Nothing more is sent to them automatically.</p>
-      <p className="mt-3" data-testid="calls-count">{open.length} to call</p>
-      {open.length === 0 ? (
-        <p className="mt-4">Nobody is on the call list.</p>
-      ) : (
-        <div className="mt-3 overflow-x-auto">
-          <table className="w-full border-collapse text-left text-sm">
-            <thead>
-              <tr className="border-b border-neutral-300">
-                <th className="py-2 pr-4">ID</th>
-                <th className="py-2 pr-4">First name</th>
-                <th className="py-2 pr-4">Why</th>
-                <th className="py-2 pr-4">Week</th>
-              </tr>
-            </thead>
-            <tbody>
-              {open.map((c) => (
-                <tr key={c.id} className="border-b border-neutral-200" data-testid="call-row">
-                  <td className="py-2 pr-4 font-mono">{c.patientId}</td>
-                  <td className="py-2 pr-4">{names.get(c.patientId)}</td>
-                  <td className="py-2 pr-4" data-testid="call-reason">{REASON_TEXT[c.reason]}</td>
-                  <td className="py-2 pr-4">{c.week ?? ""}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      <main className="page">
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <h1 className="page-title">Call list</h1>
+            <p className="page-lead">Patients a person needs to call or answer. Nothing more is sent to them automatically.</p>
+          </div>
+          <Link href="/book" className="btn-primary">Book a visit</Link>
         </div>
-      )}
-    </main>
+        {urgent.length > 0 ? (
+          <p className="strip strip-clay mt-5" data-testid="urgent-strip">
+            {urgent.length} urgent {urgent.length === 1 ? "patient" : "patients"}: call {names.get(urgent[0].patientId)} first.
+          </p>
+        ) : null}
+        <p className="mt-6 flex items-baseline gap-3" data-testid="calls-count">
+          <span className="font-serif text-[32px]">{open.length}</span> <span className="text-soft">to call</span>
+        </p>
+        {open.length === 0 ? (
+          <p className="mt-4">Nobody is on the call list.</p>
+        ) : (
+          <div className="ledger mt-3">
+            <div className={`ledger-head grid ${COLS}`}>
+              <span>Status</span><span>Patient</span><span>Why</span><span>Week</span>
+            </div>
+            {open.map((c) => {
+              const isUrgent = c.reason === "urgent_message";
+              return (
+                <div key={c.id} className={`ledger-row grid ${COLS} ${isUrgent ? "urgent" : ""}`} data-testid="call-row">
+                  <span className={`status ${isUrgent ? "status-clay" : ""}`} data-label="Status">{isUrgent ? "URGENT" : "Needs a person"}</span>
+                  <span className="cell-name" data-label="Patient">
+                    {names.get(c.patientId)} <span className="font-sans text-[13px] text-soft">{c.patientId}</span>
+                  </span>
+                  <span data-testid="call-reason" data-label="Why">{REASON_TEXT[c.reason]}</span>
+                  <span className="cell-soft" data-label="Week">{c.week ?? ""}</span>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </main>
+    </>
   );
 }
