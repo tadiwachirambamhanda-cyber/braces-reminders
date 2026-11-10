@@ -1,4 +1,4 @@
-# Feature list: Braces Reminder Agent
+# Feature list: Smile Book (braces reminder agent)
 
 Source: `docs/prd.md`. Build order: data in, decide (code), message, send window, send to simulator, hand over, booking and confirmation, then replies.
 

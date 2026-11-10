@@ -1,4 +1,4 @@
-# Braces Reminder Agent
+# Smile Book (braces reminder agent)
 
 Type: AI solution (WhatsApp-simulator reminder agent). Same stack as ../liwan-desk: Next.js, zod, Anthropic SDK, Jev (see docs/jev-rules.md once copied), /phone simulator, AI_MODE=templates fallback.
 
