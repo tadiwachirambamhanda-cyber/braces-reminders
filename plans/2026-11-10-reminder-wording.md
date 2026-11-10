@@ -15,20 +15,27 @@ First reminder, English: "Hello {name}, this is Liwan Dental. Your monthly brace
 
 Second reminder, English: "Hello {name}, it's Liwan Dental again. A friendly reminder that your monthly braces check is due on {date}, and we haven't got your booking yet. Just reply "What times are available?" and we will send you the free times."
 
-The Arabic versions say the same, warmly, with "مرحباً {name}" and the clinic name Liwan Dental, and mention "التقويم". The exact Arabic is written during the build and is what the receptionist approves; it is never changed after approval without a new approval.
+First reminder, Arabic: "مرحباً {name}، معك عيادة ليوان للأسنان (Liwan Dental). موعد مراجعة التقويم الشهرية الخاصة بك هو يوم {date}، ويسعدنا رؤيتك! هل ترغب بحجز موعدك؟ ما عليك سوى الرد بـ «ما هي الأوقات المتاحة؟» وسنرسل لك الأوقات المتاحة."
+
+Second reminder, Arabic: "مرحباً {name}، معك عيادة ليوان للأسنان (Liwan Dental) مرة أخرى. تذكير ودّي بأن موعد مراجعة التقويم الشهرية الخاصة بك هو يوم {date}، ولم يصلنا حجزك بعد. ما عليك سوى الرد بـ «ما هي الأوقات المتاحة؟» وسنرسل لك الأوقات المتاحة."
+
+This exact text is what gets built. Someone who reads Arabic should check it before the receptionist approves it. It is never changed after approval without a new approval. The first and second versions are approved together as one wording set.
 
 ## How it works (all in code, no model)
 - The reminder is a fixed template filled in by code with the patient's first name and the visit date. The visit date is the Friday of the week being run (a patient reminded a second time is shown this week's Friday).
-- The patient's first name goes in as data only: line breaks are removed and it is cut to a safe length, so it can never change the template.
-- A check runs on every built reminder (B4): starts with a greeting and the first name; names Liwan Dental; has the date; has "braces" and "تقويم"; has no "AED" or "درهم"; says nothing is booked or confirmed. A reminder that fails any check is not returned; the failure is reported instead.
-- Approval gate: the wording is hashed. The receptionist approves it on a small `/wording` page that shows both versions with a sample name and date. Approving saves who approved, when, and the hash. If the wording text ever changes, the hash no longer matches, so the code refuses to build any reminder until it is approved again.
+- The first name comes from the patient's `firstName` field and goes in as data only. Control and direction characters and line breaks are removed, extra spaces are collapsed, and a name over 30 characters is cut at a word boundary. Arabic-script names are fine. An empty name after cleaning means no reminder is built (reason `no_name`), so it can never change the template or produce "Hello , ...".
+- Dates use fixed day and month name tables written in code (English and Arabic), with Western digits, never the browser's locale formatting.
+- A check runs on every built reminder (B4): starts with a greeting and the first name; names Liwan Dental; has the date; has "braces" and "تقويم"; has no "AED" or "درهم"; does not use the words "confirmed", "booked" or "your appointment is", or the Arabic "تم تأكيد" or "تم حجز" (the second reminder may say "we haven't got your booking yet"). A reminder that fails any check is not returned. `buildReminder` returns `{ ok: true, text }` or `{ ok: false, reasons }`, never a half-built message. A later feature (the weekly run) turns an `ok: false` into `needs_person` with the reasons, so one bad message never crashes a run or silently drops a patient.
+- Approval gate: the reminder wording set (first and second, English and Arabic) is hashed. F9's confirmation wording will be its own set with its own approval, so adding it later never silently cancels this one. The receptionist approves it on a small `/wording` page that shows both versions with a sample name and date. Approving saves who approved, when, and the hash. If the wording text ever changes, the hash no longer matches, so the code refuses to build any reminder until it is approved again.
+- The approval store is passed into the code (a file path or an in-memory store). Tests and later features use a temporary store, with no bypass switch, so the gate is never weakened. The real record lives at `data/wording-approval.json`. A missing file means "not approved", and if the file cannot be written (for example on a read-only host) the page says so plainly instead of failing.
+- Accepted risk for this simulator-only version: the Approve button needs a non-empty name but no login or passcode, so anyone who can open `/wording` could approve. Before real use the receptionist screens must go behind a staff login (already noted as an idea for later).
 
 ## Steps
 1. Add `src/lib/wording.ts`: the English and Arabic templates, date formatting in English and Arabic, and first-name cleaning. Done when a unit test shows a built reminder for "Sara" on 2026-11-06.
 2. Add the reminder checks (B4) in the same file. Done when tests show each check catches a bad message (no name, a price, no Arabic, no clinic name, "your booking is confirmed").
-3. Add `src/lib/approval.ts`: hash the wording, read and save the approval record in `data/wording-approval.json`, and check it. Done when tests show: no record means refused; a valid record means allowed; a changed wording means refused.
+3. Add `src/lib/approval.ts`: hash the wording, read and save the approval record (through a store passed in, real file `data/wording-approval.json`), and check it. Done when tests show: no record means refused; a valid record means allowed; a changed wording means refused.
 4. Make `buildReminder(patient, number, date)` refuse to run without a valid approval. Done when a test shows it throws without approval and returns text with it.
-5. Add the `/wording` page: shows the two versions (English and Arabic, first and second) with a sample name, a name field and an "Approve this wording" button that saves the record. Done when I click it and the page then says approved by that name and time.
+5. Add the `/wording` page: shows the two versions (English and Arabic, first and second) with a sample name, a required name field and an "Approve this wording" button that saves the record. The page is read fresh on every visit (never cached) and shows a missing file as "not approved". Done when I click it and the page then says approved by that name and time.
 6. Run all the checks and click through it. Done when lint, typecheck, test and build pass.
 
 ## Files
@@ -50,17 +57,32 @@ None. The wording is a fixed approved template filled in by code, as the project
 | `npm test`, B4 | a built reminder is English plus Arabic in one message and contains only template text plus the name and date |
 | `npm test`, AC4 | contains a greeting and first name, "Liwan Dental", the date, "braces" and "تقويم", no "AED", no "درهم" (first and second versions) |
 | `npm test`, checks | each bad message (no name, price in English, price in Arabic, no Arabic, no clinic name, says "confirmed") fails the check |
-| `npm test`, name safety | a first name with a line break or a long string cannot change or break the template |
-| `npm test`, date | 2026-11-06 reads "Friday 6 November" and "الجمعة 6 نوفمبر" |
-| `npm test`, approval | no record: refused; valid record: allowed; changed wording: refused |
-| Open `/wording`, click "Approve this wording" | page shows approved by that name and a time; reloading keeps it |
+| `npm test`, name safety | a first name with a line break, direction characters or a very long string cannot change the template; the cut lands on a word boundary; an empty name gives `{ ok: false }` with reason `no_name`; an Arabic name works |
+| `npm test`, date | 2026-11-06 reads "Friday 6 November" and "الجمعة 6 نوفمبر" with Western digits, from the fixed name tables |
+| `npm test`, approval | no record: refused; valid record: allowed; changed wording: refused; tests use a temporary store, not the real file |
+| `npm test`, result shape | a failed check returns `{ ok: false, reasons }` and never throws or returns text |
+| `npm test`, second reminder | "we haven't got your booking yet" passes the checks, while "booked", "confirmed" and "تم تأكيد" fail them |
+| Open `/wording`, click "Approve this wording" | the name is required; page then shows approved by that name and a time; reloading keeps it; the Arabic reads right to left next to the English |
 | `npm run lint`, `typecheck`, `build` | no errors; build passes with no environment variables |
 
 ## What could break
-The Arabic text mixed with English and `{name}` placeholders can display in the wrong order on some screens. I will check it in the browser. It adds new files and one link on the Patients page, so F1 and F2 keep working.
+The Arabic text mixed with English ("Liwan Dental", names, dates) can display in the wrong order on some screens. I will check it in the browser. The approval gate is also the one control on what patients receive, so it must not be weakened to get tests passing. It adds new files and one link on the Patients page, so F1 and F2 keep working.
 
 ## Not doing
 No sending, no send times (F4), no phone simulator (F5), no repeat-run check (F6), no call list (F7), no booking confirmation wording (F9), no times reply (F10), no model-written warmth, no login for the receptionist, no way to edit the wording in the page. Editing the wording means changing the file, which needs a new approval.
 
 ## Questions
-None that block the build. One thing to know: the Arabic is written by me, and the receptionist is the one who approves it, so it should be read by someone who reads Arabic before approving.
+1. Please have someone who reads Arabic check the Arabic text above before the receptionist approves it.
+2. The plan has two texts, a first reminder and a gentler second one, approved together as one wording set. Is that what you want, or one text for both?
+
+## Plan check
+Fresh reviewer, 9 findings.
+1. MAJOR, anyone can approve on `/wording`: Partly fixed. The name is required, and the plan now states this as an accepted risk for the simulator-only version and ties the fix to the staff login idea. A passcode was not added: it needs a new secret and is extra work the owner has not asked for.
+2. MAJOR, how tests and fresh checkouts get an approval: Fixed. The store is passed in; tests use a temporary store with no bypass; a missing or unwritable file is handled.
+3. MAJOR, Arabic text not in the plan: Fixed. The exact Arabic is now in the plan, and a question asks for an Arabic reader to check it.
+4. MINOR, failure shape: Fixed. Returns `{ ok: false, reasons }`.
+5. MINOR, name handling: Fixed. Control and direction characters, word-boundary cut, empty name, source of the name.
+6. MINOR, Arabic date digits: Fixed. Fixed name tables, Western digits.
+7. MINOR, two templates versus one: Kept as planned and turned into a question for the owner.
+8. MINOR, page caching: Fixed. Read fresh every visit; missing file means not approved.
+9. MINOR, check wording and F9 hash: Fixed. Banned words defined; the confirmation wording will have its own approval.
