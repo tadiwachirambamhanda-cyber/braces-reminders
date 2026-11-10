@@ -19,3 +19,7 @@ next-env.d.ts
 
 # saved approval (not source)
 data/wording-approval.json
+
+# saved state and approvals (not source)
+data/state/
+data/replies-approval.json
