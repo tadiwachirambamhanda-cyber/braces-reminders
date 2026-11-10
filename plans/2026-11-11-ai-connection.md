@@ -58,3 +58,16 @@ A fresh reviewer found 7 points. Changes made:
 ## Questions
 1. Is it fine that the receptionist approves the fixed facts text and the opening checks, and not every single AI-written opening? (Recommended: yes. The check list makes sure the opening can never contain a time, a price or a promise.)
 2. Keys: please paste `TYPESAFE_API_KEY` and `ANTHROPIC_API_KEY` into `.env.local` yourself (instructions will follow when you approve).
+
+## Changes from the plan
+- `handlePatientMessage` stayed synchronous and gained an optional options argument; the new async `handlePatientMessageAI` (in `src/lib/replies-ai.ts`) calls Jev and Claude first and then calls it. So the 128 existing tests are unchanged (no `await` needed), and the old path is untouched. The patient message is saved at the same point as before, inside the sync function.
+- The reply hash now covers the templates, the Claude instructions and the check-list version, so the receptionist must approve the replies wording again.
+- Jev's language answer is not used at all (only `languageOf()`), and it is not asked for display.
+
+## Ideas for later
+- A run log screen (F12) could also show the AI line for every reply.
+- Hosting needs a data agreement with both AI providers (written in the PRD as B9).
+
+## Verification
+- `npm test`: 169 passed (128 old + 41 new). `npm run lint` and `npx tsc --noEmit`: clean. `npm run build` with no env vars: passes.
+- Real run with the owner's keys: not done yet.

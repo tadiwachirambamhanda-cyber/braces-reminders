@@ -4,6 +4,7 @@
 import { createHash } from "node:crypto";
 import { ApprovalError, isApproved, type ApprovalStore } from "./approval";
 import type { Lang } from "./language";
+import { OPENING_PROMPT, OPENING_RULES_VERSION } from "./opening-rules";
 import { CLINIC_NAME, cleanFirstName, formatDateAr, formatDateEn } from "./wording";
 
 export const REPLY_TEMPLATES = {
@@ -28,7 +29,9 @@ export const REPLY_TEMPLATES = {
 } as const;
 
 export function repliesWordingHash(): string {
-  return createHash("sha256").update(JSON.stringify(REPLY_TEMPLATES)).digest("hex");
+  return createHash("sha256")
+    .update(JSON.stringify({ templates: REPLY_TEMPLATES, openingPrompt: OPENING_PROMPT, openingRulesVersion: OPENING_RULES_VERSION }))
+    .digest("hex");
 }
 
 export type ReplyResult = { ok: true; text: string } | { ok: false; reasons: string[] };

@@ -6,7 +6,9 @@ export default async function CallsPage() {
   await connection();
   const state = fileState();
   const names = new Map(state?.seed.patients.map((p) => [p.id, p.firstName]) ?? []);
-  const open = (state?.calls.read() ?? []).filter((c) => c.open);
+  const open = (state?.calls.read() ?? [])
+    .filter((c) => c.open)
+    .sort((a, b) => Number(b.reason === "urgent_message") - Number(a.reason === "urgent_message")); // urgent first
 
   return (
     <main className="mx-auto w-full max-w-5xl p-6">

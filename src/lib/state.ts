@@ -24,6 +24,18 @@ export const MessageSchema = z.object({
   visitDate: z.string().nullable(), // the Friday the message is about
   visitDueDate: z.string().nullable(), // the patient's first due Friday (counts reminders per visit)
   sendAt: z.string(), // ISO with +04:00
+  // F13: what the AI did for this reply. Numbers and names of checks only, never the patient's text.
+  ai: z
+    .object({
+      engine: z.enum(["jev", "keywords"]),
+      intent: z.string().nullable(),
+      confidence: z.number().nullable(),
+      ms: z.number(),
+      costUsd: z.number().nullable(),
+      opening: z.enum(["ai", "fixed"]),
+      openingNote: z.string().nullable(),
+    })
+    .optional(),
 });
 export type Message = z.infer<typeof MessageSchema>;
 
@@ -37,6 +49,7 @@ export const CALL_REASONS = [
   "other_question",
   "booking_request",
   "reply_failed_checks",
+  "urgent_message",
 ] as const;
 export type CallReason = (typeof CALL_REASONS)[number];
 
@@ -77,6 +90,7 @@ export const REASON_TEXT: Record<CallReason, string> = {
   other_question: "Asked something else",
   booking_request: "Wants to book a time",
   reply_failed_checks: "The reply did not pass its checks",
+  urgent_message: "URGENT: wrote about pain, swelling or bleeding",
 };
 
 // ---------------------------------------------------------------------------

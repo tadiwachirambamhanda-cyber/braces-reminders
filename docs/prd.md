@@ -36,6 +36,7 @@ In: a synthetic patient list, a braces calendar for the Fridays, patient replies
 - B5: reminders go out only between 17:00 and 22:00 clinic time (UTC+4).
 - B6: after two reminders with no booking, no third reminder; the patient goes to the call list.
 - B7: the only reply is when braces visits happen: the patient's Friday, between 5 p.m. and 10 p.m. It never lists the 20-minute slots (those are for the receptionist's booking screen), never books, and the model never writes a time, date or price. A patient who names a time or wants to book goes to the receptionist.
+- B9 (F13, optional AI): with `AI_MODE=ai`, Jev may read what a patient means and Claude may add one short warm sentence to a reply. Code can always veto Jev toward the receptionist (a named time, a wish to book or a money question never gets the window reply). The sentence must pass the checks on /wording or the fixed wording is used. Reminders and confirmations are never AI-written. Pain or urgent messages go to the top of the call list. Patient messages and first names go to Jev and Claude, so a data agreement is needed before any real patient data is used.
 - B8: a confirmation is sent only after the receptionist's booking exists, and its day and time come from the booking record. A taken slot cannot be booked twice.
 
 ## Sending and hand-over
