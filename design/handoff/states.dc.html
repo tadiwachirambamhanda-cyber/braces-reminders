@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>States sheet</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:wght@500&family=Source+Sans+3:wght@400;600&display=swap">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="min-height: 1500px; box-sizing: border-box; background: #F6F1E7; color: #2A2620; font-family: 'Source Sans 3', sans-serif; font-size: 16px">
+<div style="width: 100%; max-width: 1200px; box-sizing: border-box; padding: 40px 48px 64px; display: flex; flex-direction: column; gap: 24px">
+<div>
+<h1 style="margin: 0; font-family: 'Newsreader', serif; font-weight: 500; font-size: 40px; line-height: 1.1">States on every screen</h1>
+<p style="margin: 8px 0 0; color: #675F52; max-width: 640px; line-height: 1.5">Empty, loading and error for each screen, plus the extra states from the screen map. Loading is quiet grey bars. Errors are one plain sentence in clay red, with what to do next.</p>
+</div>
+<div style="border-top: 1px solid #2A2620">
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="6">
+<div style="display: flex; flex-wrap: wrap; gap: 16px 32px; padding: 20px 0; border-bottom: 1px solid #DDD3C0">
+<div style="flex: 0 0 160px"><div style="font-family: 'Newsreader', serif; font-size: 22px">{{r.screen}}</div><div style="color: #675F52; font-size: 14px">{{r.route}}</div></div>
+<div style="flex: 1 1 220px; min-width: 0"><div style="font-size: 13px; letter-spacing: 0.04em; color: #675F52; margin-bottom: 6px">EMPTY</div><p style="margin: 0; line-height: 1.5">{{r.empty}}</p></div>
+<div style="flex: 1 1 220px; min-width: 0"><div style="font-size: 13px; letter-spacing: 0.04em; color: #675F52; margin-bottom: 8px">LOADING</div><div style="height: 12px; width: 90%; background: #E4DAC6; border-radius: 2px"></div><div style="height: 12px; width: 70%; background: #E4DAC6; border-radius: 2px; margin-top: 8px"></div><div style="height: 12px; width: 80%; background: #E4DAC6; border-radius: 2px; margin-top: 8px"></div></div>
+<div style="flex: 1 1 220px; min-width: 0"><div style="font-size: 13px; letter-spacing: 0.04em; color: #675F52; margin-bottom: 6px">ERROR</div><p style="margin: 0; line-height: 1.5; color: #8F3820; font-weight: 600">{{r.error}}</p></div>
+<div style="flex: 1 1 220px; min-width: 0"><div style="font-size: 13px; letter-spacing: 0.04em; color: #675F52; margin-bottom: 6px">ALSO</div><p style="margin: 0; line-height: 1.5; color: #675F52">{{r.extra}}</p></div>
+</div>
+</sc-for>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1500}}'>
+class Component extends DCLogic {
+renderVals() {
+return {
+rows: [
+{ screen: 'Patients', route: '/', empty: 'No patients yet. Run the seed command, then refresh this page.', error: 'The patient list could not be read. Refresh the page, or run the seed again.', extra: 'A patient with no phone shows "missing" in clay red.' },
+{ screen: 'Run this week', route: '/run', empty: 'No patients yet. Run the seed command first.', error: 'The wording is not approved yet, so nothing was sent. Approve it on the Wording page.', extra: 'Not a Monday: "Pick a Monday. 5 Nov is not one." Done: the result is shown.' },
+{ screen: 'Phone simulator', route: '/phone', empty: 'No messages yet.', error: 'That message could not be sent. Try again.', extra: 'AI off: no AI line and no gap. AI on: the line sits under the reply. Sending: the Send button shows "Sending".' },
+{ screen: 'Call list', route: '/calls', empty: 'Nobody is on the call list.', error: 'The call list could not be read. Refresh the page.', extra: 'Urgent: the red strip and URGENT row appear at the top. Normal: grey dot rows only.' },
+{ screen: 'Book', route: '/book', empty: 'No free times left, or no braces patients without a booking.', error: 'That time is already taken. Nothing was booked and nothing was sent. Pick another time.', extra: 'Booked, booked but confirmation not sent (reply wording not approved), already booked, not a braces patient.' },
+{ screen: 'Wording', route: '/wording', empty: 'Not approved yet. Nothing can be sent from this wording.', error: 'Type your name to approve. Or: the approval could not be saved. Nothing was approved.', extra: 'Approved (name and time). Changed since approval: needs approving again.' }
+]
+};
+}
+}
+</script>
+</body>
+</html>

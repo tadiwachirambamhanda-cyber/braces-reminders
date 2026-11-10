@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Call list</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:wght@500&family=Source+Sans+3:wght@400;600&display=swap">
+<style>
+body{margin:0}
+a{color:#2F5D50}a:hover{color:#1F4238}
+</style>
+</helmet>
+<div style="min-height: 900px; box-sizing: border-box; background: #F6F1E7; color: #2A2620; font-family: 'Source Sans 3', sans-serif; font-size: 16px; display: flex; flex-direction: column">
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 32px; padding: 20px 48px; border-bottom: 1px solid #DDD3C0">
+<span style="font-family: 'Newsreader', serif; font-size: 20px; margin-right: 16px">Liwan Dental</span>
+<a href="#" style="text-decoration: none; color: #675F52; padding: 8px 0">Patients</a>
+<a href="#" style="text-decoration: none; color: #675F52; padding: 8px 0">Run this week</a>
+<a href="#" style="text-decoration: none; color: #675F52; padding: 8px 0">Phone</a>
+<a href="#" style="text-decoration: none; color: #2A2620; font-weight: 600; padding: 8px 0; border-bottom: 2px solid #2F5D50">Call list</a>
+<a href="#" style="text-decoration: none; color: #675F52; padding: 8px 0">Book</a>
+<a href="#" style="text-decoration: none; color: #675F52; padding: 8px 0">Wording</a>
+</div>
+<div style="width: 100%; max-width: 1040px; box-sizing: border-box; padding: 40px 48px 64px; display: flex; flex-direction: column; gap: 20px">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px">
+<div>
+<h1 style="margin: 0; font-family: 'Newsreader', serif; font-weight: 500; font-size: 40px; line-height: 1.1">Call list</h1>
+<p style="margin: 8px 0 0; color: #675F52; max-width: 560px; line-height: 1.5">Patients a person needs to call or answer. Nothing more is sent to them automatically.</p>
+</div>
+<a href="#" style="display: inline-block; min-height: 44px; box-sizing: border-box; padding: 11px 20px; background: #2F5D50; color: #F6F1E7; text-decoration: none; border-radius: 4px; font-weight: 600">Book a visit</a>
+</div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; padding: 12px 16px; background: #F3DDD0; color: #8F3820; border-radius: 4px">
+<span style="width: 10px; height: 10px; border-radius: 50%; background: #B4472B"></span>
+<span style="font-weight: 600; font-size: 17px">1 urgent patient. Call Omar first.</span>
+<span style="color: #6B2B19">He wrote about a broken bracket and pain.</span>
+</div>
+<div style="display: flex; align-items: baseline; gap: 12px; margin-top: 8px">
+<span style="font-family: 'Newsreader', serif; font-size: 32px; font-weight: 500" data-testid="calls-count">5</span>
+<span style="color: #675F52">to call</span>
+</div>
+<div style="border-top: 1px solid #2A2620">
+<div style="display: grid; grid-template-columns: 150px 150px 1fr 110px; gap: 16px; padding: 10px 0; border-bottom: 1px solid #DDD3C0; color: #675F52; font-size: 13px; letter-spacing: 0.04em">
+<span>STATUS</span><span>PATIENT</span><span>WHY</span><span>WEEK</span>
+</div>
+<div style="display: grid; grid-template-columns: 150px 150px 1fr 110px; gap: 16px; align-items: center; min-height: 56px; border-bottom: 1px solid #DDD3C0; background: #FBF0E8">
+<span style="display: flex; align-items: center; gap: 8px; color: #8F3820; font-weight: 600"><span style="width: 8px; height: 8px; border-radius: 50%; background: #B4472B"></span>URGENT</span>
+<span style="font-family: 'Newsreader', serif; font-size: 21px">Omar <span style="font-family: 'Source Sans 3', sans-serif; font-size: 13px; color: #675F52">P011</span></span>
+<span>Wrote about pain, swelling or bleeding</span>
+<span style="color: #675F52">2 Nov</span>
+</div>
+<div style="display: grid; grid-template-columns: 150px 150px 1fr 110px; gap: 16px; align-items: center; min-height: 56px; border-bottom: 1px solid #DDD3C0">
+<span style="display: flex; align-items: center; gap: 8px; color: #675F52"><span style="width: 8px; height: 8px; border-radius: 50%; background: #675F52"></span>Needs a person</span>
+<span style="font-family: 'Newsreader', serif; font-size: 21px">Layla <span style="font-family: 'Source Sans 3', sans-serif; font-size: 13px; color: #675F52">P014</span></span>
+<span>Wants to book a time</span>
+<span style="color: #675F52">2 Nov</span>
+</div>
+<div style="display: grid; grid-template-columns: 150px 150px 1fr 110px; gap: 16px; align-items: center; min-height: 56px; border-bottom: 1px solid #DDD3C0">
+<span style="display: flex; align-items: center; gap: 8px; color: #675F52"><span style="width: 8px; height: 8px; border-radius: 50%; background: #675F52"></span>Needs a person</span>
+<span style="font-family: 'Newsreader', serif; font-size: 21px">Khalid <span style="font-family: 'Source Sans 3', sans-serif; font-size: 13px; color: #675F52">P021</span></span>
+<span>No booking after two reminders</span>
+<span style="color: #675F52">9 Nov</span>
+</div>
+<div style="display: grid; grid-template-columns: 150px 150px 1fr 110px; gap: 16px; align-items: center; min-height: 56px; border-bottom: 1px solid #DDD3C0">
+<span style="display: flex; align-items: center; gap: 8px; color: #675F52"><span style="width: 8px; height: 8px; border-radius: 50%; background: #675F52"></span>Needs a person</span>
+<span style="font-family: 'Newsreader', serif; font-size: 21px">Hessa <span style="font-family: 'Source Sans 3', sans-serif; font-size: 13px; color: #675F52">P041</span></span>
+<span>Asked something else</span>
+<span style="color: #675F52">2 Nov</span>
+</div>
+<div style="display: grid; grid-template-columns: 150px 150px 1fr 110px; gap: 16px; align-items: center; min-height: 56px; border-bottom: 1px solid #DDD3C0">
+<span style="display: flex; align-items: center; gap: 8px; color: #675F52"><span style="width: 8px; height: 8px; border-radius: 50%; background: #675F52"></span>Needs a person</span>
+<span style="font-family: 'Newsreader', serif; font-size: 21px">Yousef <span style="font-family: 'Source Sans 3', sans-serif; font-size: 13px; color: #675F52">P034</span></span>
+<span>No usable phone number</span>
+<span style="color: #675F52">2 Nov</span>
+</div>
+</div>
+<p style="margin: 8px 0 0; color: #675F52; font-size: 14px">Sample data. All patients are made up.</p>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

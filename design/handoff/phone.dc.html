@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Phone simulator</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:wght@500&family=Source+Sans+3:wght@400;600&family=Noto+Naskh+Arabic:wght@400;600&display=swap">
+<style>
+body{margin:0}
+a{color:#2F5D50}a:hover{color:#1F4238}
+</style>
+</helmet>
+<div style="min-height: 1000px; box-sizing: border-box; background: #F6F1E7; color: #2A2620; font-family: 'Source Sans 3', sans-serif; font-size: 16px; display: flex; flex-direction: column">
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 32px; padding: 20px 48px; border-bottom: 1px solid #DDD3C0">
+<span style="font-family: 'Newsreader', serif; font-size: 20px; margin-right: 16px">Liwan Dental</span>
+<a href="#" style="text-decoration: none; color: #675F52; padding: 8px 0">Patients</a>
+<a href="#" style="text-decoration: none; color: #675F52; padding: 8px 0">Run this week</a>
+<a href="#" style="text-decoration: none; color: #2A2620; font-weight: 600; padding: 8px 0; border-bottom: 2px solid #2F5D50">Phone</a>
+<a href="#" style="text-decoration: none; color: #675F52; padding: 8px 0">Call list</a>
+<a href="#" style="text-decoration: none; color: #675F52; padding: 8px 0">Book</a>
+<a href="#" style="text-decoration: none; color: #675F52; padding: 8px 0">Wording</a>
+</div>
+<div style="width: 100%; max-width: 1040px; box-sizing: border-box; padding: 40px 48px 64px">
+<h1 style="margin: 0; font-family: 'Newsreader', serif; font-weight: 500; font-size: 40px; line-height: 1.1">Phone simulator</h1>
+<p style="margin: 8px 0 0; color: #675F52; max-width: 560px; line-height: 1.5">What each patient sees on WhatsApp. Times are the planned send times.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 32px; margin-top: 28px; align-items: flex-start">
+<div style="flex: 0 0 200px; border-top: 1px solid #2A2620">
+<div style="display: flex; justify-content: space-between; align-items: center; min-height: 44px; border-bottom: 1px solid #DDD3C0; background: #EAE1CF; padding: 0 10px; font-weight: 600"><span><span style="font-family: 'Newsreader', serif; font-size: 18px; font-weight: 500">Sara</span> <span style="color: #675F52; font-size: 13px; font-weight: 400">P003</span></span><span style="color: #675F52; font-weight: 400">5</span></div>
+<div style="display: flex; justify-content: space-between; align-items: center; min-height: 44px; border-bottom: 1px solid #DDD3C0; padding: 0 10px"><span><span style="font-family: 'Newsreader', serif; font-size: 18px">Omar</span> <span style="color: #675F52; font-size: 13px">P011</span></span><span style="color: #675F52">3</span></div>
+<div style="display: flex; justify-content: space-between; align-items: center; min-height: 44px; border-bottom: 1px solid #DDD3C0; padding: 0 10px"><span><span style="font-family: 'Newsreader', serif; font-size: 18px">Layla</span> <span style="color: #675F52; font-size: 13px">P014</span></span><span style="color: #675F52">2</span></div>
+<div style="display: flex; justify-content: space-between; align-items: center; min-height: 44px; border-bottom: 1px solid #DDD3C0; padding: 0 10px"><span><span style="font-family: 'Newsreader', serif; font-size: 18px">Khalid</span> <span style="color: #675F52; font-size: 13px">P021</span></span><span style="color: #675F52">2</span></div>
+<div style="display: flex; justify-content: space-between; align-items: center; min-height: 44px; border-bottom: 1px solid #DDD3C0; padding: 0 10px"><span><span style="font-family: 'Newsreader', serif; font-size: 18px">Noura</span> <span style="color: #675F52; font-size: 13px">P027</span></span><span style="color: #675F52"></span></div>
+</div>
+<div style="flex: 1 1 420px; min-width: 0; max-width: 600px; display: flex; flex-direction: column">
+<div style="display: flex; align-items: baseline; gap: 10px; padding-bottom: 10px; border-bottom: 1px solid #DDD3C0"><span style="font-family: 'Newsreader', serif; font-size: 26px">Sara</span><span style="color: #675F52">P003, braces, due Friday 6 November</span></div>
+<div style="background: #EAE1CF; border-radius: 6px; padding: 20px 16px; margin-top: 12px; display: flex; flex-direction: column; gap: 6px">
+
+<div style="max-width: 88%; align-self: flex-start">
+<div style="background: #DCE8D2; border-radius: 10px 10px 10px 2px; padding: 10px 14px; line-height: 1.5">
+<div>Hi Sara, it's Liwan Dental. Your braces visit is due on Friday 6 November. Reply here and we will help you find a time.</div>
+<div dir="rtl" lang="ar" style="font-family: 'Noto Naskh Arabic', serif; font-size: 18px; line-height: 1.8; text-align: right; margin-top: 8px; padding-top: 8px; border-top: 1px solid #C3D2B8">مرحباً سارة، معكِ عيادة ليوان. موعد تقويمك يوم الجمعة ٦ نوفمبر. اكتبي لنا هنا وسنساعدك في اختيار الوقت.</div>
+<div style="text-align: right; font-size: 12px; color: #5A6A52; margin-top: 4px">Liwan Dental, Mon 2 Nov, 17:40</div>
+</div>
+</div>
+
+<div style="max-width: 88%; align-self: flex-end; margin-top: 10px">
+<div style="background: #FFFFFF; border-radius: 10px 10px 2px 10px; padding: 10px 14px; line-height: 1.5">
+<div>How much does it cost?</div>
+<div style="text-align: right; font-size: 12px; color: #675F52; margin-top: 4px">Sara, Mon 2 Nov, 18:02</div>
+</div>
+</div>
+
+<div style="max-width: 88%; align-self: flex-start">
+<div style="background: #DCE8D2; border-radius: 10px 10px 10px 2px; padding: 10px 14px; line-height: 1.5">
+<div>Hi Sara, thank you for asking. Your braces visit costs AED 300. If you would like a time, the receptionist will help you.</div>
+<div dir="rtl" lang="ar" style="font-family: 'Noto Naskh Arabic', serif; font-size: 18px; line-height: 1.8; text-align: right; margin-top: 8px; padding-top: 8px; border-top: 1px solid #C3D2B8">مرحباً سارة، شكراً لسؤالك. تكلفة زيارة التقويم ٣٠٠ درهم. إذا رغبتِ بموعد، ستساعدك موظفة الاستقبال.</div>
+<div style="text-align: right; font-size: 12px; color: #5A6A52; margin-top: 4px">Liwan Dental, Mon 2 Nov, 18:02</div>
+</div>
+<div style="font-family: ui-monospace, Menlo, monospace; font-size: 12px; line-height: 1.5; color: #675F52; margin: 4px 2px 0">Read by Jev: price, confidence 0.94, 820 ms. Warm sentence: written by AI, passed the checks.</div>
+</div>
+
+<div style="max-width: 88%; align-self: flex-end; margin-top: 10px">
+<div style="background: #FFFFFF; border-radius: 10px 10px 2px 10px; padding: 10px 14px; line-height: 1.5">
+<div>Friday 18:00 please</div>
+<div style="text-align: right; font-size: 12px; color: #675F52; margin-top: 4px">Sara, Mon 2 Nov, 18:05</div>
+</div>
+</div>
+
+<div style="max-width: 88%; align-self: flex-start">
+<div style="background: #DCE8D2; border-radius: 10px 10px 10px 2px; padding: 10px 14px; line-height: 1.5">
+<div>Hi Sara, thank you. The receptionist will confirm your time with you shortly.</div>
+<div dir="rtl" lang="ar" style="font-family: 'Noto Naskh Arabic', serif; font-size: 18px; line-height: 1.8; text-align: right; margin-top: 8px; padding-top: 8px; border-top: 1px solid #C3D2B8">مرحباً سارة، شكراً لك. ستؤكد لك موظفة الاستقبال موعدك قريباً.</div>
+<div style="text-align: right; font-size: 12px; color: #5A6A52; margin-top: 4px">Liwan Dental, Mon 2 Nov, 18:05</div>
+</div>
+<div style="font-family: ui-monospace, Menlo, monospace; font-size: 12px; line-height: 1.5; color: #675F52; margin: 4px 2px 0">Read by code: wants to book. Fixed wording (no AI sentence). Sara is on the call list.</div>
+</div>
+
+</div>
+<form style="display: flex; gap: 10px; margin-top: 14px" onsubmit="return false">
+<label for="msg" style="position: absolute; left: -9999px">Type a message as Sara</label>
+<input id="msg" dir="auto" placeholder="Type a message as Sara" style="flex: 1; min-height: 44px; box-sizing: border-box; padding: 0 14px; border: 1px solid #B9AD96; border-radius: 4px; background: #FFFDF8; font-family: 'Source Sans 3', sans-serif; font-size: 16px; color: #2A2620">
+<button type="submit" style="min-height: 44px; padding: 0 24px; background: #2F5D50; color: #F6F1E7; border: 0; border-radius: 4px; font-family: 'Source Sans 3', sans-serif; font-size: 16px; font-weight: 600">Send</button>
+</form>
+</div>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1000}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>
