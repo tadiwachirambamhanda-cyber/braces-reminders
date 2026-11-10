@@ -37,8 +37,8 @@ describe("F13 code can veto Jev (B7)", () => {
   it("a named time goes to the receptionist even if Jev says times_question", () => {
     expect(decideIntent("Friday 18:00 please", "times_question").intent).toBe("booking");
   });
-  it("a price question goes to the receptionist even if Jev says times_question", () => {
-    expect(decideIntent("how much is it, and what times?", "times_question").intent).toBe("other");
+  it("a price question gets the price reply even if Jev says times_question", () => {
+    expect(decideIntent("how much is it, and what times?", "times_question").intent).toBe("price");
   });
   it("Jev adds a general times question the keywords missed", () => {
     expect(decideIntent("what do you have for braces?", "times_question").intent).toBe("window");
@@ -48,6 +48,25 @@ describe("F13 code can veto Jev (B7)", () => {
   });
   it("without Jev, the keywords decide as before", () => {
     expect(decideIntent("What times are available?", null).intent).toBe("window");
+  });
+});
+
+describe("F14 with the AI on", () => {
+  it("Jev price_question gets the price reply with a checked AI sentence", async () => {
+    const state = approvedState();
+    await handlePatientMessageAI(state, "P001", "what is the fee for a visit", NOW, {
+      classify: jevSays("price_question"),
+      write: writes("It is lovely to hear from you about your braces."),
+      env: AI_ON,
+    });
+    const reply = state.messages.read().find((m) => m.kind === "price_reply");
+    expect(reply?.text).toContain("AED 300");
+    expect(reply?.text).toContain("lovely to hear from you");
+  });
+  it("without Jev, a keyword pain message is still urgent", async () => {
+    const state = approvedState();
+    await handlePatientMessageAI(state, "P001", "my bracket broke and it hurts", NOW, { env: {} });
+    expect(state.calls.read().some((c) => c.reason === "urgent_message")).toBe(true);
   });
 });
 

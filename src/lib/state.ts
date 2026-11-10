@@ -17,7 +17,7 @@ export const MessageSchema = z.object({
   id: z.string(),
   patientId: z.string(),
   direction: z.enum(["out", "in"]),
-  kind: z.enum(["reminder", "confirmation", "times_reply", "holding_reply", "patient_message"]),
+  kind: z.enum(["reminder", "confirmation", "times_reply", "price_reply", "holding_reply", "patient_message"]),
   text: z.string(),
   week: z.string().nullable(), // the Monday of the run, for reminders
   reminderNumber: z.union([z.literal(1), z.literal(2)]).nullable(),

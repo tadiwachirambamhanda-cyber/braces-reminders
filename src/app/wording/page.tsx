@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { connection } from "next/server";
 import { ApprovalError, approve, fileStore, isApproved } from "@/lib/approval";
 import { OPENING_CHECKS, OPENING_PROMPT } from "@/lib/opening-rules";
-import { REPLY_TEMPLATES, repliesWordingHash } from "@/lib/replies-wording";
+import { BRACES_PRICE_AED, REPLY_TEMPLATES, repliesWordingHash } from "@/lib/replies-wording";
 import { renderTemplate, wordingHash, type ReminderNumber } from "@/lib/wording";
 import { Nav } from "../nav";
 
@@ -119,6 +119,16 @@ export default async function WordingPage(props: PageProps<"/wording">) {
         <h3 className="text-lg font-semibold">Reply when a patient names a time or wants to book (the receptionist books it)</h3>
         <Box lang="en">{fill(REPLY_TEMPLATES.bookingRequest.en, v)}</Box>
         <Box lang="ar">{fill(REPLY_TEMPLATES.bookingRequest.ar, vAr)}</Box>
+      </section>
+      <section className="mt-6">
+        <h3 className="text-lg font-semibold">Reply to &quot;How much does it cost?&quot; (braces patients only; the price is AED {BRACES_PRICE_AED})</h3>
+        <Box lang="en">{fill(REPLY_TEMPLATES.priceReply.en, { ...v, price: String(BRACES_PRICE_AED) })}</Box>
+        <Box lang="ar">{fill(REPLY_TEMPLATES.priceReply.ar, { ...vAr, price: String(BRACES_PRICE_AED) })}</Box>
+      </section>
+      <section className="mt-6">
+        <h3 className="text-lg font-semibold">Reply to pain, bleeding or damage (the patient goes first on the call list as URGENT)</h3>
+        <Box lang="en">{fill(REPLY_TEMPLATES.urgentReply.en, v)}</Box>
+        <Box lang="ar">{fill(REPLY_TEMPLATES.urgentReply.ar, vAr)}</Box>
       </section>
       <section className="mt-6">
         <h3 className="text-lg font-semibold">Reply to anything else (the patient goes on the call list)</h3>

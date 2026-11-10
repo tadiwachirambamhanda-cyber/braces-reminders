@@ -8,7 +8,7 @@ import { languageOf, type Lang } from "./language";
 import type { JevIntent } from "./jev";
 import { insertOpening } from "./opening-rules";
 import { isBraces } from "./patients";
-import { buildBookingRequestReply, buildHoldingReply, buildWindowReply, repliesWordingHash } from "./replies-wording";
+import { buildBookingRequestReply, buildHoldingReply, buildPriceReply, buildUrgentReply, buildWindowReply, repliesWordingHash } from "./replies-wording";
 import { addCall, effectiveData, newId, type AppState, type CallReason, type Message } from "./state";
 
 // A specific time, date or weekday: the patient is choosing a slot, so a person answers.
@@ -27,7 +27,11 @@ const PRICE_Q =
 const TIMES_Q =
   /\b(?:times?|available|availability|free|slots?|openings?|when can (?:i|we)|what days?|what hours?|opening hours)\b|متاح|متاحة|متوفر|متوفرة|الأوقات|الاوقات|أوقات|مواعيد|المواعيد|فاضي|فاضية/i;
 
-export type Intent = "window" | "booking" | "other";
+// Pain, bleeding, swelling or damage (English and Arabic). Used when there is no AI, and alongside Jev.
+const URGENT_Q =
+  /\b(?:pain\w*|hurt\w*|ache\w*|aching|bleed\w*|blood|swell\w*|swollen|broken|broke|cracked|chipped|loose|fell off|came off|snapped|damag\w*|injur\w*|emergency|urgent|cuts? my|cutting my|poking)\b|(?<![؀-ۿ])(?:ألم|الم|وجع|يوجع|يؤلم|تؤلم|نزيف|ينزف|دم|تورم|منتفخ|مكسور|مكسورة|انكسر|انكسرت|كسر|تلف|طارئ|عاجل|مستعجل)(?![؀-ۿ])/iu;
+
+export type Intent = "window" | "booking" | "price" | "other";
 
 export function classify(text: string): Intent {
   if (PRICE_Q.test(text)) return "other"; // money is never answered
@@ -36,15 +40,15 @@ export function classify(text: string): Intent {
   return "other";
 }
 
-// Code decides, Jev advises. A named time, a wish to book or a money question always goes to the
-// receptionist, whatever Jev says. Jev can add "this is a general times question" or "this is
-// urgent", and a confident Jev "no" stops a window reply. Without a confident Jev, today's keywords decide.
+// Code decides, Jev advises. Order: pain or damage first; then a named day or time (a person books it);
+// then a price question; then a wish to book; then Jev's general-times answer; otherwise keywords.
+// Jev can only add "urgent", "price" or "general times"; a confident Jev "no" stops a window reply.
 export function decideIntent(text: string, jev: JevIntent | null): { intent: Intent; urgent: boolean } {
-  if (jev === "pain_or_urgent") return { intent: "other", urgent: true };
-  const kw = classify(text);
-  if (kw === "booking") return { intent: "booking", urgent: false };
-  if (PRICE_Q.test(text)) return { intent: "other", urgent: false };
-  if (jev === null) return { intent: kw, urgent: false };
+  if (jev === "pain_or_urgent" || URGENT_Q.test(text)) return { intent: "other", urgent: true };
+  if (SPECIFIC.test(text)) return { intent: "booking", urgent: false };
+  if (PRICE_Q.test(text) || jev === "price_question") return { intent: "price", urgent: false };
+  if (BOOK_Q.test(text)) return { intent: "booking", urgent: false };
+  if (jev === null) return { intent: classify(text), urgent: false };
   if (jev === "times_question") return { intent: "window", urgent: false };
   if (jev === "booking_request") return { intent: "booking", urgent: false };
   return { intent: "other", urgent: false };
@@ -57,7 +61,7 @@ export type ReplyOptions = {
   ai?: Omit<AiInfo, "opening">; // what to record next to the reply
 };
 
-export type ReplyOutcome = { kind: "window_reply" | "holding_reply" | "no_reply"; callReason: CallReason | null };
+export type ReplyOutcome = { kind: "window_reply" | "price_reply" | "holding_reply" | "no_reply"; callReason: CallReason | null };
 
 export function handlePatientMessage(
   state: AppState,
@@ -95,9 +99,13 @@ export function handlePatientMessage(
     opts.ai ? { ...opts.ai, opening: withOpening && opening ? "ai" : "fixed" } : undefined;
   const decided = decideIntent(text, opts.jevIntent ?? null);
 
-  const hold = (reason: CallReason, booking: boolean, withOpening = true): ReplyOutcome => {
+  const hold = (reason: CallReason, booking: boolean, withOpening = true, urgent = false): ReplyOutcome => {
     const args = { firstName: patient.firstName, lang };
-    const built = booking ? buildBookingRequestReply(args, state.repliesApproval) : buildHoldingReply(args, state.repliesApproval);
+    const built = urgent
+      ? buildUrgentReply(args, state.repliesApproval)
+      : booking
+        ? buildBookingRequestReply(args, state.repliesApproval)
+        : buildHoldingReply(args, state.repliesApproval);
     if (!built.ok) return call("reply_failed_checks");
     const useOpening = withOpening && opening !== null;
     save({ direction: "out", kind: "holding_reply", text: useOpening ? insertOpening(built.text, opening) : built.text, ai: aiFor(useOpening) });
@@ -106,9 +114,17 @@ export function handlePatientMessage(
   };
 
   // Urgent: the normal holding reply with no AI sentence, and the call list shows it first.
-  if (decided.urgent) return hold("urgent_message", false, false);
+  if (decided.urgent) return hold("urgent_message", false, false, true);
   const intent = decided.intent;
   if (intent === "booking") return hold("booking_request", true);
+  if (intent === "price") {
+    // Only a braces patient is told the braces price (B1); anyone else goes to the receptionist.
+    if (!isBraces(patient)) return hold("other_question", false);
+    const priced = buildPriceReply({ firstName: patient.firstName, lang }, state.repliesApproval);
+    if (!priced.ok) return hold("reply_failed_checks", false);
+    save({ direction: "out", kind: "price_reply", text: opening ? insertOpening(priced.text, opening) : priced.text, ai: aiFor(true) });
+    return { kind: "price_reply", callReason: null };
+  }
   // Only a braces patient with no booking is told the visit window (B1, B7).
   if (intent !== "window" || !isBraces(patient) || patient.bookedSlotId !== null) return hold("other_question", false);
 
