@@ -28,6 +28,14 @@ All six exist today, in this nav order. Do not add, merge or remove any:
 
 Design each in **English (left to right)** and show **Arabic (right to left)** where text appears: reminders and replies on `/phone` and `/wording` are English and Arabic in the same message, and the Arabic block must mirror correctly (right-aligned, own bubble direction). The app chrome (nav, labels) stays English.
 
+## Chosen direction (owner decision, 2026-11-11): A, "Appointment book"
+
+The owner compared three directions (appointment book, clean clinic, sand and terracotta) and chose **A**. Starting values from the approved sample; Claude Design may refine them and must explain any change:
+
+- Paper `#F6F1E7`, ink `#2A2620`, soft text `#7B7365`, rules `#DDD3C0`, clinic green `#2F5D50` (actions), outgoing bubble `#DCE8D2`, chat ground `#EAE1CF`, clay red `#B4472B` (URGENT and errors only), attention strip `#F3DDD0`.
+- Serif for titles and patient first names (sample used Newsreader), Source Sans 3 for everything else, Noto Naskh Arabic for Arabic message text (sample choices, not locked).
+- Directions B (clean clinic) and C (sand and terracotta) are rejected; do not blend them in.
+
 ## Point of view (this is what keeps it from looking AI-made)
 
 **The front-desk appointment book.** Think of the paper book a good receptionist keeps: warm paper, ink, ruled lines, one colour pen. Calm, human, a bit editorial, never a software ad.
