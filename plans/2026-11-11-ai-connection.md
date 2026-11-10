@@ -70,4 +70,12 @@ A fresh reviewer found 7 points. Changes made:
 
 ## Verification
 - `npm test`: 169 passed (128 old + 41 new). `npm run lint` and `npx tsc --noEmit`: clean. `npm run build` with no env vars: passes.
-- Real run with the owner's keys: not done yet.
+- Real run with the owner's keys (Jev + Claude, patient P001, /phone), 2026-11-11:
+  - "what do you have for braces?": Jev said other (0.63), so a holding reply (cautious, correct under B7). AI sentence passed.
+  - "What times are available?" and the Arabic version: Jev times_question (1.00), window reply with a Friday 5 p.m. to 10 p.m. line, no slot times, AI sentence passed.
+  - "Can I come Friday at 6?": Jev booking_request, booking-request reply, call list "Wants to book".
+  - "how much does it cost?": Jev price_question, holding reply, no price.
+  - Pain and bleeding: Jev pain_or_urgent, plain holding reply, no AI sentence, call list shows URGENT first.
+  - "thank you so much!", "asdf qwerty zzz", and an injection message (booked, confirmed, free of charge): the AI sentence failed the no_promise check and the fixed wording was used; nothing was booked or promised. For the nonsense message Jev was not sure, so the keywords decided.
+  - Latency 1.5 to 2.6 s per reply with Claude, 0.3 s without. Cost about $0.0008 per reply.
+- Quality note: some AI sentences repeat the thank-you the template already has ("Thank you... Thanks so much for reaching out"). The prompt could say "do not start with thanks". That changes the approved instructions, so it needs a new approval.
