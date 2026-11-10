@@ -13,7 +13,7 @@ The one person it is for: **the front-desk receptionist** at Liwan Dental. They 
 Screen map: `docs/ux/screen-map.md` (the six screens and their contracts).
 Product details: `docs/prd.md` and `docs/feature-list.md`.
 
-Inspiration images in `design/reference/`: none yet. The sister app `liwan-desk` is the style cousin: take its WhatsApp-like phone screen (soft green bubbles on a warm grey chat background) and its plain, friendly tone. Do not copy its plain tables; this app can look a little more finished.
+Inspiration: `design/inspiration.md` (links and the principles taken; read it, then do not copy any of those shots). Images in `design/reference/`: none yet. The sister app `liwan-desk` is the style cousin: take its WhatsApp-like phone screen (soft green bubbles on a warm grey chat background) and its plain, friendly tone. Do not copy its plain tables; this app should look finished and distinct.
 
 ## Screens to design
 
@@ -28,13 +28,25 @@ All six exist today, in this nav order. Do not add, merge or remove any:
 
 Design each in **English (left to right)** and show **Arabic (right to left)** where text appears: reminders and replies on `/phone` and `/wording` are English and Arabic in the same message, and the Arabic block must mirror correctly (right-aligned, own bubble direction). The app chrome (nav, labels) stays English.
 
+## Point of view (this is what keeps it from looking AI-made)
+
+**The front-desk appointment book.** Think of the paper book a good receptionist keeps: warm paper, ink, ruled lines, one colour pen. Calm, human, a bit editorial, never a software ad.
+
+- Ground: warm off-white paper, not pure white and not dark mode. Text: warm near-black ink. One clinic green for actions and outgoing messages (deeper and calmer than WhatsApp's). One clay red used only for URGENT and errors.
+- Type: a warm serif for page titles and patient first names, a clean humanist sans for everything else, and a proper Arabic face matched to each (Arabic about 12 percent larger, line height about 1.7). Not Inter-only.
+- Surfaces: hairline rules and spacing instead of boxes. Corner radius 4 to 6 px (chat bubbles 10 px). Tables read like a ledger: tabular numbers, 44 px rows.
+- Status is a dot plus one word, never colour alone.
+- Hierarchy: one sentence at the top of a screen says what needs attention ("1 urgent patient: call Omar first"). Then the main content. Numbers are not put in identical cards.
+- Avoid on purpose: gradients, glass, glow, stock photos, tooth or sparkle icons, "AI" badges, emoji as icons, big rounded cards, centred hero blocks, equal four-card KPI rows, dark mode, a single geometric sans.
+
 ## Rules that cannot bend
 
 1. One primary action per screen, as listed in the screen map. Everything else is quiet.
 2. Every screen shows its empty, loading and error states (plus the extra states in the screen map).
 3. On `/calls`, every URGENT row is above every other row and is visibly different at a glance (badge and colour, not colour alone).
 4. On `/phone`, the AI line is directly under its message, smaller and quieter than the message, and never inside the bubble. When AI is off there is no AI line and no empty gap.
-5. Arabic text is right-to-left in its own block; it is never mixed into a left-to-right line, and a screenshot at 390 wide shows no sideways scrolling and text that is easy to read (body text 16 px or larger on phone widths).
+5. No gradients, no shadows except one on the phone frame, no emoji, and no row of identical stat cards; corners are 6 px or less (bubbles 10 px).
+6. Arabic text is right-to-left in its own block; it is never mixed into a left-to-right line, and a screenshot at 390 wide shows no sideways scrolling and text that is easy to read (body text 16 px or larger on phone widths).
 
 ## Words to use (and never use)
 
@@ -60,7 +72,7 @@ All made up. Clinic: Liwan Dental, Dubai. Today in the mock-up: Monday 2 Novembe
 
 ## You decide
 
-Layout, colour, typography, components, icons, spacing, and how Arabic is set. The owner has chosen no colours or fonts. Pick a warm, clean, clinic-friendly look (calm, not cold-hospital, not playful). Choose type that has a proper Arabic face alongside the Latin one. If you change anything above, tell us why.
+Exact colours, exact fonts, components, icons, spacing, and how Arabic is set, inside the point of view above. The owner has chosen no exact values. Choose type that has a proper Arabic face alongside the Latin one, and explain each choice. If you change anything above, tell us why.
 
 ## Send back
 

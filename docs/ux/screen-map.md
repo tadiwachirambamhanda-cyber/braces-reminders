@@ -17,6 +17,15 @@ Notes on the rows above:
 - `/wording` has two sets (Reminders, Confirmation and replies). Each set has one Approve button. Inside a set there is exactly one.
 - The AI sentence rules on `/wording` are a short list that sits above the second Approve button; the rules are read, not edited.
 
+## Look and feel per screen (from `design/inspiration.md`)
+
+- `/` ledger of patients (hairline rows, braces shown as a word with a dot, "Booking" column) and, beside or under it, the Friday calendar as plain text rows. No stat cards.
+- `/run` one line of figures: "12 to send" large, the other counts small beside it. Result table as a ledger. The error "wording not approved" sits in the top attention slot.
+- `/phone` beige chat ground, light-green outgoing bubble, small tail, timestamp in the bubble corner, no avatars. AI line directly under the bubble: small, grey, tabular, no sparkle, no "AI" pill. Arabic bubble text right-aligned and larger.
+- `/calls` top attention line ("1 urgent patient: call Omar first"), then the ledger; URGENT rows first, with a dot plus the word URGENT in clay red, not colour alone.
+- `/book` two plain fields and one button, a short result line above them (green for booked, clay for refused).
+- `/wording` proof sheet: English and Arabic side by side (stacked at 390 wide), approval status at the top of each set, the AI sentence rules as a plain numbered list.
+
 ## Users and access
 
 - Receptionist / front-desk manager: the only real user. No sign-in. Can reach all six routes.
