@@ -86,3 +86,26 @@ Fresh reviewer, 9 findings.
 7. MINOR, two templates versus one: Kept as planned and turned into a question for the owner.
 8. MINOR, page caching: Fixed. Read fresh every visit; missing file means not approved.
 9. MINOR, check wording and F9 hash: Fixed. Banned words defined; the confirmation wording will have its own approval.
+
+## Changes from the plan
+- Added a small `renderTemplate` function in `src/lib/wording.ts` so the `/wording` page can preview the wording with the same code that builds real reminders.
+- Wrote `buildReminder` to throw when the wording is not approved and to return `{ ok: false, reasons }` when a check fails, as the plan's plan check described.
+- Open question 2 (two texts or one) was not answered, so I kept two texts approved together as one wording set, as planned.
+
+## Verification
+| Check | Result |
+|---|---|
+| `npm test`, B4 (bilingual, only name and date change) | pass |
+| `npm test`, AC4 (greeting and first name, Liwan Dental, date, "braces", "تقويم", no "AED", no "درهم"), first and second reminder | pass |
+| `npm test`, checks catch bad messages (no name, no clinic name, English price, Arabic price, no Arabic, "booked" or "confirmed" in English or Arabic, wrong date) | pass |
+| `npm test`, name safety (line break, direction characters, long name cut on a word boundary, Arabic name, empty name gives `{ ok: false, reasons: ["no_name"] }`) | pass |
+| `npm test`, dates | "Friday 6 November" and "الجمعة 6 نوفمبر" with Western digits: pass |
+| `npm test`, approval (none: refused; valid: allowed; changed wording: refused; name required; file store; missing or damaged file means not approved) | pass |
+| `npm test`, second reminder passes while "booked", "confirmed", "تم تأكيد" fail | pass |
+| Open `/wording` | both versions show, Arabic reads right to left, status "Not approved yet" |
+| Click "Approve this wording" with a test name | page shows "Approved by Test check on 2026-11-10 13:27 UTC"; after a reload it still does. The test approval file was removed afterwards so the receptionist approves for real |
+| `npm run lint`, `typecheck`, `build` | no errors; build passes with no environment variables set |
+All 60 tests pass in total.
+
+## Ideas for later
+- A staff login for `/wording`, `/run` and the Patients page before any real patient data (Codex round 1, finding 1; plan check finding 1).
