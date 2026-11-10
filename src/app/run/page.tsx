@@ -22,8 +22,16 @@ async function runAction(formData: FormData) {
 
 const STATUS_LABEL: Record<Decision["status"], string> = {
   to_send: "to send",
-  skipped_booked: "skipped (already booked)",
+  skipped_booked: "skipped (booked)",
   needs_person: "needs a person",
+};
+
+// One name per outcome after a run too (the stored values stay as they are).
+const RESULT_LABEL: Record<string, string> = {
+  sent: "sent",
+  skipped_booked: "skipped (booked)",
+  needs_person: "needs a person",
+  already_sent: "already sent",
 };
 
 function reasonText(d: Decision): string {
@@ -158,7 +166,7 @@ function RunResult({ state, week, runId }: { state: State; week: string; runId: 
         needs={count("needs_person")}
         other={count("already_sent")}
         otherLabel="already sent earlier"
-        toSendLabel="reminders created"
+        toSendLabel="sent"
       />
       <div className="ledger mt-4" role="table">
         <div role="row" className="ledger-head grid grid-cols-[60px_120px_190px_1fr_120px]">
@@ -170,7 +178,7 @@ function RunResult({ state, week, runId }: { state: State; week: string; runId: 
             <div role="row" key={r.patientId} className="ledger-row grid grid-cols-[60px_120px_190px_1fr_120px]" data-testid="decision-row">
               <span role="cell" className="cell-soft" data-label="ID">{r.patientId}</span>
               <span role="cell" className="cell-name" data-label="First name">{names.get(r.patientId)}</span>
-              <span role="cell" className={`status ${r.status === "sent" ? "status-ok" : r.status === "needs_person" ? "status-clay" : ""}`} data-label="Result">{r.status.replace("_", " ")}</span>
+              <span role="cell" className={`status ${r.status === "sent" ? "status-ok" : r.status === "needs_person" ? "status-clay" : ""}`} data-label="Result">{RESULT_LABEL[r.status] ?? r.status.replace("_", " ")}</span>
               <span role="cell" className="cell-soft" data-label="Why">{r.reason && r.status === "needs_person" ? REASON_TEXT[r.reason as CallReason] : (r.reason ?? "")}</span>
               <span role="cell" className="num" data-label="Planned send time" data-testid="planned-time">{r.status === "sent" && m ? timeOfDay(m.sendAt) : ""}</span>
             </div>
@@ -197,7 +205,7 @@ function Counts(props: { toSend: number; detail: string; skipped: number; needs:
       </li>
       <li className="flex items-baseline gap-2">
         <span className="font-serif text-[28px]" data-testid="count-needs-person">{props.needs}</span>
-        <span className="text-soft">need a person</span>
+        <span className="text-soft">needs a person</span>
       </li>
       <li className="flex items-baseline gap-2">
         <span className="font-serif text-[28px]" data-testid="count-ignored">{props.other}</span>

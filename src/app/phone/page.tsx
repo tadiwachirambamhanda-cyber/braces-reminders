@@ -88,12 +88,15 @@ export default async function PhonePage(props: PageProps<"/phone">) {
             ))}
           </ul>
 
-          <section className="min-w-0 max-w-[600px] flex-[1_1_420px]" data-testid="chat">
-            <div className="flex items-baseline gap-2.5 border-b border-rule pb-2.5">
-              <h2 className="text-[26px]">{selected.firstName}</h2>
-              <span className="text-soft">{selected.id}</span>
-            </div>
-            <div className="mt-3 rounded-md px-4 py-5" style={{ background: "var(--chat-ground)" }}>
+          <section className="phone-frame" data-testid="chat">
+            <header className="phone-header">
+              <span className="phone-avatar" aria-hidden="true">{selected.firstName.slice(0, 1)}</span>
+              <div>
+                <h2 className="phone-name">{selected.firstName}</h2>
+                <p className="phone-status">{selected.id}, online</p>
+              </div>
+            </header>
+            <div className="phone-chat">
               {chat.length === 0 ? <p className="text-sm text-soft">No messages yet.</p> : null}
               <ul className="flex flex-col gap-1.5">
                 {chat.map((m) => {
@@ -109,7 +112,7 @@ export default async function PhonePage(props: PageProps<"/phone">) {
                       >
                         <MessageBody text={m.text} />
                         <p className="mt-1 text-right text-xs" style={{ color: out ? "var(--bubble-time)" : "var(--soft)" }}>
-                          {out ? "Liwan Dental" : selected.firstName}, planned {label(m.sendAt)}
+                          {out ? `Liwan Dental, planned ${label(m.sendAt)}` : `${selected.firstName}, ${label(m.sendAt)}`}
                         </p>
                       </div>
                       {m.ai ? (
@@ -125,18 +128,18 @@ export default async function PhonePage(props: PageProps<"/phone">) {
                 })}
               </ul>
             </div>
-            <form action={sendAction} className="mt-4 flex gap-2.5" data-testid="send-form">
+            <form action={sendAction} className="phone-bar" data-testid="send-form">
               <input type="hidden" name="patient" value={selected.id} />
               <input
                 name="text"
                 dir="auto"
                 aria-label={`Type a message as ${selected.firstName}`}
                 placeholder={`Type a message as ${selected.firstName}`}
-                className="field flex-1"
+                className="phone-input"
                 autoComplete="off"
                 data-testid="send-text"
               />
-              <button type="submit" className="btn-primary">Send</button>
+              <button type="submit" className="phone-send">Send</button>
             </form>
           </section>
         </div>
