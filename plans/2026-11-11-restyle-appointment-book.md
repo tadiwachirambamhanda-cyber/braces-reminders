@@ -57,3 +57,15 @@ A fresh reviewer returned five findings; all were accepted.
 - Seeded and run on the dev server (port 3012, own data folder): approved both wording sets through the real forms with a throwaway name; ran Monday 2 Nov: "12 reminders created, 1 skipped, 1 needs a person"; ran Monday 9 Nov preview: 24 to send; on `/phone` sent "How much does it cost?" (AED 300 reply, Arabic block right-to-left) and "my bracket broke and it hurts"; `/calls` then showed the red strip "1 urgent patient: call Sara first" and the URGENT row first; `/book` booked a free slot and showed the green strip.
 - At 375px wide none of the six pages scrolls sideways; table rows stack with their own labels (a label overlap on status cells was found and fixed).
 - Not yet walked: every state on the states sheet (refused run, not a Monday, slot taken, empty call list, AI on and off) beyond the ones above; `/ux-check` not run.
+
+## UX check (2026-11-11, 13 screens and states, 1440 and 390 wide)
+Round 1 critic: 5 screens failed, 2 distinct P0 defects. Fixed: the refused run (`/run`) and "booked, confirmation not sent" (`/book`) now link to the Wording page; empty labels hidden on phones; the nav brand has its own row on phones; the patient list is shorter on phones; the calendar sits first on phones; the approve button is quiet ("Approve again") once a set is approved; the AI prompt text is readable size; a hint line shows on `/run` before a run.
+Round 2 critic: no P0. Remaining P1, dismissed because they would change app behaviour or wording, which this restyle must not do (ideas for later): two Monday pickers on `/run` (two forms: run and preview); different names for the same outcome ("skipped booked" vs "skipped (booked)"); "planned" on typed patient messages; "URGENT:" repeated in the call reason; the preview shown under a refused run; the booked-but-not-sent result shown in clay; the form not resetting after a booking; 5-line stacked rows on phones (a compact two-line row is a later design choice). Not checked: empty states with no data and AI-on on `/phone` (needs keys).
+
+## Codex review
+Round 1: FINDINGS(1). #1 MINOR, ledger rows lost table semantics for screen readers: Fixed (table, row, columnheader and cell roles added).
+Round 2: VERDICT: PASS (no findings).
+Reply and reminder wording: `git diff origin/main -- src/lib data tests scripts` is empty, so `wordingHash()` and `repliesWordingHash()` inputs are unchanged and no re-approval is needed.
+
+## Merge order
+Merge after pull request 9 (design handoff), which this branch builds on.
