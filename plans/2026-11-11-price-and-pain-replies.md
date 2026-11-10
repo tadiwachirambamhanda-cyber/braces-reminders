@@ -54,3 +54,6 @@ No other prices, no discounts, no medical advice, no opening hours for the clini
 ## Codex review
 - Round 1 (whole branch): MAJOR, the booked-claim check missed phrases like "Your appointment is all set". Fixed: more phrases blocked (all set, locked in, secured, see you, looking forward...), rules version 3, three new tests. Verdict FINDINGS(1), no other findings.
 - Round 2 (whole branch): MAJOR, a Jev-only `price_question` could send the AED 300 reply to a braces patient who did not ask. Dismissed by the owner on 2026-11-11: the price comes from one code constant, only braces patients get it, Jev needs 0.6 confidence, a named time is vetoed to the receptionist, and the reply claims nothing is booked or free. Requiring a price keyword would stop questions like "what is the fee?". Verdict FINDINGS(1), dismissed.
+
+## Follow-up: PR 7 (AI sentence passes more often)
+Real run, 2026-11-11, patient P003, wording version 4 approved: "How much is a braces appointment?" gave AED 300 with an AI sentence that passed ("lovely to hear from you about your braces journey"); "which times are free for my braces check?" gave the Friday window with a passing AI sentence. Neither doubled the thank-you.
