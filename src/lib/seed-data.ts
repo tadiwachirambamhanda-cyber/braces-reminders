@@ -46,7 +46,7 @@ export function buildPatients(): Patient[] {
   for (let i = 0; i < 10; i++) {
     const n = 51 + i;
     patients.push({
-      id: `P${n}`,
+      id: `P${String(n).padStart(3, "0")}`,
       firstName: FIRST_NAMES[50 + i],
       phone: fakePhone(n),
       treatment: OTHER_TREATMENTS[i % OTHER_TREATMENTS.length],

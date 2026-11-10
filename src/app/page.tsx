@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { connection } from "next/server";
+import { Nav } from "./nav";
 import { loadData } from "@/lib/load-data";
 import { isBraces } from "@/lib/patients";
 import { freeTimes, slotsForDate } from "@/lib/calendar";
@@ -23,9 +23,9 @@ export default async function PatientsPage() {
 
   return (
     <main className="mx-auto w-full max-w-5xl p-6">
+      <Nav />
       <h1 className="text-2xl font-semibold">Braces Reminders</h1>
       <p className="mt-1 text-sm text-neutral-600">Liwan Dental. All patients below are made up.</p>
-      <p className="mt-2 text-sm"><Link href="/run" className="underline">Run this week</Link></p>
 
       <h2 className="mt-6 text-lg font-semibold">Patients</h2>
       <p className="mt-1" data-testid="patient-count">
