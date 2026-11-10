@@ -31,3 +31,15 @@ No change to replies, reminders, rules or data. No second Monday picker merge, n
 ## Questions
 1. The frame is in the warm green of direction A, not WhatsApp's bright green. OK (recommended), or use WhatsApp green?
 2. Merge order: this builds on pull request 10, which builds on pull request 9. OK?
+
+## Verification
+- Lint, typecheck, 193 tests (none edited) and the build pass with no env vars. `git diff origin/main -- src/lib data tests scripts` is empty, so the wording hashes are unchanged. Secrets scan of the diff: nothing.
+- Dev server (port 3013): `/phone?patient=P001` shows the phone frame (rounded body, green header with "Sara, P001, online", chat, message bar). A typed message shows "Sara, 2026-11-10 20:46" (no "planned"); clinic messages keep "planned". `/run` labels after a run: sent, skipped (booked), needs a person; preview: to send, skipped (booked), needs a person; counts match. At 375px wide no sideways scroll on `/phone` and `/run`.
+- Not re-run: the full /ux-check screenshot pass (the same pages passed it with the restyle).
+
+## Codex review
+Round 1: FINDINGS(2). #1 MINOR (after-run count said "reminders created", preview said "to send"): Fixed, now "sent". #2 MINOR (white text on the green phone header may be low contrast): Dismissed. Paper `#F6F1E7` on green `#2F5D50` is about 6.5:1 and the 12px status line at 85% opacity is about 5.5:1, both above 4.5:1.
+Round 2: FINDINGS(1), the same as round 1 item 2, dismissed again with the same reason. Round 3: VERDICT: PASS.
+
+## Merge order
+After pull request 9 (design handoff), then pull request 10 (restyle). This branch builds on both.
