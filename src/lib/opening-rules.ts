@@ -3,7 +3,7 @@
 // replies-wording.ts), so changing either one needs a new approval from the receptionist.
 import type { Lang } from "./language";
 
-export const OPENING_RULES_VERSION = "2";
+export const OPENING_RULES_VERSION = "3";
 export const OPENING_MAX_CHARS = 160;
 
 export const OPENING_PROMPT = [
@@ -22,7 +22,7 @@ const MONTHS_DAYS =
 const MONEY =
   /\b(?:prices?|costs?|fees?|free|charges?|discounts?|offers?|aed|dirhams?|money|pay|paid)\b|\$|درهم|سعر|أسعار|اسعار|مجاني|مجانا|مجاناً|خصم|رسوم|تكلفة|تكاليف|عرض/i;
 const BOOKED =
-  /\b(?:booked|confirmed|reserved|scheduled|arranged|sorted|set up)\b|تم تأكيد|تم حجز|حجزنا|مؤكد|محجوز|رتبنا|تم ترتيب/i;
+  /\b(?:booked|confirmed|reserved|scheduled|arranged|sorted|set up|all set|good to go|locked in|secured|taken care of|see you|seeing you|expecting you|looking forward)\b|تم تأكيد|تم حجز|حجزنا|مؤكد|محجوز|رتبنا|تم ترتيب/i;
 const PROMISE =
   /\b(?:will|we'll|i'll|shall|going to|call you|ring you|get back|reach out|contact you|soon|shortly|today|tomorrow|tonight|always|definitely|guarantee\w*|doctor|dentist|orthodontist|pain|painful|medic\w*|treatment|cure|fix)\b|سوف|سنقوم|سنتصل|ستتصل|نتصل|سيتصل|سنعود|قريبا|قريباً|اليوم|غدا|غداً|الليلة|دائما|دائماً|بالتأكيد|الطبيب|الدكتور|الدكتورة|ألم|الم |دواء|علاج|نضمن/i;
 const THANKS = /\b(?:thanks?|thank you|grateful|appreciate\w*)\b|شكر|ممتن|نقدر/i;
