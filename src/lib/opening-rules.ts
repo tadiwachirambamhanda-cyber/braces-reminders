@@ -3,13 +3,14 @@
 // replies-wording.ts), so changing either one needs a new approval from the receptionist.
 import type { Lang } from "./language";
 
-export const OPENING_RULES_VERSION = "1";
+export const OPENING_RULES_VERSION = "2";
 export const OPENING_MAX_CHARS = 160;
 
 export const OPENING_PROMPT = [
   "You write one short, warm sentence for a dental clinic's WhatsApp reply to a braces patient.",
   "Write exactly one sentence, at most 25 words, in the language you are told. No question.",
   "React kindly to what the patient said. Do not use the patient's name. Do not answer the question.",
+  "Never say thank you or thanks and never show gratitude, because the reply already does that.",
   "Never mention any number, date, day, time, price, money, discount or link.",
   "Never promise anything and never say what staff will do. Never say anything is booked, confirmed or arranged.",
   "No medical advice and no guesses about pain or treatment.",
@@ -24,7 +25,8 @@ const BOOKED =
   /\b(?:booked|confirmed|reserved|scheduled|arranged|sorted|set up)\b|تم تأكيد|تم حجز|حجزنا|مؤكد|محجوز|رتبنا|تم ترتيب/i;
 const PROMISE =
   /\b(?:will|we'll|i'll|shall|going to|call you|ring you|get back|reach out|contact you|soon|shortly|today|tomorrow|tonight|always|definitely|guarantee\w*|doctor|dentist|orthodontist|pain|painful|medic\w*|treatment|cure|fix)\b|سوف|سنقوم|سنتصل|ستتصل|نتصل|سيتصل|سنعود|قريبا|قريباً|اليوم|غدا|غداً|الليلة|دائما|دائماً|بالتأكيد|الطبيب|الدكتور|الدكتورة|ألم|الم |دواء|علاج|نضمن/i;
-const LINK = /https?:|www\.|\.com\b|@/i;
+const THANKS = /\b(?:thanks?|thank you|grateful|appreciate\w*)\b|شكر|ممتن|نقدر/i;
+const LINK =/https?:|www\.|\.com\b|@/i;
 const DIGIT = /[0-9٠-٩۰-۹]/;
 const ARABIC = /[؀-ۿ]/;
 const LATIN = /[A-Za-z]/;
@@ -41,6 +43,7 @@ export const OPENING_CHECKS: OpeningCheck[] = [
   { name: "no_money", description: "No price, money, discount or free offer", test: (t) => !MONEY.test(t) },
   { name: "no_booked_claim", description: "Never says anything is booked, confirmed or arranged", test: (t) => !BOOKED.test(t) },
   { name: "no_promise", description: "No promise, no staff action, no medical or timing words", test: (t) => !PROMISE.test(t) },
+  { name: "no_thanks", description: "No thank you (the reply already says it)", test: (t) => !THANKS.test(t) },
   { name: "no_link", description: "No link, email or @", test: (t) => !LINK.test(t) },
   { name: "language_matches", description: "Same language as the patient (English or Arabic)", test: (t, l) => (l === "ar" ? ARABIC.test(t) && !LATIN.test(t) : !ARABIC.test(t)) },
 ];
