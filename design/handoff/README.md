@@ -39,4 +39,5 @@ Files (each is a design prototype in the .dc.html format; read the markup and in
 ## Choices and open points
 - Chose a serif only for titles and first names; ledger rows instead of cards; one green; clay red kept for urgency so it keeps its meaning.
 - 390px frames: `calls-390`, `phone-390`, `run-390`, `wording-390` (same markup, shown in a 390 wide frame). Under 640px: table rows stack as one block per row (status, name, why, week), header labels hide, page padding drops to 20px, the nav wraps. Checked in a browser at 375px: no sideways scroll on /, /calls, /phone.
-- The wording samples in `wording.dc.html` are illustrative; the real text comes from `src/lib`.
+- The reminder and reply wording in `wording.dc.html` and `phone.dc.html` is copied from `src/lib/wording.ts` and `src/lib/replies-wording.ts` (sample name Sara, Friday 6 November), with ordinary digits in Arabic text as the app writes them. The AI warm sentence in the /phone example is illustrative. Keep the app's code as the source of truth.
+- Bubble timestamps use `#44563C` on the green bubble so they pass 4.5:1.
