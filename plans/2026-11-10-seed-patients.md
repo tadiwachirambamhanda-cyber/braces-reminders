@@ -25,7 +25,9 @@ After this, the clinic can run one command and open a Patients screen that shows
 - 50 braces patients with visit dates on the four November Fridays (2026-11-06, 11-13, 11-20, 11-27).
 - Friday 2026-11-06 has 14 braces patients: 12 clean ones (no booking, valid phone), 1 already booked, 1 with a missing or bad phone. The other three Fridays have 12 each. That gives 14 + 12 + 12 + 12 = 50.
 - 10 non-braces patients (check-up, cleaning, filling and so on), some also due on 2026-11-06, to prove they are skipped later.
-- The seed has no bookings or reminders yet beyond the one booked patient, so the Monday 2026-11-09 run later finds 24 (12 first reminders for 2026-11-13 plus 12 second reminders for 2026-11-06), and the Monday 2026-11-16 run sends 24 and moves the 12 from 2026-11-06 to the call list. A patient's `dueFriday` is the Friday their visit was first due; the later run (F2) decides who has rolled over, so the seed needs no extra field for it.
+- The seed has no reminders yet and only the one booked patient. A patient's `dueDate` is the Friday their monthly visit is first due; the later run (F2) decides who has rolled over, so the seed needs no extra field for it. With no bookings changing, the later runs should find:
+  - Monday 2026-11-09: 24 reminders (12 first reminders for 2026-11-13, plus 12 second reminders for the patients first due 2026-11-06).
+  - Monday 2026-11-16: 24 reminders (12 first reminders for 2026-11-20, plus 12 second reminders for 2026-11-13). The 12 patients first due 2026-11-06 have had two reminders and still have no booking, so they get no third reminder and go to the call list.
 - All names, phone numbers and ids are invented. Phones look like `+971 50 000 0001`. No surnames.
 
 ## Files
@@ -74,4 +76,10 @@ None. I picked the seed numbers above myself from the acceptance criteria.
 | `npm run build` | passes with no environment variables set |
 
 ## Ideas for later
-- None yet.
+- Put the Patients page and the receptionist screens behind a staff login before any real patient data is used (Codex round 1, finding 1).
+
+## Codex review
+Round 1: VERDICT: FINDINGS(2).
+1. MAJOR, the Patients page has no login: Dismissed for now. All 60 patients are made up and nothing real is stored; the owner asked for no logins unless wanted. Before any real patient data is used, the page must go behind a staff login (recorded under Ideas for later).
+2. MAJOR, plan line about the 2026-11-16 run was unclear: Fixed. The rules were right (B3 and B6); the sentence is now spelled out, and uses `dueDate`, not `dueFriday`.
+Codex also confirmed the seed counts, found no secrets, no `NEXT_PUBLIC_` variables, no messaging or model code in F1.
