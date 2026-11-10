@@ -13,8 +13,8 @@ export const REPLY_TEMPLATES = {
   },
   // The reply to "What times are available?": the visit window only, never the 20-minute slots.
   windowReply: {
-    en: "Hello {name}, happy to help! We see braces patients on {date} between 5 p.m. and 10 p.m. Just reply with the time that suits you and our receptionist will confirm your booking.",
-    ar: "مرحباً {name}، يسعدنا مساعدتك! نستقبل مرضى التقويم يوم {date} بين الساعة 5 مساءً و10 مساءً. ما عليك سوى إخبارنا بالوقت المناسب لك وستقوم موظفة الاستقبال بتأكيد حجزك.",
+    en: "Hello {name}, happy to help! We see braces patients on {date} between 5 p.m. and 10 p.m. Just reply with the time that suits you and our receptionist will get back to you to arrange it.",
+    ar: "مرحباً {name}، يسعدنا مساعدتك! نستقبل مرضى التقويم يوم {date} بين الساعة 5 مساءً و10 مساءً. ما عليك سوى إخبارنا بالوقت المناسب لك وستتواصل معك موظفة الاستقبال لترتيب الموعد.",
   },
   // When a patient names a time or wants to book: a person books it.
   bookingRequest: {

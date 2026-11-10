@@ -12,12 +12,12 @@ export type ReminderNumber = 1 | 2;
 // {name} and {date} are the only two places that change.
 export const TEMPLATES: Record<ReminderNumber, { en: string; ar: string }> = {
   1: {
-    en: 'Hello {name}, this is Liwan Dental. Your monthly braces check is due on {date}. We would love to see you! Would you like to book your visit? Just reply "What times are available?" and we will send you the free times.',
-    ar: "مرحباً {name}، معك عيادة ليوان للأسنان (Liwan Dental). موعد مراجعة التقويم الشهرية الخاصة بك هو يوم {date}، ويسعدنا رؤيتك! هل ترغب بحجز موعدك؟ ما عليك سوى الرد بـ «ما هي الأوقات المتاحة؟» وسنرسل لك الأوقات المتاحة.",
+    en: 'Hello {name}, this is Liwan Dental. Your monthly braces check is due on {date}. We would love to see you! Would you like to book your visit? Just reply "What times are available?" and we will tell you when we see braces patients.',
+    ar: "مرحباً {name}، معك عيادة ليوان للأسنان (Liwan Dental). موعد مراجعة التقويم الشهرية الخاصة بك هو يوم {date}، ويسعدنا رؤيتك! هل ترغب بحجز موعدك؟ ما عليك سوى الرد بـ «ما هي الأوقات المتاحة؟» وسنخبرك بمواعيد استقبال مرضى التقويم.",
   },
   2: {
-    en: 'Hello {name}, it\'s Liwan Dental again. A friendly reminder that your monthly braces check is due on {date}, and we haven\'t got your booking yet. Just reply "What times are available?" and we will send you the free times.',
-    ar: "مرحباً {name}، معك عيادة ليوان للأسنان (Liwan Dental) مرة أخرى. تذكير ودّي بأن موعد مراجعة التقويم الشهرية الخاصة بك هو يوم {date}، ولم يصلنا حجزك بعد. ما عليك سوى الرد بـ «ما هي الأوقات المتاحة؟» وسنرسل لك الأوقات المتاحة.",
+    en: 'Hello {name}, it\'s Liwan Dental again. A friendly reminder that your monthly braces check is due on {date}, and we haven\'t got your booking yet. Just reply "What times are available?" and we will tell you when we see braces patients.',
+    ar: "مرحباً {name}، معك عيادة ليوان للأسنان (Liwan Dental) مرة أخرى. تذكير ودّي بأن موعد مراجعة التقويم الشهرية الخاصة بك هو يوم {date}، ولم يصلنا حجزك بعد. ما عليك سوى الرد بـ «ما هي الأوقات المتاحة؟» وسنخبرك بمواعيد استقبال مرضى التقويم.",
   },
 };
 

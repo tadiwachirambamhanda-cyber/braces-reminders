@@ -59,10 +59,11 @@ describe("AC5: the visit window reply", () => {
     expect(m.text.startsWith("Hello Sara, happy to help!")).toBe(true);
     expect(m.text).toContain("Friday 6 November");
     expect(m.text).toContain("between 5 p.m. and 10 p.m.");
-    expect(m.text).toContain("our receptionist will confirm your booking");
+    expect(m.text).toContain("our receptionist will get back to you to arrange it");
     expect(m.text).not.toMatch(/\d{1,2}:\d{2}/); // no 17:40, 18:00 and so on
     expect(ARABIC.test(m.text)).toBe(false);
     expect(m.text).not.toMatch(/AED|درهم|minutes?/);
+    expect(m.text).not.toMatch(/confirm your booking|your booking is/); // no booking exists yet (Codex round 2)
     expect(openCalls(state, "P001")).toEqual([]); // nothing for a person to do yet
   });
 

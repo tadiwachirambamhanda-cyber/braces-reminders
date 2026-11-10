@@ -54,6 +54,18 @@ describe("F3 the reminder (AC4, B4)", () => {
   });
 });
 
+describe("F3 the reminder does not promise what the agent will not do (Codex round 2)", () => {
+  it("does not promise a list of free times, and says we will tell them when braces patients are seen", () => {
+    for (const n of [1, 2] as const) {
+      const r = build("Sara", n);
+      if (!r.ok) throw new Error("should build");
+      expect(r.text).not.toMatch(/free times|send you the|الأوقات المتاحة\.$/);
+      expect(r.text).toContain("we will tell you when we see braces patients");
+      expect(r.text).toContain("وسنخبرك بمواعيد استقبال مرضى التقويم");
+    }
+  });
+});
+
 describe("F3 checks catch bad messages", () => {
   const good = (() => {
     const r = build("Sara");
