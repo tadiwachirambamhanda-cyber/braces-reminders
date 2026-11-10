@@ -96,6 +96,12 @@ export function checkReminder(text: string, firstName: string, visitDate: string
   return failures;
 }
 
+// Fill one language of one template. Used to build reminders and to preview the wording.
+export function renderTemplate(n: ReminderNumber, lang: "en" | "ar", name: string, visitDate: string): string {
+  const date = lang === "en" ? formatDateEn(visitDate) : formatDateAr(visitDate);
+  return TEMPLATES[n][lang].replace("{name}", () => name).replace("{date}", () => date);
+}
+
 // ---------------------------------------------------------------------------
 // Build a reminder. Refuses to run unless this exact wording has been approved.
 // ---------------------------------------------------------------------------
@@ -110,9 +116,7 @@ export function buildReminder(
   const name = cleanFirstName(args.firstName);
   if (name === "") return { ok: false, reasons: ["no_name"] };
 
-  const template = TEMPLATES[args.reminderNumber];
-  const fill = (t: string, date: string) => t.replace("{name}", () => name).replace("{date}", () => date);
-  const text = `${fill(template.en, formatDateEn(args.visitDate))}\n\n${fill(template.ar, formatDateAr(args.visitDate))}`;
+  const text = `${renderTemplate(args.reminderNumber, "en", name, args.visitDate)}\n\n${renderTemplate(args.reminderNumber, "ar", name, args.visitDate)}`;
 
   const reasons = checkReminder(text, name, args.visitDate);
   return reasons.length > 0 ? { ok: false, reasons } : { ok: true, text };
