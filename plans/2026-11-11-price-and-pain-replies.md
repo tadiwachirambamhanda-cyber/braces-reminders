@@ -57,3 +57,6 @@ No other prices, no discounts, no medical advice, no opening hours for the clini
 
 ## Follow-up: PR 7 (AI sentence passes more often)
 Real run, 2026-11-11, patient P003, wording version 4 approved: "How much is a braces appointment?" gave AED 300 with an AI sentence that passed ("lovely to hear from you about your braces journey"); "which times are free for my braces check?" gave the Friday window with a passing AI sentence. Neither doubled the thank-you.
+
+## Follow-up: shorter replies (owner request, 2026-11-11)
+The window, price and pain replies are shorter (English and Arabic), and Claude's sentence is limited to 12 words and 90 characters (rules version 5). Rule P3 (the price reply says the receptionist helps with anything else) was dropped on purpose to keep it short; the price is still worded as the braces appointment price only. The receptionist must approve the replies wording again.

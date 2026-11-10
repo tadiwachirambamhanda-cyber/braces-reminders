@@ -17,8 +17,8 @@ export const REPLY_TEMPLATES = {
   },
   // The reply to "What times are available?": the visit window only, never the 20-minute slots.
   windowReply: {
-    en: "Hello {name}, happy to help! We see braces patients on {date} between 5 p.m. and 10 p.m. Just reply with the time that suits you and our receptionist will get back to you to arrange it.",
-    ar: "مرحباً {name}، يسعدنا مساعدتك! نستقبل مرضى التقويم يوم {date} بين الساعة 5 مساءً و10 مساءً. ما عليك سوى إخبارنا بالوقت المناسب لك وستتواصل معك موظفة الاستقبال لترتيب الموعد.",
+    en: "Hello {name}, happy to help! We see braces patients on {date} between 5 p.m. and 10 p.m. Reply with the time that suits you and our receptionist will arrange it.",
+    ar: "مرحباً {name}، يسعدنا مساعدتك! نستقبل مرضى التقويم يوم {date} بين الساعة 5 مساءً و10 مساءً. أخبرنا بالوقت المناسب لك وستقوم موظفة الاستقبال بترتيبه.",
   },
   // When a patient names a time or wants to book: a person books it.
   bookingRequest: {
@@ -27,13 +27,13 @@ export const REPLY_TEMPLATES = {
   },
   // When a braces patient asks what it costs: the one price, then how to come in.
   priceReply: {
-    en: "Hello {name}, happy to help! A braces appointment at Liwan Dental costs AED {price}. If you would like to come in, just reply with the time that suits you and our receptionist will arrange it with you. For anything else, our receptionist will be glad to help.",
-    ar: "مرحباً {name}، يسعدنا مساعدتك! تكلفة موعد التقويم في عيادة ليوان للأسنان {price} درهم. إذا رغبت بالحضور، ما عليك سوى إخبارنا بالوقت المناسب لك وستتواصل معك موظفة الاستقبال لترتيب الموعد. وإذا كان لديك أي استفسار آخر، فستسعد موظفة الاستقبال بمساعدتك.",
+    en: "Hello {name}, happy to help! A braces appointment at Liwan Dental costs AED {price}. To come in, reply with a time that suits you and our receptionist will arrange it.",
+    ar: "مرحباً {name}، يسعدنا مساعدتك! تكلفة موعد التقويم في عيادة ليوان للأسنان {price} درهم. للحضور، أخبرنا بالوقت المناسب وستقوم موظفة الاستقبال بترتيبه.",
   },
   // Pain, bleeding or damage: short, sympathetic, a suggestion to come in, and a person will speak to them.
   urgentReply: {
-    en: "I'm so sorry to hear that, {name}. If you can, please come to the clinic as soon as possible so a dentist can see you. I have also told our receptionist, who will speak to you shortly. If it is severe or cannot wait, please go to your nearest emergency department.",
-    ar: "نأسف جداً لسماع ذلك يا {name}. إذا استطعت، يرجى زيارة العيادة في أقرب وقت ممكن ليتمكن الطبيب من فحصك. وقد أبلغت موظفة الاستقبال وستتواصل معك قريباً. وإذا كان الأمر شديداً أو لا يحتمل الانتظار، يرجى التوجه إلى أقرب قسم طوارئ.",
+    en: "I'm so sorry to hear that, {name}. Please come to the clinic as soon as possible so a dentist can see you. Our receptionist will speak to you shortly. If it is severe, go to your nearest emergency department.",
+    ar: "نأسف جداً لسماع ذلك يا {name}. يرجى زيارة العيادة في أقرب وقت ممكن ليتمكن الطبيب من فحصك. ستتواصل معك موظفة الاستقبال قريباً. وإذا كان الأمر شديداً، توجّه إلى أقرب قسم طوارئ.",
   },
   holding: {
     en: "Thank you for your message, {name}. I have passed it to our receptionist, who will reply to you shortly.",

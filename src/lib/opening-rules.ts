@@ -3,12 +3,12 @@
 // replies-wording.ts), so changing either one needs a new approval from the receptionist.
 import type { Lang } from "./language";
 
-export const OPENING_RULES_VERSION = "4";
-export const OPENING_MAX_CHARS = 160;
+export const OPENING_RULES_VERSION = "5";
+export const OPENING_MAX_CHARS = 90;
 
 export const OPENING_PROMPT = [
   "You write one short, warm sentence for a dental clinic's WhatsApp reply to a braces patient.",
-  "Write exactly one sentence, at most 25 words, in the language you are told. No question.",
+  "Write exactly one sentence, at most 12 words, in the language you are told. No question.",
   "React kindly to what the patient said. Do not use the patient's name. Do not answer the question.",
   "Never say thank you or thanks and never show gratitude, because the reply already does that.",
   "Never mention any number, date, day, time, price, money, discount or link.",
