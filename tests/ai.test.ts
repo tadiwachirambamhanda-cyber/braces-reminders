@@ -105,6 +105,8 @@ describe("F13 opening checks", () => {
   it("accepts a clean warm sentence in each language", () => {
     expect(checkOpening("It is lovely to hear from you about your braces.", "en").ok).toBe(true);
     expect(checkOpening("يسعدنا سماع أخبارك عن التقويم.", "ar").ok).toBe(true);
+    expect(checkOpening("We are glad you got in touch about your braces.", "en").ok).toBe(true);
+    expect(checkOpening("Keeping your braces on track is always a good idea.", "en").ok).toBe(true);
   });
   it("the opening goes after the first sentence", () => {
     expect(insertOpening("Hello Sara, happy to help! We see braces patients.", "Nice to hear from you.")).toBe(

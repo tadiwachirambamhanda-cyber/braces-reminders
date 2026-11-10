@@ -13,7 +13,7 @@ import { addCall, effectiveData, newId, type AppState, type CallReason, type Mes
 
 // A specific time, date or weekday: the patient is choosing a slot, so a person answers.
 const SPECIFIC =
-  /\b\d{1,2}\s?[:.]\s?\d{2}\b|\b\d{1,2}\s?(?:am|pm|a\.m\.|p\.m\.)(?!\w)|\b(?:mon|tue|tues|wed|thu|thur|thurs|fri|sat|sun)(?:day|sday|nesday|rsday|urday)?\b|\b(?:today|tomorrow|tonight|next week|this week)\b|\b\d{1,2}(?:st|nd|rd|th)\b|\b(?:january|february|march|april|june|july|august|september|october|november|december|jan|feb|mar|apr|jun|jul|aug|sept?|oct|nov|dec)\b|\b(?:at|around|by|after|before|until|till)\s+\d{1,2}\b|\b\d{1,2}\s*o'?clock\b|الساعة\s*[0-9٠-٩]{1,2}|[0-9٠-٩]{1,2}\s*[:٫]\s*[0-9٠-٩]{2}|الأحد|الاحد|الاثنين|الإثنين|الثلاثاء|الأربعاء|الاربعاء|الخميس|الجمعة|السبت|اليوم|غدا|غداً|بكرة|الأسبوع القادم|الاسبوع القادم/i;
+  /\b\d{1,2}\s?[:.]\s?\d{2}\b|\b\d{1,2}\s?(?:am|pm|a\.m\.|p\.m\.)(?!\w)|\b(?:mon|tue|tues|wed|thu|thur|thurs|fri|sat|sun)(?:day|sday|nesday|rsday|urday)?\b|\b(?:today|tomorrow|tonight|next week)\b|\b\d{1,2}(?:st|nd|rd|th)\b|\b(?:january|february|march|april|june|july|august|september|october|november|december|jan|feb|mar|apr|jun|jul|aug|sept?|oct|nov|dec)\b|\b(?:at|around|by|after|before|until|till)\s+\d{1,2}\b|\b\d{1,2}\s*o'?clock\b|الساعة\s*[0-9٠-٩]{1,2}|[0-9٠-٩]{1,2}\s*[:٫]\s*[0-9٠-٩]{2}|الأحد|الاحد|الاثنين|الإثنين|الثلاثاء|الأربعاء|الاربعاء|الخميس|الجمعة|السبت|اليوم|غدا|غداً|بكرة|الأسبوع القادم|الاسبوع القادم/i;
 
 // Wanting to book: a person books it.
 const BOOK_Q =

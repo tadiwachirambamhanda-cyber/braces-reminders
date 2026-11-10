@@ -54,3 +54,10 @@ No other prices, no discounts, no medical advice, no opening hours for the clini
 ## Codex review
 - Round 1 (whole branch): MAJOR, the booked-claim check missed phrases like "Your appointment is all set". Fixed: more phrases blocked (all set, locked in, secured, see you, looking forward...), rules version 3, three new tests. Verdict FINDINGS(1), no other findings.
 - Round 2 (whole branch): MAJOR, a Jev-only `price_question` could send the AED 300 reply to a braces patient who did not ask. Dismissed by the owner on 2026-11-11: the price comes from one code constant, only braces patients get it, Jev needs 0.6 confidence, a named time is vetoed to the receptionist, and the reply claims nothing is booked or free. Requiring a price keyword would stop questions like "what is the fee?". Verdict FINDINGS(1), dismissed.
+
+## Follow-up: PR 7 (AI sentence passes more often)
+Real run, 2026-11-11, patient P003, wording version 4 approved: "How much is a braces appointment?" gave AED 300 with an AI sentence that passed ("lovely to hear from you about your braces journey"); "which times are free for my braces check?" gave the Friday window with a passing AI sentence. Neither doubled the thank-you.
+
+## Follow-up: shorter replies (owner request, 2026-11-11)
+The window, price and pain replies are shorter (English and Arabic), and Claude's sentence is limited to 12 words and 90 characters (rules version 5). Rule P3 (the price reply says the receptionist helps with anything else) was dropped on purpose to keep it short; the price is still worded as the braces appointment price only. The receptionist must approve the replies wording again.
+Real run of the shorter wording (rules version 5), patient P003: price question gives a 3-sentence reply with a passing AI sentence and AED 300; "What times do you have?" gives the shorter window reply with a passing AI sentence; "my bracket broke and it really hurts" gives the shorter pain reply. Note: "What times are available this week?" went to the receptionist (booking reply) because the keyword check treats "this week" as a named time; this is the existing safe behaviour.

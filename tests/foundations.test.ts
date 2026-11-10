@@ -156,7 +156,7 @@ describe("replies wording set (needs its own approval)", () => {
     expect(en.text.startsWith("Hello Sara")).toBe(true);
     expect(en.text).toContain("Friday 6 November");
     expect(en.text).toContain("between 5 p.m. and 10 p.m.");
-    expect(en.text).toContain("our receptionist will get back to you to arrange it");
+    expect(en.text).toContain("our receptionist will arrange it");
     expect(en.text).not.toMatch(/\d{1,2}:\d{2}/);
     expect(/[\u0600-\u06FF]/.test(en.text)).toBe(false);
     expect(ar.text).toContain("الجمعة 6 نوفمبر");

@@ -59,7 +59,7 @@ describe("AC5: the visit window reply", () => {
     expect(m.text.startsWith("Hello Sara, happy to help!")).toBe(true);
     expect(m.text).toContain("Friday 6 November");
     expect(m.text).toContain("between 5 p.m. and 10 p.m.");
-    expect(m.text).toContain("our receptionist will get back to you to arrange it");
+    expect(m.text).toContain("our receptionist will arrange it");
     expect(m.text).not.toMatch(/\d{1,2}:\d{2}/); // no 17:40, 18:00 and so on
     expect(ARABIC.test(m.text)).toBe(false);
     expect(m.text).not.toMatch(/AED|درهم|minutes?/);
@@ -212,11 +212,20 @@ describe("F14 P1 to P3: the braces price is answered", () => {
     expect(m.text).toContain("300 درهم");
   });
 
-  it("'How much is a filling?' also gets the braces price, and says the receptionist helps with anything else", () => {
+  it("'What times are available this week?' is a general times question and gets the window reply; 'next week' still goes to a person", () => {
+    const a = freshState();
+    handlePatientMessage(a, "P001", "What times are available this week?", NOW);
+    expect(lastOut(a, "P001")!.kind).toBe("times_reply");
+    const b = freshState();
+    handlePatientMessage(b, "P001", "Can I come next week instead?", NOW);
+    expect(lastOut(b, "P001")!.kind).toBe("holding_reply");
+  });
+
+  it("'How much is a filling?' gets the braces price, clearly worded as the braces appointment price only (P3 shortened on purpose)", () => {
     const state = freshState();
     handlePatientMessage(state, "P001", "How much is a filling?", NOW);
-    expect(lastOut(state, "P001")!.text).toContain("braces appointment");
-    expect(lastOut(state, "P001")!.text).toContain("For anything else");
+    expect(lastOut(state, "P001")!.text).toContain("A braces appointment at Liwan Dental costs AED 300");
+    expect(lastOut(state, "P001")!.text).toContain("our receptionist will arrange it");
   });
 
   it("a patient who is not a braces patient is not given the braces price: holding reply and call list", () => {
